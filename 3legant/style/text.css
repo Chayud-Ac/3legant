@@ -1,0 +1,123 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* create reuseable style for component that share the same styling */
+
+@layer utilities {
+  .h1-hero {
+    @apply text-[96px] font-medium leading-[96px] font-Poppins;
+  }
+
+  .h1-medium {
+    @apply text-[80px] font-medium leading-[84px] font-Poppins;
+  }
+
+  .h2-medium {
+    @apply text-[72px] font-medium leading-[76px] font-Poppins;
+  }
+
+  .h3-medium {
+    @apply text-[54px] font-medium leading-[58px] font-Poppins;
+  }
+
+  .h4-medium {
+    @apply text-[40px] font-medium leading-[44px] font-Poppins;
+  }
+
+  .h5-medium {
+    @apply text-[34px] font-medium leading-[38px] font-Poppins;
+  }
+
+  .h6-medium {
+    @apply text-[28px] font-medium leading-[34px] font-Poppins;
+  }
+
+  .h6-medium {
+    @apply text-[20px] font-medium leading-7 font-Poppins;
+  }
+
+  .regular-3xl {
+    @apply text-[26px] font-normal leading-10 font-inter;
+  }
+
+  .regular-2xl {
+    @apply text-[22px] font-normal leading-[34px] font-inter;
+  }
+
+  .regular-xl {
+    @apply text-[20px] font-normal leading-loose font-inter;
+  }
+
+  .regular-lg {
+    @apply text-[18px] font-normal leading-[30px] font-inter;
+  }
+
+  .regular-base {
+    @apply text-[16px] font-normal leading-relaxed font-inter;
+  }
+
+  .regular-sm {
+    @apply text-[14px] font-normal leading-snug font-inter;
+  }
+
+  .regular-xs {
+    @apply text-[14px] font-normal leading-tight font-inter;
+  }
+
+  .medium-3xl {
+    @apply text-[26px] font-semibold leading-10 font-inter;
+  }
+
+  .medium-2xl {
+    @apply text-[22px] font-semibold leading-[34px] font-inter;
+  }
+
+  .medium-xl {
+    @apply text-[20px] font-semibold leading-loose font-inter;
+  }
+
+  .medium-lg {
+    @apply text-[18px] font-semibold leading-[30px] font-inter;
+  }
+
+  .medium-base {
+    @apply text-[16px] font-semibold leading-relaxed font-inter;
+  }
+
+  .medium-sm {
+    @apply text-[14px] font-semibold leading-snug font-inter;
+  }
+
+  .medium-xs {
+    @apply text-[14px] font-semibold leading-tight font-inter;
+  }
+
+  .bold-3xl {
+    @apply text-[26px] font-bold leading-10 font-inter;
+  }
+
+  .bold-2xl {
+    @apply text-[22px] font-bold leading-[34px] font-inter;
+  }
+
+  .bold-xl {
+    @apply text-[20px] font-bold leading-loose font-inter;
+  }
+
+  .bold-lg {
+    @apply text-[18px] font-bold leading-[30px] font-inter;
+  }
+
+  .bold-base {
+    @apply text-[16px] font-bold leading-relaxed font-inter;
+  }
+
+  .bold-sm {
+    @apply text-[14px] font-bold leading-snug font-inter;
+  }
+
+  .bold-xs {
+    @apply text-[14px] font-bold leading-tight font-inter;
+  }
+}
