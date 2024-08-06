@@ -15,6 +15,10 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import Link from "next/link";
 import { SignUpFormSchema } from "@/lib/validation";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { Spinner } from "@/components/shared/Spinner";
+import { useToast } from "@/components/ui/use-toast";
 
 const Page = () => {
   const form = useForm<z.infer<typeof SignUpFormSchema>>({
@@ -27,8 +31,44 @@ const Page = () => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof SignUpFormSchema>) {
-    console.log(values);
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const { toast } = useToast();
+
+  async function onSubmit(values: z.infer<typeof SignUpFormSchema>) {
+    setLoading(true);
+    const formData = values;
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/register`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      if (response.status === 400) {
+        toast({
+          title: "Email already used",
+        });
+      }
+
+      if (response.status === 200) {
+        toast({
+          title: "Register successful",
+        });
+        router.push("/");
+      }
+    } catch (error) {
+      toast({
+        title: "error",
+      });
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -112,7 +152,7 @@ const Page = () => {
             </div>
 
             <Button type="submit" className="w-full text-light-2 bg-dark-1">
-              Sign up
+              {loading ? <Spinner size="small" /> : `Sign up`}
             </Button>
           </form>
         </Form>
