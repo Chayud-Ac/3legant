@@ -14,25 +14,18 @@ import {
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import Link from "next/link";
-
-const formSchema = z.object({
-  username: z
-    .string()
-    .min(2, { message: "User name must be greater than 2 characters" })
-    .max(50, { message: "User name must be less than 50 characters" }),
-  password: z.string(),
-});
+import { SignInFormSchema } from "@/lib/validation";
 
 const Page = () => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof SignInFormSchema>>({
+    resolver: zodResolver(SignInFormSchema),
     defaultValues: {
       username: "",
       password: "",
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values: z.infer<typeof SignInFormSchema>) {
     console.log(values);
   }
 

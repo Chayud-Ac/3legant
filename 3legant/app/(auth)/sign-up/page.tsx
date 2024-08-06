@@ -14,17 +14,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import Link from "next/link";
-
-const formSchema = z.object({
-  name: z.string().min(2).max(50),
-  username: z.string().min(2).max(50),
-  email: z.string().email(),
-  password: z.string(),
-});
+import { SignUpFormSchema } from "@/lib/validation";
 
 const Page = () => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof SignUpFormSchema>>({
+    resolver: zodResolver(SignUpFormSchema),
     defaultValues: {
       name: "",
       username: "",
@@ -33,9 +27,10 @@ const Page = () => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values: z.infer<typeof SignUpFormSchema>) {
     console.log(values);
   }
+
   return (
     <>
       <div className="sm:w-[456px]">
