@@ -9,36 +9,72 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import Link from "next/link";
-
-const formSchema = z.object({
-  name: z.string().min(2).max(50),
-  username: z.string().min(2).max(50),
-  email: z.string().email(),
-  password: z.string(),
-});
+import { SignUpFormSchema } from "@/lib/validation";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { Spinner } from "@/components/shared/Spinner";
+import { useToast } from "@/components/ui/use-toast";
+import { PasswordField } from "@/components/shared/PasswordField";
 
 const Page = () => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof SignUpFormSchema>>({
+    resolver: zodResolver(SignUpFormSchema),
     defaultValues: {
       name: "",
       username: "",
       email: "",
       password: "",
+      privacy: false,
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const { toast } = useToast();
+
+  async function onSubmit(values: z.infer<typeof SignUpFormSchema>) {
+    setLoading(true);
+    const formData = values;
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/register`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      if (response.status === 400) {
+        toast({
+          title: "Email already used",
+        });
+      }
+
+      if (response.status === 200) {
+        toast({
+          title: "Register successful",
+        });
+        router.push("/");
+      }
+    } catch (error) {
+      throw error;
+    }
+
+    setLoading(false);
   }
+
   return (
     <>
-      <div className="sm:w-[456px]">
+      <div className="sm:w-[465px]">
         <Form {...form}>
           <div className="flex flex-col gap-[24px]">
             <p className="h4-medium">Sign up</p>
@@ -62,7 +98,7 @@ const Page = () => {
                     <Input placeholder="Your name" {...field} />
                   </FormControl>
 
-                  <FormMessage />
+                  <FormMessage className="medium-xs" />
                 </FormItem>
               )}
             />
@@ -75,7 +111,7 @@ const Page = () => {
                     <Input placeholder="Username" {...field} />
                   </FormControl>
 
-                  <FormMessage />
+                  <FormMessage className="medium-xs" />
                 </FormItem>
               )}
             />
@@ -87,37 +123,42 @@ const Page = () => {
                   <FormControl>
                     <Input placeholder="Email Address" {...field} />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="medium-xs" />
                 </FormItem>
               )}
             />
+            <PasswordField name="password" placeholder="Password" />
+
             <FormField
               control={form.control}
-              name="password"
+              name="privacy"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="flex flex-row  space-x-3 space-y-0 items-center">
                   <FormControl>
-                    <Input placeholder="password" {...field} />
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
                   </FormControl>
-                  <FormMessage />
+                  <div className="space-y-1 leading-none">
+                    <FormLabel className="text-sm regular-base text-grey-1 leading-none">
+                      I agree with{" "}
+                      <span className="medium-sm text-dark-1">
+                        Privacy Policy
+                      </span>{" "}
+                      and{" "}
+                      <span className="medium-sm text-dark-1">
+                        Terms of Use
+                      </span>
+                    </FormLabel>
+                    <FormMessage className="medium-xs" />
+                  </div>
                 </FormItem>
               )}
             />
 
-            <div className="flex items-center space-x-2">
-              <Checkbox id="terms2" />
-              <label
-                htmlFor="terms2"
-                className="text-sm regular-base text-grey-1 leading-none"
-              >
-                I agree with{" "}
-                <span className="medium-sm text-dark-1">Privacy Policy</span>{" "}
-                and <span className="medium-sm text-dark-1">Terms of Use</span>
-              </label>
-            </div>
-
             <Button type="submit" className="w-full text-light-2 bg-dark-1">
-              Sign up
+              {loading ? <Spinner size="small" /> : `Sign up`}
             </Button>
           </form>
         </Form>

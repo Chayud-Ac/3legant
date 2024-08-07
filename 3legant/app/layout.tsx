@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import "../style/text.css";
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -29,7 +30,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} ${poppins.variable}`}>
-        {children}
+        <div>{children}</div>
+        <Toaster />
       </body>
     </html>
   );

@@ -1,6 +1,8 @@
 import Image from "next/image";
+import { userSignup } from "@/lib/actions/user.action";
 
 const layout = ({ children }: { children: React.ReactNode }) => {
+  userSignup();
   return (
     <section>
       <div className="flex flex-col justify-center gap-[40px] max-md:items-center md:gap-[88px] md:flex-row ">
@@ -14,9 +16,7 @@ const layout = ({ children }: { children: React.ReactNode }) => {
             className="w-auto h-auto max-md:object-contain min-w-[400px]"
           />
         </div>
-        <div className="md:mt-[220px] max-sm:pl-[32px] max-sm:pr-[32px]">
-          {children}
-        </div>
+        <div className="md:mt-[220px] max-sm:px-[32px] ">{children}</div>
       </div>
     </section>
   );
