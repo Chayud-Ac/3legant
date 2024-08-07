@@ -63,7 +63,7 @@ const Page = () => {
         toast({
           title: "Register successful",
         });
-        router.push("/");
+        router.push("/sign-in");
       }
     } catch (error) {
       throw error;
@@ -157,7 +157,7 @@ const Page = () => {
               )}
             />
 
-            <Button type="submit" className="w-full text-light-2 bg-dark-1">
+            <Button type="submit" className="w-full btn-primary">
               {loading ? <Spinner size="small" /> : `Sign up`}
             </Button>
           </form>

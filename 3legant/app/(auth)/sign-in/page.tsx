@@ -19,8 +19,16 @@ import { SignInFormSchema } from "@/lib/validation";
 import { PasswordField } from "@/components/shared/PasswordField";
 import { Spinner } from "@/components/shared/Spinner";
 import { useState } from "react";
+import { signIn } from "next-auth/react";
+import { FcGoogle } from "react-icons/fc";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/components/ui/use-toast";
 
 const Page = () => {
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const { toast } = useToast();
+
   const form = useForm<z.infer<typeof SignInFormSchema>>({
     resolver: zodResolver(SignInFormSchema),
     defaultValues: {
@@ -29,12 +37,52 @@ const Page = () => {
       remember: false,
     },
   });
+  console.log("Google Client ID:", process.env.MONGODB_URL);
 
-  function onSubmit(values: z.infer<typeof SignInFormSchema>) {
+  async function onSubmit(values: z.infer<typeof SignInFormSchema>) {
     console.log(values);
+    setLoading(true);
+    const { email, password, remember } = values;
+
+    try {
+      const res = await signIn("credentials", {
+        redirect: false,
+        email,
+        password,
+        remember,
+      });
+
+      if (res?.error) {
+        toast({
+          title: "Invalid email or password",
+        });
+      } else {
+        router.push("/");
+      }
+      toast({
+        title: "Login Sucessful",
+      });
+    } catch (error) {
+      throw error;
+    } finally {
+      setLoading(false);
+    }
   }
 
-  const [loading, setLoading] = useState(false);
+  async function handleSocialLogin(social: string) {
+    const res = await signIn(social);
+
+    if (res?.error) {
+      toast({
+        title: "Something went wrong",
+      });
+    } else {
+      router.push("/");
+      toast({
+        title: "Login Sucessful",
+      });
+    }
+  }
 
   return (
     <>
@@ -73,7 +121,7 @@ const Page = () => {
               control={form.control}
               name="remember"
               render={({ field }) => (
-                <FormItem className="flex flex-row md:justify-between items-center max-sm:gap-20">
+                <FormItem className="flex flex-row sm:justify-between items-center max-sm:gap-20">
                   <div className="flex flex-row items-center gap-2">
                     <FormControl>
                       <Checkbox
@@ -92,11 +140,22 @@ const Page = () => {
               )}
             />
 
-            <Button type="submit" className="w-full text-light-2 bg-dark-1">
+            <Button type="submit" className="w-full btn-primary">
               {loading ? <Spinner size="small" /> : `Sign In`}
             </Button>
           </form>
         </Form>
+        <div className="mt-6">
+          <button
+            onClick={() => {
+              handleSocialLogin("google");
+            }}
+            className="flex w-full items-center border border-gray-300 justify-center gap-3 rounded-md bg-white px-3 py-1.5 text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+          >
+            <FcGoogle />
+            <span className="text-sm font-semibold leading-6">Google</span>
+          </button>
+        </div>
       </div>
     </>
   );

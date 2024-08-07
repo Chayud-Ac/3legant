@@ -21,6 +21,10 @@ body {
   }
 }
 
+.btn-primary {
+  @apply text-light-2 bg-dark-1 transition-colors duration-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 hover:bg-grey-1 hover:shadow-md;
+}
+
 .no-focus {
   @apply focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 !important;
 }
