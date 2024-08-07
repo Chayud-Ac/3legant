@@ -9,6 +9,7 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -19,6 +20,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Spinner } from "@/components/shared/Spinner";
 import { useToast } from "@/components/ui/use-toast";
+import { PasswordField } from "@/components/shared/PasswordField";
 
 const Page = () => {
   const form = useForm<z.infer<typeof SignUpFormSchema>>({
@@ -28,6 +30,7 @@ const Page = () => {
       username: "",
       email: "",
       password: "",
+      privacy: false,
     },
   });
 
@@ -63,17 +66,15 @@ const Page = () => {
         router.push("/");
       }
     } catch (error) {
-      toast({
-        title: "error",
-      });
-    } finally {
-      setLoading(false);
+      throw error;
     }
+
+    setLoading(false);
   }
 
   return (
     <>
-      <div className="sm:w-[456px]">
+      <div className="sm:w-[465px]">
         <Form {...form}>
           <div className="flex flex-col gap-[24px]">
             <p className="h4-medium">Sign up</p>
@@ -97,7 +98,7 @@ const Page = () => {
                     <Input placeholder="Your name" {...field} />
                   </FormControl>
 
-                  <FormMessage />
+                  <FormMessage className="medium-xs" />
                 </FormItem>
               )}
             />
@@ -110,7 +111,7 @@ const Page = () => {
                     <Input placeholder="Username" {...field} />
                   </FormControl>
 
-                  <FormMessage />
+                  <FormMessage className="medium-xs" />
                 </FormItem>
               )}
             />
@@ -122,34 +123,39 @@ const Page = () => {
                   <FormControl>
                     <Input placeholder="Email Address" {...field} />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="medium-xs" />
                 </FormItem>
               )}
             />
+            <PasswordField name="password" placeholder="Password" />
+
             <FormField
               control={form.control}
-              name="password"
+              name="privacy"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="flex flex-row  space-x-3 space-y-0 items-center">
                   <FormControl>
-                    <Input placeholder="password" {...field} />
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
                   </FormControl>
-                  <FormMessage />
+                  <div className="space-y-1 leading-none">
+                    <FormLabel className="text-sm regular-base text-grey-1 leading-none">
+                      I agree with{" "}
+                      <span className="medium-sm text-dark-1">
+                        Privacy Policy
+                      </span>{" "}
+                      and{" "}
+                      <span className="medium-sm text-dark-1">
+                        Terms of Use
+                      </span>
+                    </FormLabel>
+                    <FormMessage className="medium-xs" />
+                  </div>
                 </FormItem>
               )}
             />
-
-            <div className="flex items-center space-x-2">
-              <Checkbox id="terms2" />
-              <label
-                htmlFor="terms2"
-                className="text-sm regular-base text-grey-1 leading-none"
-              >
-                I agree with{" "}
-                <span className="medium-sm text-dark-1">Privacy Policy</span>{" "}
-                and <span className="medium-sm text-dark-1">Terms of Use</span>
-              </label>
-            </div>
 
             <Button type="submit" className="w-full text-light-2 bg-dark-1">
               {loading ? <Spinner size="small" /> : `Sign up`}

@@ -16,9 +16,7 @@ const layout = ({ children }: { children: React.ReactNode }) => {
             className="w-auto h-auto max-md:object-contain min-w-[400px]"
           />
         </div>
-        <div className="md:mt-[220px] max-sm:pl-[32px] max-sm:pr-[32px]">
-          {children}
-        </div>
+        <div className="md:mt-[220px] max-sm:px-[32px] ">{children}</div>
       </div>
     </section>
   );
