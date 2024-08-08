@@ -41,16 +41,12 @@ export const authOptions: any = {
       clientId: process.env.AUTH_GOOGLE_ID ?? "",
       clientSecret: process.env.AUTH_GOOGLE_SECRET ?? "",
     }),
-    FacebookProvider({
-      clientId: process.env.AUTH_FACEBOOK_ID ?? "",
-      clientSecret: process.env.AUTH_FACEBOOK_SECRET ?? "",
-    }),
   ],
 
   callbacks: {
     async signIn({ user, account }: { user: any; account: any }) {
       if (account.provider === "credentials") {
-        return true;
+        return "true";
       }
       if (account.provider === "google") {
         await connectToDatabase();
