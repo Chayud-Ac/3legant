@@ -5,7 +5,7 @@ const layout = ({ children }: { children: React.ReactNode }) => {
   userSignup();
   return (
     <section>
-      <div className="flex flex-col justify-center gap-[40px] max-md:items-center md:gap-[88px] md:flex-row ">
+      <div className="flex flex-col justify-center gap-[40px] max-md:items-center md:gap-[56px] md:flex-row ">
         <div className="flex items-center">
           <Image
             src="/assets/images/auth_image.svg"
@@ -16,7 +16,9 @@ const layout = ({ children }: { children: React.ReactNode }) => {
             className="w-auto h-auto max-md:object-contain min-w-[400px]"
           />
         </div>
-        <div className="md:mt-[220px] max-sm:px-[32px] ">{children}</div>
+        <div className="md:mt-[220px] px-[32px] flex-1 max-w-[465px] min-w-[375px] ">
+          {children}
+        </div>
       </div>
     </section>
   );

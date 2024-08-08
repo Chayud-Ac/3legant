@@ -63,7 +63,7 @@ const Page = () => {
         toast({
           title: "Register successful",
         });
-        router.push("/");
+        router.push("/sign-in");
       }
     } catch (error) {
       throw error;
@@ -74,95 +74,91 @@ const Page = () => {
 
   return (
     <>
-      <div className="sm:w-[465px]">
-        <Form {...form}>
-          <div className="flex flex-col gap-[24px]">
-            <p className="h4-medium">Sign up</p>
-            <p className="regular-base text-grey-1">
-              Already have an Account?{" "}
-              <Link href="/sign-in">
-                <span className="text-accent-green medium-base">Sign In</span>{" "}
-              </Link>
-            </p>
-          </div>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-[32px] mt-[32px]"
-          >
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input placeholder="Your name" {...field} />
-                  </FormControl>
+      <Form {...form}>
+        <div className="flex flex-col gap-[24px]">
+          <p className="h4-medium">Sign up</p>
+          <p className="regular-base text-grey-1">
+            Already have an Account?{" "}
+            <Link href="/sign-in">
+              <span className="text-accent-green medium-base">Sign In</span>{" "}
+            </Link>
+          </p>
+        </div>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="space-y-[32px] mt-[32px] w-full"
+        >
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input placeholder="Your name" {...field} />
+                </FormControl>
 
+                <FormMessage className="medium-xs" />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="username"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input placeholder="Username" {...field} />
+                </FormControl>
+
+                <FormMessage className="medium-xs" />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input placeholder="Email Address" {...field} />
+                </FormControl>
+                <FormMessage className="medium-xs" />
+              </FormItem>
+            )}
+          />
+          <PasswordField name="password" placeholder="Password" />
+
+          <FormField
+            control={form.control}
+            name="privacy"
+            render={({ field }) => (
+              <FormItem className="flex flex-row  space-x-3 space-y-0 items-center">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <div className="space-y-1 leading-none">
+                  <FormLabel className="text-sm regular-base text-grey-1 leading-none">
+                    I agree with{" "}
+                    <span className="medium-sm text-dark-1">
+                      Privacy Policy
+                    </span>{" "}
+                    and{" "}
+                    <span className="medium-sm text-dark-1">Terms of Use</span>
+                  </FormLabel>
                   <FormMessage className="medium-xs" />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="username"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input placeholder="Username" {...field} />
-                  </FormControl>
+                </div>
+              </FormItem>
+            )}
+          />
 
-                  <FormMessage className="medium-xs" />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input placeholder="Email Address" {...field} />
-                  </FormControl>
-                  <FormMessage className="medium-xs" />
-                </FormItem>
-              )}
-            />
-            <PasswordField name="password" placeholder="Password" />
-
-            <FormField
-              control={form.control}
-              name="privacy"
-              render={({ field }) => (
-                <FormItem className="flex flex-row  space-x-3 space-y-0 items-center">
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <div className="space-y-1 leading-none">
-                    <FormLabel className="text-sm regular-base text-grey-1 leading-none">
-                      I agree with{" "}
-                      <span className="medium-sm text-dark-1">
-                        Privacy Policy
-                      </span>{" "}
-                      and{" "}
-                      <span className="medium-sm text-dark-1">
-                        Terms of Use
-                      </span>
-                    </FormLabel>
-                    <FormMessage className="medium-xs" />
-                  </div>
-                </FormItem>
-              )}
-            />
-
-            <Button type="submit" className="w-full text-light-2 bg-dark-1">
-              {loading ? <Spinner size="small" /> : `Sign up`}
-            </Button>
-          </form>
-        </Form>
-      </div>
+          <Button type="submit" className="w-full btn-primary">
+            {loading ? <Spinner size="small" /> : `Sign up`}
+          </Button>
+        </form>
+      </Form>
     </>
   );
 };
