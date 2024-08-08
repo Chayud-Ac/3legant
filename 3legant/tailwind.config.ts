@@ -82,6 +82,7 @@ const config = {
           5: "#b0b4c3",
         },
         "accent-green": "#38cb89",
+        "accent-blue": "#377dff",
       },
       borderRadius: {
         lg: "var(--radius)",
