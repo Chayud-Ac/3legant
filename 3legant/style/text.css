@@ -33,10 +33,6 @@
     @apply text-[28px] font-medium leading-[34px] font-poppins;
   }
 
-  .h6-medium {
-    @apply text-[20px] font-medium leading-7 font-poppins;
-  }
-
   .regular-3xl {
     @apply text-[26px] font-normal leading-10 font-inter;
   }
@@ -62,7 +58,7 @@
   }
 
   .regular-xs {
-    @apply text-[14px] font-normal leading-tight font-inter;
+    @apply text-[12px] font-normal leading-tight font-inter;
   }
 
   .medium-3xl {
@@ -90,7 +86,7 @@
   }
 
   .medium-xs {
-    @apply text-[14px] font-semibold leading-tight font-inter;
+    @apply text-[12px] font-semibold leading-tight font-inter;
   }
 
   .bold-3xl {
