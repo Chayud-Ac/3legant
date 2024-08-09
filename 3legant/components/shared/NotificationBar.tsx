@@ -6,7 +6,7 @@ import React from "react";
 
 const NotificationBar = () => {
   return (
-    <div className="w-full py-[9px] bg-grey-3">
+    <div className="w-full py-[9px] bg-grey-5">
       <div className="flex flex-row items-center justify-center gap-2">
         <Image
           src="/assets/icons/ticket-percent.svg"

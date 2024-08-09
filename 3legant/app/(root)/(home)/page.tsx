@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import email from "next-auth/providers/email";
 import HomeHeader from "@/components/header/HomeHeader";
 import CategoryCard from "@/components/cards/CategoryCard";
+import FeatureList from "@/components/list/FeatureList";
 
 const Page = () => {
   // const { data: session, status } = useSession();
@@ -63,6 +64,9 @@ const Page = () => {
           />
         </div>
       </div>
+
+      {/* Feature */}
+      <FeatureList />
     </section>
   );
 };
