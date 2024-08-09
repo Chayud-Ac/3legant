@@ -1,4 +1,4 @@
-import { HeaderImg, NavbarLink, SocialLink } from "@/types";
+import { FeatureCardProps, HeaderImg, NavbarLink, SocialLink } from "@/types";
 
 export const navbarLinks: NavbarLink[] = [
   {
@@ -45,5 +45,28 @@ export const imgHeaderUrls: HeaderImg[] = [
   {
     url: "/assets/images/home_header3.svg",
     label: "image3",
+  },
+];
+
+export const featureCardLists: FeatureCardProps[] = [
+  {
+    iconUrl: "/assets/icons/fast_delivery.svg",
+    title: "Free Shipping",
+    describtion: "Order above $200",
+  },
+  {
+    iconUrl: "/assets/icons/money.svg",
+    title: "Money-back",
+    describtion: "30 days guarantee",
+  },
+  {
+    iconUrl: "/assets/icons/lock1.svg",
+    title: "Secure Payments",
+    describtion: "Secured by mobile-banking",
+  },
+  {
+    iconUrl: "/assets/icons/call.svg",
+    title: "24/7 Support",
+    describtion: "Phone and Email support",
   },
 ];

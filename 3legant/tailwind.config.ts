@@ -77,9 +77,9 @@ const config = {
           // arkest grey to the lightest grey
           1: "#6c7174",
           2: "#807e7e",
-          3: "#e8ecef",
+          3: "#b0b4c3",
           4: "#f3f5f6",
-          5: "#b0b4c3",
+          5: "#e8ecef",
         },
         "accent-green": "#38cb89",
         "accent-blue": "#377dff",

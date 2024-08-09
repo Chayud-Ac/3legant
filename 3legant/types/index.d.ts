@@ -13,3 +13,9 @@ export interface HeaderImg {
   url: string;
   label: string;
 }
+
+export interface FeatureCardProps {
+  iconUrl: string;
+  title: string;
+  describtion: string;
+}

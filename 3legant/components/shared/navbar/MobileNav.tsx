@@ -40,7 +40,7 @@ const NavContent = () => {
                   {item.label}
                 </h1>
               </Link>
-              <span className="absolute left-0 bottom-0 w-full h-[2px] bg-grey-3"></span>
+              <span className="absolute left-0 bottom-0 w-full h-[2px] bg-grey-5"></span>
             </div>
           </SheetClose>
         );
@@ -85,7 +85,7 @@ const MobileNav = () => {
                   </h1>
                   <CartIconNum />
                 </Link>
-                <span className="absolute left-0 bottom-0 w-full h-[2px] bg-grey-3"></span>
+                <span className="absolute left-0 bottom-0 w-full h-[2px] bg-grey-5"></span>
               </div>
               <div className="relative inline-flex items-center">
                 <Link
@@ -97,7 +97,7 @@ const MobileNav = () => {
                   </h1>
                   <WishListIconNum />
                 </Link>
-                <span className="absolute left-0 bottom-0 w-full h-[2px] bg-grey-3"></span>
+                <span className="absolute left-0 bottom-0 w-full h-[2px] bg-grey-5"></span>
               </div>
             </div>
           </div>
