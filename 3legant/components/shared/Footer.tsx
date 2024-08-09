@@ -21,7 +21,11 @@ const Footer = () => {
           </div>
           <div className="flex flex-row gap-8 md:w-[250px] justify-between max-sm:flex-col items-center ">
             {navbarLinks.map((item) => (
-              <Link href={item.route} className="regular-sm text-light-2">
+              <Link
+                href={item.route}
+                key={item.label}
+                className="regular-sm text-light-2"
+              >
                 {item.label}
               </Link>
             ))}
@@ -40,7 +44,7 @@ const Footer = () => {
           </div>
           <div className="flex flex-row justify-center items-center gap-[26px] sm:justify-between sm:w-[120px]">
             {socialLinks.map((item) => (
-              <Link href={item.route}>
+              <Link href={item.route} key={item.label}>
                 <Image
                   src={item.icon}
                   alt={item.label}
