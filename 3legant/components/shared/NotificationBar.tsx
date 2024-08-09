@@ -19,7 +19,7 @@ const NotificationBar = () => {
           <Link href="/product" className="flex flex-row gap-1">
             <h2 className="medium-sm text-accent-blue">Shop Now</h2>
             <Image
-              src="/assets/icons/arrow-right.svg"
+              src="/assets/icons/arrow-right-blue.svg"
               alt="arrow-right"
               width={18}
               height={18}
