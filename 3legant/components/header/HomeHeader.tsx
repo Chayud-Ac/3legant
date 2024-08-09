@@ -46,7 +46,7 @@ const HomeHeader = () => {
   };
 
   return (
-    <div className="mt-[10px] container-1 w-full m-auto relative overflow-x-auto sm:overflow-x-hidden">
+    <div className="mt-[10px] container-1 max-w-[1440px] w-full m-auto relative overflow-x-auto sm:overflow-x-hidden">
       <div
         ref={sliderRef}
         onTouchStart={handleTouchStart}
