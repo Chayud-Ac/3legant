@@ -1,4 +1,4 @@
-import { NavbarLink, SocialLink } from "@/types";
+import { HeaderImg, NavbarLink, SocialLink } from "@/types";
 
 export const navbarLinks: NavbarLink[] = [
   {
@@ -30,5 +30,20 @@ export const socialLinks: SocialLink[] = [
     route: "/",
     label: "Youtube",
     icon: "/assets/icons/youtube.svg",
+  },
+];
+
+export const imgHeaderUrls: HeaderImg[] = [
+  {
+    url: "/assets/images/home_header1.svg",
+    label: "image1",
+  },
+  {
+    url: "/assets/images/home_header2.svg",
+    label: "image2",
+  },
+  {
+    url: "/assets/images/home_header3.svg",
+    label: "image3",
   },
 ];

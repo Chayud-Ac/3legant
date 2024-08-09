@@ -8,3 +8,8 @@ export interface SocialLink {
   label: string;
   icon: string;
 }
+
+export interface HeaderImg {
+  url: string;
+  label: string;
+}
