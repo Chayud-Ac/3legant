@@ -20,7 +20,7 @@ body {
     @apply flex justify-start items-center;
   }
   .container-1 {
-    @apply px-[32px] md:px-[120px] pb-3;
+    @apply px-[32px] md:px-[120px];
   }
 }
 
