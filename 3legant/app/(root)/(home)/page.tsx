@@ -8,6 +8,7 @@ import CategoryCard from "@/components/cards/CategoryCard";
 import FeatureList from "@/components/list/FeatureList";
 import ProductCard from "@/components/cards/ProductCard";
 import NewsSection from "@/components/shared/NewsSection";
+import ProductHorizontal from "@/components/list/ProductHorizontal";
 
 const Page = () => {
   // const { data: session, status } = useSession();
@@ -67,6 +68,7 @@ const Page = () => {
         </div>
       </div>
 
+      <ProductHorizontal />
       {/* Feature */}
       <FeatureList />
 
