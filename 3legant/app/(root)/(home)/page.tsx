@@ -6,6 +6,8 @@ import email from "next-auth/providers/email";
 import HomeHeader from "@/components/header/HomeHeader";
 import CategoryCard from "@/components/cards/CategoryCard";
 import FeatureList from "@/components/list/FeatureList";
+import ProductCard from "@/components/cards/ProductCard";
+import NewsSection from "@/components/shared/NewsSection";
 
 const Page = () => {
   // const { data: session, status } = useSession();
@@ -67,6 +69,8 @@ const Page = () => {
 
       {/* Feature */}
       <FeatureList />
+
+      <NewsSection />
     </section>
   );
 };
