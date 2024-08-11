@@ -26,15 +26,15 @@ const ProductHorizontal = () => {
 
   return (
     <div className="flex flex-col p-8 lg:p-10">
-      <div className="flex flex-row container-1 w-full justify-between items-center  max-w-[1360px]">
+      <div className="flex flex-row container-1 w-full justify-between items-center max-w-[1360px]">
         <h4 className="h4-medium text-dark-1">New Arrival</h4>
         <TextLinkButton
           href="/products"
           title="More Products"
-          otherClasses="w-[120px]"
+          otherClasses="w-[120px] max-sm:hidden"
         />
       </div>
-      <div className="w-full md:max-w-[1360px] m-auto pl-[32px] lg:pl-[120px] pt-10">
+      <div className="w-screen md:max-w-[1360px] pl-[32px] md:pl-[120px] m-auto pt-10 flex-shrink ">
         <div
           id="slider"
           ref={sliderRef}
