@@ -20,7 +20,7 @@ const TextLinkButton = ({ title, href, otherClasses }: TextLinkButtonProps) => {
           alt="arrow-right"
           width={18}
           height={18}
-          className="w-auto h-auto"
+          className="w-[18px] h-[18px]"
         />
       </Link>
 
