@@ -34,7 +34,7 @@ const ProductHorizontal = () => {
           otherClasses="w-[120px]"
         />
       </div>
-      <div className="w-full md:max-w-[1360px] m-auto pl-[32px] lg:pl-[120px] pt-10">
+      <div className="w-screen md:max-w-[1360px] m-auto pl-[32px] lg:pl-[120px] pt-10">
         <div
           id="slider"
           ref={sliderRef}
