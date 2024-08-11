@@ -35,7 +35,7 @@ const CategoryCard = ({
         className={`absolute flex flex-col justify-start gap-3 ${otherClasses}`}
       >
         <h1 className="h5-medium">{title}</h1>
-        <TextLinkButton title="Shop Now" href={href} />
+        <TextLinkButton title="Shop Now" href={href} otherClasses="w-[92px]" />
       </div>
     </div>
   );

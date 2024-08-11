@@ -20,7 +20,7 @@ body {
     @apply flex justify-start items-center;
   }
   .container-1 {
-    @apply px-[32px] md:px-[120px];
+    @apply px-[32px] lg:px-[120px];
   }
 }
 
@@ -35,22 +35,19 @@ body {
 /* add custom scroll bar ใช้กับตัวตัว horizontal scroll ของ list item */
 
 .custom-scrollbar::-webkit-scrollbar {
+  margin-top: 20px;
   width: 834px;
-  height: 4px;
+  height: 5px;
   border-radius: 80px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: #343839;
+  background: #fff;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #888;
+  background: #343839;
   border-radius: 50px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #555;
 }
 
 /* Hide ตัว scroll bar  */
