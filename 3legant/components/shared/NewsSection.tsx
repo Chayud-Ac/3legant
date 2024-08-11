@@ -25,7 +25,11 @@ const NewsSection = () => {
             <br className="max-sm:hidden" />
             room in your home a stylish makeover
           </p>
-          <TextLinkButton title="Shop Now" href="/product" />
+          <TextLinkButton
+            title="Shop Now"
+            href="/product"
+            otherClasses="w-[92px]"
+          />
         </div>
       </div>
     </div>

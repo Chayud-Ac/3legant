@@ -6,12 +6,13 @@ import React from "react";
 interface TextLinkButtonProps {
   title: string;
   href: string;
+  otherClasses?: string;
 }
 
-const TextLinkButton = ({ title, href }: TextLinkButtonProps) => {
+const TextLinkButton = ({ title, href, otherClasses }: TextLinkButtonProps) => {
   return (
-    <div className="relative inline-flex items-center w-[92px]">
-      <Link href={href} className="flex flex-row gap-1">
+    <div className={`relative  items-center ${otherClasses}`}>
+      <Link href={href} className="flex flex-row justify-between">
         <h2 className="medium-sm text-dark-1">{title}</h2>
 
         <Image

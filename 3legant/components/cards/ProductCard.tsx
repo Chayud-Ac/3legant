@@ -3,7 +3,6 @@ import React from "react";
 import RatingsStars from "../shared/RatingsStars";
 import { calculateDiscountedPrice } from "@/lib/utils";
 import AddtoCartButton from "../shared/AddtoCartButton";
-import TextLinkButton from "../shared/TextLinkButton";
 import Link from "next/link";
 import AddtoWishListButton from "../shared/AddtoWishListButton";
 
@@ -86,7 +85,7 @@ const ProductCard = ({
     );
   } else {
     return (
-      <div className="flex flex-col gap-2 ">
+      <div className="flex flex-col gap-2 min-w-[262px] ">
         {/* image container*/}
         <div className="relative group max-w-[262px] max-h-[349px]">
           <Image
