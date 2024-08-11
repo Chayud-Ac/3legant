@@ -76,27 +76,26 @@ const MobileNav = () => {
             </div>
             <div className="flex flex-col gap-4">
               <div className="relative inline-flex items-center">
-                <Link
-                  href="/cart"
-                  className="flex flex-row justify-between items-center mb-4 w-full"
-                >
-                  <h1 className="text-grey-1 medium-lg hover:text-dark-2 transition-colors duration-300 ">
-                    Cart
-                  </h1>
+                <div className="flex flex-row justify-between items-center mb-4 w-full">
+                  <Link href="/cart">
+                    <h1 className="text-grey-1 medium-lg hover:text-dark-2 transition-colors duration-300 ">
+                      Cart
+                    </h1>
+                  </Link>
                   <CartIconNum />
-                </Link>
+                </div>
                 <span className="absolute left-0 bottom-0 w-full h-[2px] bg-grey-5"></span>
               </div>
               <div className="relative inline-flex items-center">
-                <Link
-                  href="/profile"
-                  className="flex flex-row justify-between items-center mb-4 w-full"
-                >
-                  <h1 className="text-grey-1 medium-lg hover:text-dark-2 transition-colors duration-300 ">
-                    WishList
-                  </h1>
+                <div className="flex flex-row justify-between items-center mb-4 w-full">
+                  <Link href="/profile">
+                    <h1 className="text-grey-1 medium-lg hover:text-dark-2 transition-colors duration-300 ">
+                      WishList
+                    </h1>
+                  </Link>
                   <WishListIconNum />
-                </Link>
+                </div>
+
                 <span className="absolute left-0 bottom-0 w-full h-[2px] bg-grey-5"></span>
               </div>
             </div>
