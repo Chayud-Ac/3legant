@@ -48,8 +48,8 @@ const ProductCard = ({
             </div>
           </div>
         </div>
-        <div className="flex flex-col justify-center items-center md:p-6 max-w-[312px] sm:max-w-[282px]">
-          <div className="flex flex-col justify-start gap-1 sm:max-w-[230px]">
+        <div className="flex flex-col justify-center items-center md:p-6 max-w-[312px]">
+          <div className="flex flex-col justify-start gap-1">
             <RatingsStars rating={rating} />
             <div className="flex flex-row justify-between items-center">
               <Link href={`product/${id}`}>
@@ -85,7 +85,7 @@ const ProductCard = ({
     );
   } else {
     return (
-      <div className="flex flex-col gap-2 min-w-[262px] ">
+      <div className="flex flex-col gap-2 min-w-[262px] max-w-[262px]">
         {/* image container*/}
         <div className="relative group max-w-[262px] max-h-[349px]">
           <Image
@@ -105,7 +105,7 @@ const ProductCard = ({
           </div>
           <AddtoCartButton otherClasses="absolute left-1/2 transform -translate-x-1/2 bottom-4  w-4/5  xl:hidden group-hover:block " />
         </div>
-        <div className="flex flex-col justify-start gap-1">
+        <div className="flex flex-col justify-start gap-1 w-full">
           <RatingsStars rating={rating} />
           <Link href={`product/${id}`}>
             <h1 className="medium-sm text-dark-1 hover:underline">{name}</h1>
