@@ -23,10 +23,6 @@ const gridsDesk: Grid[] = [
     iconUrl: "/assets/icons/grids-2.svg",
     gridType: "grid-cols-2",
   },
-  {
-    iconUrl: "/assets/icons/grids-1.svg",
-    gridType: "grid-cols-1",
-  },
 ];
 
 const gridsMobile: Grid[] = [
