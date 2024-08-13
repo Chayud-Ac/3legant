@@ -18,11 +18,13 @@ export const priceFilters = [
   { name: "400.00+", value: "option6" }, // Represents prices above 400
 ];
 
-export const priceOptionRange = {
-  option1: { minValue: 0, maxValue: 99999999 },
-  option2: { minValue: 0, maxValue: 99.99 },
-  option3: { minValue: 100, maxValue: 199.99 },
-  option4: { minValue: 200, maxValue: 299.99 },
-  option5: { minValue: 300, maxValue: 399.99 },
-  option6: { minValue: 400, maxValue: 99999999 },
+export const priceOptionRange: {
+  [key: string]: { minPrice: number; maxPrice: number };
+} = {
+  option1: { minPrice: 0, maxPrice: 99999999 },
+  option2: { minPrice: 100, maxPrice: 200 },
+  option3: { minPrice: 200, maxPrice: 300 },
+  option4: { minPrice: 300, maxPrice: 400 },
+  option5: { minPrice: 400, maxPrice: 500 },
+  option6: { minPrice: 500, maxPrice: 999999999 },
 };
