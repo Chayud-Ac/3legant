@@ -10,9 +10,12 @@ import ProductCard from "../cards/ProductCard";
 import Image from "next/image";
 import FilterCatDesktop from "../shared/FilterCatDesktop";
 import FilterPriceDesktop from "../shared/FilterPriceDesktop";
+import { priceOptionRange } from "@/constant/filter";
+import MultipleFilter from "../shared/MultipleFilter";
 
 const DisplayTemplate = () => {
   const [sort, setSort] = useState("grid-cols-4");
+  const [titleMain, setTitleMain] = useState("All Rooms");
   console.log(sort);
 
   return (
@@ -30,7 +33,11 @@ const DisplayTemplate = () => {
           />
           <p className="medium-base text-dark-1">Filter</p>
         </div>
-        <FilterCatDesktop title="CATEGORIES" filter={CategoryFilters} />
+        <FilterCatDesktop
+          title="CATEGORIES"
+          filter={CategoryFilters}
+          setTitleMain={setTitleMain}
+        />
         <FilterPriceDesktop title="PRICES" filter={priceFilters} />
       </div>
 
@@ -38,7 +45,7 @@ const DisplayTemplate = () => {
         <div className="flex flex-col sm:flex-row justify-between w-full">
           <div className="flex flex-col sm:flex-row gap-5 w-full max-w-[548px]">
             {sort === "grid-cols-3" ? (
-              <h1 className="medium-base text-dark-1">Living Room</h1> //!!TODO this title will be dynamic base on the path query category key
+              <h1 className="medium-base text-dark-1">{titleMain}</h1>
             ) : (
               <>
                 {" "}
@@ -47,12 +54,17 @@ const DisplayTemplate = () => {
                   filter={CategoryFilters}
                   otherClasses="text-dark-1 medium-sm w-full"
                   containerClasses="w-full flex-col gap-3"
+                  type="single"
+                  filterKey="cat"
+                  setTitleMain={setTitleMain}
+                  titleMain={titleMain}
                 />
-                <Filter
+                <MultipleFilter
                   title="PRICES"
                   filter={priceFilters}
                   otherClasses="text-dark-1 medium-sm w-full"
                   containerClasses="w-full flex-col gap-3"
+                  optionMap={priceOptionRange}
                 />
               </>
             )}
