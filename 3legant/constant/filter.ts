@@ -28,3 +28,20 @@ export const priceOptionRange: {
   option5: { minPrice: 400, maxPrice: 500 },
   option6: { minPrice: 500, maxPrice: 999999999 },
 };
+
+// {"_id":{"$oid":"66bcb8296115e57bdf1e94f0"},
+//   "name": "Plateware Wooden",
+//   "slug": "plateware-wooden",
+//   "description": "Small-sized plate made primarily from maple wood suitable with vintage oldish style.",
+//   "price": 39.99,
+//   "colorStock": {
+//     "black": 10
+//   },
+//   "totalStock": 10,
+//   "category": "Plates",
+//   "images": {
+//     "black": ["black.svg"]
+//   },
+//   "thumbnail": "thumbnail.svg",
+//   "avgRating": 4.0
+// }

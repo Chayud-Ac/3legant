@@ -74,7 +74,11 @@ const Page = () => {
       {/* Feature */}
       <FeatureList />
 
+      <ProductHorizontal />
+
       <NewsSection />
+
+      <ProductHorizontal />
 
       <ArticleList />
 

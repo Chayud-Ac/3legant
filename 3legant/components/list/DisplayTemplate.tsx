@@ -14,14 +14,14 @@ import { priceOptionRange } from "@/constant/filter";
 import MultipleFilter from "../shared/MultipleFilter";
 
 const DisplayTemplate = () => {
-  const [sort, setSort] = useState("grid-cols-4");
+  const [sort, setSort] = useState("grid-cols-1");
   const [titleMain, setTitleMain] = useState("All Rooms");
   console.log(sort);
 
   return (
-    <section className="flex flex-row w-full max-w-[1440px] container-1 gap-10 pt-10 pb-10">
+    <section className="flex flex-row w-full max-w-[1440px] container-1 gap-10 pt-10 pb-10 ">
       <div
-        className={`${sort !== "grid-cols-3" && "hidden"} flex flex-col gap-8 w-[400px]`}
+        className={`${sort !== "grid-cols-3" && "hidden"} flex flex-col gap-8 w-[400px] max-lg:hidden`}
       >
         <div className="flex flex-row gap-1 items-center justify-start">
           <Image
@@ -71,7 +71,10 @@ const DisplayTemplate = () => {
           </div>
           <SortDisplay sort={sort} setSort={setSort} />
         </div>
-        <div className={`grid ${sort} w-full h-full gap-10 pt-10`}>
+        {/*--------------------------------------------------------------------------Display grid for Desktop---------------------------------------------------------------------------------------------- */}
+        <div
+          className={`grid ${sort} w-full h-full gap-2 pt-10 max-sm:hidden place-items-center`}
+        >
           <ProductCard
             id="1"
             name="Loveseat Sofa"
@@ -80,7 +83,7 @@ const DisplayTemplate = () => {
             discount={50}
             imgUrl="/assets/images/thumnail_test.svg"
             describtion={
-              sort === "grid-cols-2"
+              sort === "grid-cols-2" || sort === "grid-cols-1"
                 ? "Super-soft cushion cover in off-white with a tactile pattern that enhances the different tones in the pile and base."
                 : undefined
             }
@@ -93,7 +96,7 @@ const DisplayTemplate = () => {
             discount={50}
             imgUrl="/assets/images/thumnail_test.svg"
             describtion={
-              sort === "grid-cols-2"
+              sort === "grid-cols-2" || sort === "grid-cols-1"
                 ? "Super-soft cushion cover in off-white with a tactile pattern that enhances the different tones in the pile and base."
                 : undefined
             }
@@ -106,7 +109,7 @@ const DisplayTemplate = () => {
             discount={50}
             imgUrl="/assets/images/thumnail_test.svg"
             describtion={
-              sort === "grid-cols-2"
+              sort === "grid-cols-2" || sort === "grid-cols-1"
                 ? "Super-soft cushion cover in off-white with a tactile pattern that enhances the different tones in the pile and base."
                 : undefined
             }
@@ -119,7 +122,64 @@ const DisplayTemplate = () => {
             discount={50}
             imgUrl="/assets/images/thumnail_test.svg"
             describtion={
-              sort === "grid-cols-2"
+              sort === "grid-cols-2" || sort === "grid-cols-1"
+                ? "Super-soft cushion cover in off-white with a tactile pattern that enhances the different tones in the pile and base."
+                : undefined
+            }
+          />
+        </div>
+        {/*--------------------------------------------------------------------------Display grid for moblie---------------------------------------------------------------------------------------------- */}
+        <div
+          className={`grid ${sort} w-full h-full gap-2 pt-10 place-items-center sm:hidden`}
+        >
+          <ProductCard
+            id="1"
+            name="Loveseat Sofa"
+            price={199}
+            rating={5}
+            discount={50}
+            imgUrl="/assets/images/thumnail_test.svg"
+            describtion={
+              sort === "grid-cols-1"
+                ? "Super-soft cushion cover in off-white with a tactile pattern that enhances the different tones in the pile and base."
+                : undefined
+            }
+          />
+          <ProductCard
+            id="1"
+            name="Loveseat Sofa"
+            price={199}
+            rating={5}
+            discount={50}
+            imgUrl="/assets/images/thumnail_test.svg"
+            describtion={
+              sort === "grid-cols-1"
+                ? "Super-soft cushion cover in off-white with a tactile pattern that enhances the different tones in the pile and base."
+                : undefined
+            }
+          />
+          <ProductCard
+            id="1"
+            name="Loveseat Sofa"
+            price={199}
+            rating={5}
+            discount={50}
+            imgUrl="/assets/images/thumnail_test.svg"
+            describtion={
+              sort === "grid-cols-1"
+                ? "Super-soft cushion cover in off-white with a tactile pattern that enhances the different tones in the pile and base."
+                : undefined
+            }
+          />
+          <ProductCard
+            id="1"
+            name="Loveseat Sofa"
+            price={199}
+            rating={5}
+            discount={50}
+            imgUrl="/assets/images/thumnail_test.svg"
+            describtion={
+              sort === "grid-cols-1"
                 ? "Super-soft cushion cover in off-white with a tactile pattern that enhances the different tones in the pile and base."
                 : undefined
             }

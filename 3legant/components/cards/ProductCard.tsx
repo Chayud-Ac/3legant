@@ -14,6 +14,7 @@ interface ProductCardProps {
   discount?: number;
   describtion?: string;
   imgUrl: string;
+  otherClasses?: string;
 }
 
 const ProductCard = ({
@@ -24,14 +25,15 @@ const ProductCard = ({
   discount,
   describtion,
   imgUrl,
+  otherClasses,
 }: ProductCardProps) => {
   // ProductCard has two different styles one is with description and another is without the describtion
   // So we check base on the describtion if the describtion is pass to this component or not
   if (describtion) {
     return (
-      <div className="flex flex-col gap-2 sm:flex-row">
+      <div className="flex flex-col gap-2 sm:flex-row items-center">
         {/* image container*/}
-        <div className="relative group max-w-[262px] max-h-[349px]">
+        <div className="relative group max-w-[262px] max-h-[349px] sm:min-w-[200px] lg:max-w-[462px] lg:max-h-[500px]">
           <Image
             src={imgUrl}
             alt="thumbnail"
@@ -48,7 +50,7 @@ const ProductCard = ({
             </div>
           </div>
         </div>
-        <div className="flex flex-col justify-center items-center md:p-6 max-w-[312px]">
+        <div className="flex flex-col justify-center items-center md:p-6 max-w-[262px] sm:max-w-[500px]">
           <div className="flex flex-col justify-start gap-1">
             <RatingsStars rating={rating} />
             <div className="flex flex-row justify-between items-center">
@@ -85,9 +87,11 @@ const ProductCard = ({
     );
   } else {
     return (
-      <div className="flex flex-col gap-2 min-w-[262px] max-w-[262px]">
+      <div className="flex flex-col gap-2 max-w-[262px]">
         {/* image container*/}
-        <div className="relative group max-w-[262px] max-h-[349px]">
+        <div
+          className={`relative group max-w-[262px] max-h-[349px] ${otherClasses} `}
+        >
           <Image
             src={imgUrl}
             alt="thumbnail"
