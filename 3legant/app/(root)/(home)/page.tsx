@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import { useSession } from "next-auth/react";
 import email from "next-auth/providers/email";
@@ -11,12 +9,10 @@ import NewsSection from "@/components/shared/NewsSection";
 import ProductHorizontal from "@/components/list/ProductHorizontal";
 import ArticleList from "@/components/list/ArticleList";
 import JoinUsNews from "@/components/shared/JoinUsNews";
+import DiscountProductsList from "@/components/list/DiscountProductsList";
+import NewArrivalProductsList from "@/components/list/NewArrivalProductsList";
 
-const Page = () => {
-  // const { data: session, status } = useSession();
-  // console.log(status);
-  // console.log(session?.expires);
-  // console.log(session?.user);
+const Page = async () => {
   return (
     <section className="flex flex-col justify-center items-center">
       <HomeHeader />
@@ -70,15 +66,17 @@ const Page = () => {
         </div>
       </div>
 
-      <ProductHorizontal />
+      <DiscountProductsList percentage={40} title="Discount Deal 40%" />
       {/* Feature */}
       <FeatureList />
 
-      <ProductHorizontal />
+      <DiscountProductsList percentage={20} title="Discount Deal 20%" />
 
       <NewsSection />
 
-      <ProductHorizontal />
+      {/* <ProductHorizontal title="Discount Deal 40%" /> */}
+
+      <NewArrivalProductsList />
 
       <ArticleList />
 

@@ -4,25 +4,11 @@ import { Button } from "../ui/button";
 
 interface LoadMoreProps {
   otherClasses: string;
-  cursor: string | null;
   hasMore: boolean;
-  maxPrice: number;
-  minPrice: number;
-  room: string;
   handleLoadMore: () => void;
 }
 
-const LoadMore = ({
-  otherClasses,
-  cursor,
-  hasMore,
-  maxPrice,
-  minPrice,
-  room,
-  handleLoadMore,
-}: LoadMoreProps) => {
-  console.log(cursor, maxPrice, minPrice, room);
-
+const LoadMore = ({ otherClasses, hasMore, handleLoadMore }: LoadMoreProps) => {
   if (!hasMore) {
     return null;
   }
