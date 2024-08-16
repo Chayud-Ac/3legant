@@ -11,9 +11,15 @@ interface ProductCardProps {
   name: string;
   price: number;
   rating: number;
-  discount?: number;
-  describtion?: string;
+  discount?: {
+    discountedPrice: number;
+    discountPercentage: number;
+    endDate?: Date;
+  };
+  description?: string;
   imgUrl: string;
+  otherClasses?: string;
+  newArrival?: boolean;
 }
 
 const ProductCard = ({
@@ -22,16 +28,19 @@ const ProductCard = ({
   price,
   rating,
   discount,
-  describtion,
+  description,
   imgUrl,
+  newArrival,
+  otherClasses,
 }: ProductCardProps) => {
   // ProductCard has two different styles one is with description and another is without the describtion
   // So we check base on the describtion if the describtion is pass to this component or not
-  if (describtion) {
+  console.log(discount);
+  if (description) {
     return (
-      <div className="flex flex-col gap-2 sm:flex-row">
+      <div className="flex flex-col gap-2 sm:flex-row items-center">
         {/* image container*/}
-        <div className="relative group max-w-[262px] max-h-[349px]">
+        <div className="relative group max-w-[272px] max-h-[349px] sm:min-w-[200px] lg:max-w-[462px] lg:max-h-[500px]">
           <Image
             src={imgUrl}
             alt="thumbnail"
@@ -40,15 +49,21 @@ const ProductCard = ({
             className="w-auto h-auto rounded-lg"
           />
           <div className="absolute top-2 left-2 flex flex-col gap-2">
-            <div className="flex items-center justify-center w-[67px] h-[24px] bg-light-2 rounded-md">
-              <p className="font-bold bold-sm text-dark-1">NEW</p>
-            </div>
-            <div className="flex items-center justify-center w-[67px] h-[24px] bg-accent-green rounded-md">
-              <p className="font-bold bold-sm text-light-1">-50%</p>
-            </div>
+            {newArrival && (
+              <div className="flex items-center justify-center w-[67px] h-[24px] bg-light-2 rounded-md">
+                <p className="font-bold bold-sm text-dark-1">NEW</p>
+              </div>
+            )}
+            {discount && (
+              <div className="flex items-center justify-center w-[67px] h-[24px] bg-accent-green rounded-md">
+                <p className="font-bold bold-sm text-light-1">
+                  -{discount.discountPercentage}%
+                </p>
+              </div>
+            )}
           </div>
         </div>
-        <div className="flex flex-col justify-center items-center md:p-6 max-w-[312px]">
+        <div className="flex flex-col justify-center items-center md:p-6 max-w-[262px] sm:max-w-[500px]">
           <div className="flex flex-col justify-start gap-1">
             <RatingsStars rating={rating} />
             <div className="flex flex-row justify-between items-center">
@@ -63,9 +78,7 @@ const ProductCard = ({
               {discount ? (
                 <>
                   {/* price after discount */}
-                  <h2 className="medium-sm">
-                    ${calculateDiscountedPrice(price, discount)}
-                  </h2>
+                  <h2 className="medium-sm">${discount.discountedPrice}</h2>
                   <h2 className="regular-sm line-through text-grey-1">
                     ${price}
                   </h2>
@@ -74,7 +87,7 @@ const ProductCard = ({
                 <h2 className="medium-sm">${price}</h2>
               )}
             </div>
-            <p className="regular-xs md:regular-sm sm:pt-4">{describtion}</p>
+            <p className="regular-xs md:regular-sm sm:pt-4">{description}</p>
             <div className="flex flex-col justify-center pt-4 gap-4">
               <AddtoCartButton otherClasses="w-full" />
               <AddtoWishListButton otherClasses="medium-sm max-sm:hidden" />
@@ -85,9 +98,11 @@ const ProductCard = ({
     );
   } else {
     return (
-      <div className="flex flex-col gap-2 min-w-[262px] max-w-[262px]">
+      <div className="flex flex-col gap-2 max-w-[262px]">
         {/* image container*/}
-        <div className="relative group max-w-[262px] max-h-[349px]">
+        <div
+          className={`relative group max-w-[262px] max-h-[349px] ${otherClasses} `}
+        >
           <Image
             src={imgUrl}
             alt="thumbnail"
@@ -96,12 +111,18 @@ const ProductCard = ({
             className="w-auto h-auto rounded-lg"
           />
           <div className="absolute top-2 left-2 flex flex-col gap-2">
-            <div className="flex items-center justify-center w-[67px] h-[24px] bg-light-2 rounded-md">
-              <p className="font-bold bold-sm text-dark-1">NEW</p>
-            </div>
-            <div className="flex items-center justify-center w-[67px] h-[24px] bg-accent-green rounded-md">
-              <p className="font-bold bold-sm text-light-1">-50%</p>
-            </div>
+            {newArrival && (
+              <div className="flex items-center justify-center w-[67px] h-[24px] bg-light-2 rounded-md">
+                <p className="font-bold bold-sm text-dark-1">NEW</p>
+              </div>
+            )}
+            {discount && (
+              <div className="flex items-center justify-center w-[67px] h-[24px] bg-accent-green rounded-md">
+                <p className="font-bold bold-sm text-light-1">
+                  -{discount.discountPercentage}%
+                </p>
+              </div>
+            )}
           </div>
           <AddtoCartButton otherClasses="absolute left-1/2 transform -translate-x-1/2 bottom-4  w-4/5  xl:hidden group-hover:block " />
         </div>
@@ -114,9 +135,7 @@ const ProductCard = ({
             {discount ? (
               <>
                 {/* price after discount */}
-                <h2 className="medium-sm">
-                  ${calculateDiscountedPrice(price, discount)}
-                </h2>
+                <h2 className="medium-sm">${discount.discountedPrice}</h2>
                 <h2 className="regular-sm line-through text-grey-1">
                   ${price}
                 </h2>

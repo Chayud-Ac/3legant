@@ -47,62 +47,79 @@ const ProductHorizontal = () => {
             rating={5}
             discount={50}
             imgUrl="/assets/images/thumnail_test.svg"
+            otherClasses="min-w-[262px]"
           />
           <ProductCard
-            id="2"
+            id="1"
             name="Loveseat Sofa"
             price={199}
             rating={5}
             discount={50}
             imgUrl="/assets/images/thumnail_test.svg"
+            otherClasses="min-w-[262px]"
           />
           <ProductCard
-            id="3"
+            id="1"
             name="Loveseat Sofa"
             price={199}
             rating={5}
             discount={50}
             imgUrl="/assets/images/thumnail_test.svg"
+            otherClasses="min-w-[262px]"
           />
           <ProductCard
-            id="4"
+            id="1"
             name="Loveseat Sofa"
             price={199}
             rating={5}
             discount={50}
             imgUrl="/assets/images/thumnail_test.svg"
+            otherClasses="min-w-[262px]"
           />
           <ProductCard
-            id="4"
+            id="1"
             name="Loveseat Sofa"
             price={199}
             rating={5}
             discount={50}
             imgUrl="/assets/images/thumnail_test.svg"
+            otherClasses="min-w-[262px]"
           />
           <ProductCard
-            id="4"
+            id="1"
             name="Loveseat Sofa"
             price={199}
             rating={5}
             discount={50}
             imgUrl="/assets/images/thumnail_test.svg"
+            otherClasses="min-w-[262px]"
           />
           <ProductCard
-            id="4"
+            id="1"
             name="Loveseat Sofa"
             price={199}
             rating={5}
             discount={50}
             imgUrl="/assets/images/thumnail_test.svg"
+            otherClasses="min-w-[262px]"
           />
           <ProductCard
-            id="4"
+            id="1"
             name="Loveseat Sofa"
             price={199}
             rating={5}
             discount={50}
             imgUrl="/assets/images/thumnail_test.svg"
+            otherClasses="min-w-[262px]"
+          />
+          <ProductCard
+            id="1"
+            name="Loveseat Sofa"
+            price={199}
+            rating={5}
+            discount={50}
+            imgUrl="/assets/images/thumnail_test.svg"
+            otherClasses="min-w-[262px]"
           />
 
           {/* Add more ProductCards as needed */}

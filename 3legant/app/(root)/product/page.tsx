@@ -1,6 +1,6 @@
 import ProductHeader from "@/components/header/ProductHeader";
 import DisplayTemplate from "@/components/list/DisplayTemplate";
-import Image from "next/image";
+import JoinUsNews from "@/components/shared/JoinUsNews";
 import React from "react";
 
 const Page = () => {
@@ -11,6 +11,8 @@ const Page = () => {
       <ProductHeader />
 
       <DisplayTemplate />
+
+      <JoinUsNews />
     </section>
   );
 };

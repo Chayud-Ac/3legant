@@ -1,4 +1,4 @@
-export const CategoryFilters = [
+export const RoomsFilters = [
   { name: "All Rooms", value: "allRooms" },
   { name: "Living Room", value: "livingRoom" },
   { name: "Bedroom", value: "bedRoom" },
@@ -22,9 +22,26 @@ export const priceOptionRange: {
   [key: string]: { minPrice: number; maxPrice: number };
 } = {
   option1: { minPrice: 0, maxPrice: 99999999 },
-  option2: { minPrice: 100, maxPrice: 200 },
-  option3: { minPrice: 200, maxPrice: 300 },
-  option4: { minPrice: 300, maxPrice: 400 },
-  option5: { minPrice: 400, maxPrice: 500 },
-  option6: { minPrice: 500, maxPrice: 999999999 },
+  option2: { minPrice: 0, maxPrice: 100 },
+  option3: { minPrice: 100, maxPrice: 200 },
+  option4: { minPrice: 200, maxPrice: 300 },
+  option5: { minPrice: 300, maxPrice: 400 },
+  option6: { minPrice: 400, maxPrice: 999999999 },
 };
+
+// {"_id":{"$oid":"66bcb8296115e57bdf1e94f0"},
+//   "name": "Plateware Wooden",
+//   "slug": "plateware-wooden",
+//   "description": "Small-sized plate made primarily from maple wood suitable with vintage oldish style.",
+//   "price": 39.99,
+//   "colorStock": {
+//     "black": 10
+//   },
+//   "totalStock": 10,
+//   "category": "Plates",
+//   "images": {
+//     "black": ["black.svg"]
+//   },
+//   "thumbnail": "thumbnail.svg",
+//   "avgRating": 4.0
+// }
