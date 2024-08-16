@@ -34,10 +34,9 @@ body {
 
 /* add custom scroll bar ใช้กับตัวตัว horizontal scroll ของ list item */
 
+/* Webkit browser scrollbar styles (Chrome, Safari) */
 .custom-scrollbar::-webkit-scrollbar {
-  margin-top: 20px;
-  width: 834px;
-  height: 5px;
+  height: 5px; /* Horizontal scrollbar height */
   border-radius: 80px;
 }
 
@@ -48,6 +47,11 @@ body {
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background: #343839;
   border-radius: 50px;
+}
+
+/* Optional: Add some spacing between content and scrollbar */
+.custom-scrollbar {
+  padding-top: 10px;
 }
 
 .custom-scrollbar-2::-webkit-scrollbar {
