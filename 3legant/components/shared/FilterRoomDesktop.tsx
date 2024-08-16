@@ -13,31 +13,31 @@ interface FilterDesktopProps {
   setTitleMain: (value: string) => void;
 }
 
-const FilterCatDesktop = ({
+const FilterRoomDesktop = ({
   title,
   filter,
   setTitleMain,
 }: FilterDesktopProps) => {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const cat = searchParams.get("cat");
-  console.log(cat);
+  const room = searchParams.get("room");
+  console.log(room);
 
-  const [currentValue, setCurrentValue] = useState(cat);
+  const [currentValue, setCurrentValue] = useState(room);
 
   useEffect(() => {
     if (currentValue) {
       const newUrl = formUrlQuery({
         params: searchParams.toString(),
         queryObject: {
-          cat: currentValue,
+          room: currentValue,
         },
       });
       router.push(newUrl, { scroll: false });
     } else {
       const newUrl = removeKeysFromQuery({
         params: searchParams.toString(),
-        keysToRemove: ["cat"],
+        keysToRemove: ["room"],
       });
       router.push(newUrl, { scroll: false });
     }
@@ -52,7 +52,7 @@ const FilterCatDesktop = ({
       <p className="medium-base text-dark-1">{title}</p>
       <div className="flex flex-col gap-3 h-[260px] overflow-y-scroll whitespace-nowrap scroll-smooth custom-scrollbar-2">
         {filter.map((item) => {
-          const isActive = cat === item.value;
+          const isActive = room === item.value;
           console.log(currentValue);
           return (
             <p
@@ -69,4 +69,4 @@ const FilterCatDesktop = ({
   );
 };
 
-export default FilterCatDesktop;
+export default FilterRoomDesktop;

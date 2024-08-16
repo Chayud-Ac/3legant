@@ -2,22 +2,114 @@
 
 import React from "react";
 import Filter from "../shared/Filter";
-import { CategoryFilters } from "@/constant/filter";
+import { RoomsFilters } from "@/constant/filter";
 import { priceFilters } from "@/constant/filter";
 import { useState } from "react";
 import SortDisplay from "../shared/SortDisplay";
 import ProductCard from "../cards/ProductCard";
 import Image from "next/image";
-import FilterCatDesktop from "../shared/FilterCatDesktop";
+import FilterRoomDesktop from "../shared/FilterRoomDesktop";
 import FilterPriceDesktop from "../shared/FilterPriceDesktop";
 import { priceOptionRange } from "@/constant/filter";
 import MultipleFilter from "../shared/MultipleFilter";
+import { useEffect } from "react";
+import { useSearchParams } from "next/navigation";
+import LoadMore from "../shared/LoadMore";
+
+interface Product {
+  _id: string;
+  name: string;
+  price: number;
+  rating: number;
+  discount?: {
+    discountedPrice: number;
+    discountPercentage: number;
+    endDate?: Date;
+  };
+  category: string;
+  description?: string;
+  newArrival?: boolean;
+}
 
 const DisplayTemplate = () => {
   const [sort, setSort] = useState("grid-cols-1");
+  const [products, setProducts] = useState<Product[]>([]);
+  const [cursor, setCursor] = useState(null);
+  const [hasMore, setHasMore] = useState(false);
   const [titleMain, setTitleMain] = useState("All Rooms");
-  console.log(sort);
+  const searchParams = useSearchParams();
 
+  const maxPriceStr = searchParams.get("maxPrice");
+  const maxPriceInt = maxPriceStr ? parseInt(maxPriceStr, 10) : null;
+
+  const minPriceStr = searchParams.get("minPrice");
+  const minPriceInt = minPriceStr ? parseInt(minPriceStr, 10) : null;
+
+  console.log(process.env.NEXT_PUBLIC_GOOGLE_CLOUD_BUCKET);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const params = {
+        cursor: null,
+        room: searchParams.get("room"),
+        maxPrice: maxPriceInt,
+        minPrice: minPriceInt,
+      };
+
+      console.log(params);
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/products`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(params),
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setProducts(data.products);
+        setCursor(data.nextCursor);
+        setHasMore(data.hasMore);
+      } else {
+        console.error("Failed to fetch products");
+      }
+    };
+
+    setCursor(null);
+    fetchProducts();
+  }, [searchParams.toString(), titleMain]);
+
+  const handleLoadMore = async () => {
+    const params = {
+      cursor: cursor,
+      room: searchParams.get("room"),
+      minPrice: minPriceInt,
+      maxPrice: maxPriceInt,
+    };
+
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/api/products`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(params),
+      }
+    );
+    if (response.ok) {
+      const data = await response.json();
+      setProducts((prevProducts) => [...prevProducts, ...data.products]);
+      setCursor(data.nextCursor);
+      setHasMore(data.hasMore);
+    } else {
+      console.error("Failed to fetch products");
+    }
+  };
+
+  console.log(products);
   return (
     <section className="flex flex-row w-full max-w-[1440px] container-1 gap-10 pt-10 pb-10 ">
       <div
@@ -33,9 +125,9 @@ const DisplayTemplate = () => {
           />
           <p className="medium-base text-dark-1">Filter</p>
         </div>
-        <FilterCatDesktop
-          title="CATEGORIES"
-          filter={CategoryFilters}
+        <FilterRoomDesktop
+          title="ROOMS"
+          filter={RoomsFilters}
           setTitleMain={setTitleMain}
         />
         <FilterPriceDesktop title="PRICES" filter={priceFilters} />
@@ -50,12 +142,12 @@ const DisplayTemplate = () => {
               <>
                 {" "}
                 <Filter
-                  title="CATEGORIES"
-                  filter={CategoryFilters}
+                  title="Rooms"
+                  filter={RoomsFilters}
                   otherClasses="text-dark-1 medium-sm w-full"
                   containerClasses="w-full flex-col gap-3"
                   type="single"
-                  filterKey="cat"
+                  filterKey="room"
                   setTitleMain={setTitleMain}
                   titleMain={titleMain}
                 />
@@ -75,120 +167,57 @@ const DisplayTemplate = () => {
         <div
           className={`grid ${sort} w-full h-full gap-2 pt-10 max-sm:hidden place-items-center`}
         >
-          <ProductCard
-            id="1"
-            name="Loveseat Sofa"
-            price={199}
-            rating={5}
-            discount={50}
-            imgUrl="/assets/images/thumnail_test.svg"
-            describtion={
-              sort === "grid-cols-2" || sort === "grid-cols-1"
-                ? "Super-soft cushion cover in off-white with a tactile pattern that enhances the different tones in the pile and base."
-                : undefined
-            }
-          />
-          <ProductCard
-            id="1"
-            name="Loveseat Sofa"
-            price={199}
-            rating={5}
-            discount={50}
-            imgUrl="/assets/images/thumnail_test.svg"
-            describtion={
-              sort === "grid-cols-2" || sort === "grid-cols-1"
-                ? "Super-soft cushion cover in off-white with a tactile pattern that enhances the different tones in the pile and base."
-                : undefined
-            }
-          />
-          <ProductCard
-            id="1"
-            name="Loveseat Sofa"
-            price={199}
-            rating={5}
-            discount={50}
-            imgUrl="/assets/images/thumnail_test.svg"
-            describtion={
-              sort === "grid-cols-2" || sort === "grid-cols-1"
-                ? "Super-soft cushion cover in off-white with a tactile pattern that enhances the different tones in the pile and base."
-                : undefined
-            }
-          />
-          <ProductCard
-            id="1"
-            name="Loveseat Sofa"
-            price={199}
-            rating={5}
-            discount={50}
-            imgUrl="/assets/images/thumnail_test.svg"
-            describtion={
-              sort === "grid-cols-2" || sort === "grid-cols-1"
-                ? "Super-soft cushion cover in off-white with a tactile pattern that enhances the different tones in the pile and base."
-                : undefined
-            }
-          />
+          {products.map((product: any) => (
+            <ProductCard
+              key={product._id}
+              id={product._id}
+              name={product.name}
+              price={product.price}
+              rating={product.rating}
+              discount={product.discount}
+              description={
+                sort === "grid-cols-2" || sort === "grid-cols-1"
+                  ? product.description
+                  : undefined
+              }
+              imgUrl={`${process.env.NEXT_PUBLIC_GOOGLE_CLOUD_BUCKET}/${product.category}/${product.slug}/${product.thumbnail}`}
+              newArrival={product.newArrival}
+            />
+          ))}
         </div>
         {/*--------------------------------------------------------------------------Display grid for moblie---------------------------------------------------------------------------------------------- */}
         <div
           className={`grid ${sort} w-full h-full gap-2 pt-10 place-items-center sm:hidden`}
         >
-          <ProductCard
-            id="1"
-            name="Loveseat Sofa"
-            price={199}
-            rating={5}
-            discount={50}
-            imgUrl="/assets/images/thumnail_test.svg"
-            describtion={
-              sort === "grid-cols-1"
-                ? "Super-soft cushion cover in off-white with a tactile pattern that enhances the different tones in the pile and base."
-                : undefined
-            }
-          />
-          <ProductCard
-            id="1"
-            name="Loveseat Sofa"
-            price={199}
-            rating={5}
-            discount={50}
-            imgUrl="/assets/images/thumnail_test.svg"
-            describtion={
-              sort === "grid-cols-1"
-                ? "Super-soft cushion cover in off-white with a tactile pattern that enhances the different tones in the pile and base."
-                : undefined
-            }
-          />
-          <ProductCard
-            id="1"
-            name="Loveseat Sofa"
-            price={199}
-            rating={5}
-            discount={50}
-            imgUrl="/assets/images/thumnail_test.svg"
-            describtion={
-              sort === "grid-cols-1"
-                ? "Super-soft cushion cover in off-white with a tactile pattern that enhances the different tones in the pile and base."
-                : undefined
-            }
-          />
-          <ProductCard
-            id="1"
-            name="Loveseat Sofa"
-            price={199}
-            rating={5}
-            discount={50}
-            imgUrl="/assets/images/thumnail_test.svg"
-            describtion={
-              sort === "grid-cols-1"
-                ? "Super-soft cushion cover in off-white with a tactile pattern that enhances the different tones in the pile and base."
-                : undefined
-            }
-          />
+          {products.map((product: any) => (
+            <ProductCard
+              key={product._id}
+              id={product._id}
+              name={product.name}
+              price={product.price}
+              rating={product.rating}
+              discount={product.discount}
+              description={
+                sort === "grid-cols-1" ? product.description : undefined
+              }
+              imgUrl={`${process.env.NEXT_PUBLIC_GOOGLE_CLOUD_BUCKET}/${product.category}/${product.slug}/${product.thumbnail}`}
+              newArrival={product.newArrival}
+            />
+          ))}
         </div>
+        <LoadMore
+          otherClasses="pt-10"
+          hasMore={hasMore}
+          handleLoadMore={handleLoadMore}
+        />
       </div>
     </section>
   );
 };
+
+// room: searchParams.get("room"),
+//         maxPrice: maxPriceInt,
+//         minPrice: minPriceInt,
 
 export default DisplayTemplate;
 

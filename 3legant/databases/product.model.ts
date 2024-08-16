@@ -1,6 +1,6 @@
 import { Schema, models, model, Document } from "mongoose";
 
-export interface IProduct {
+export interface IProduct extends Document {
   name: string;
   slug: string; // this use to form url when we try to get the image from the firebase cloud
   description: string;
@@ -11,6 +11,12 @@ export interface IProduct {
   category: string;
   images?: Record<string, string[]>; // define the object with string key and value as array of image path
   thumbnail: string;
+  createdAt: Date;
+  discount?: {
+    discountedPrice: number;
+    discountPercentage: number;
+    endDate: Date;
+  };
 }
 
 const productSchema = new Schema<IProduct>({
@@ -24,6 +30,12 @@ const productSchema = new Schema<IProduct>({
   category: { type: String, required: true },
   images: { type: Map, of: [String], required: true },
   thumbnail: { type: String, required: true },
+  createdAt: { type: Date, default: Date.now },
+  discount: {
+    discountedPrice: { type: Number },
+    discountPercentage: { type: Number },
+    endDate: { type: Date },
+  },
 });
 
 const Product = models.Product || model<IProduct>("Product", productSchema);
@@ -50,5 +62,11 @@ export default Product;
 //     'productname/color2.svg',
 //   ], // เป็น array เพือเราเพื่ม ตัว รูปภาพได้ใน อนาคตเผื่อเราจะเพื่มรูป
 // },
-// thumbnail : “productname/thumbnail.svg”
+// thumbnail : “productname/thumbnail.svg”,
+// createdAt: date,
+// discount : {
+//    discountedPrice :
+//    discountPercentage :
+//    endDate :
+// }
 // });
