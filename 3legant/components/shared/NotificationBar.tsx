@@ -16,7 +16,7 @@ const NotificationBar = () => {
         />
         <p className="medium-sm">30% off storewide - Limited time!</p>
         <div className="relative inline-flex items-center max-sm:hidden">
-          <Link href="/product" className="flex flex-row gap-1">
+          <Link href="/products" className="flex flex-row gap-1">
             <h2 className="medium-sm text-accent-blue">Shop Now</h2>
             <Image
               src="/assets/icons/arrow-right-blue.svg"

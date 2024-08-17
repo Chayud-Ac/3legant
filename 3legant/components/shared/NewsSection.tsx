@@ -27,7 +27,7 @@ const NewsSection = () => {
           </p>
           <TextLinkButton
             title="Shop Now"
-            href="/product"
+            href="/products"
             otherClasses="w-[92px]"
           />
         </div>

@@ -6,7 +6,7 @@ export const navbarLinks: NavbarLink[] = [
     label: "Home",
   },
   {
-    route: "/product",
+    route: "/products",
     label: "Product",
   },
   {

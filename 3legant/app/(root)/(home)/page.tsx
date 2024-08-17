@@ -38,7 +38,7 @@ const Page = async () => {
             height={664}
             alt="livingRoom"
             // !!TODO apply query later in href
-            href={`/product`}
+            href={`/products`}
             otherClasses="left-8 top-8 md:left-12 md:top-12 "
           />
         </div>
@@ -50,7 +50,7 @@ const Page = async () => {
             height={319}
             alt="bedRoom"
             // !!TODO apply query later in href
-            href={`/product`}
+            href={`/products`}
             otherClasses="left-8 top-8 md:left-12 md:top-12 "
           />
           <CategoryCard
@@ -60,7 +60,7 @@ const Page = async () => {
             height={319}
             alt="kitchen"
             // !!TODO apply query later in href
-            href={`/product`}
+            href={`/products`}
             otherClasses="left-8 top-8 md:left-12 md:top-12 "
           />
         </div>
