@@ -1,7 +1,6 @@
 import Image from "next/image";
 import React from "react";
 import RatingsStars from "../shared/RatingsStars";
-import { calculateDiscountedPrice } from "@/lib/utils";
 import AddtoCartButton from "../shared/AddtoCartButton";
 import Link from "next/link";
 import AddtoWishListButton from "../shared/AddtoWishListButton";
@@ -14,7 +13,7 @@ interface ProductCardProps {
   discount?: {
     discountedPrice: number;
     discountPercentage: number;
-    endDate?: Date;
+    endDate?: string;
   };
   description?: string;
   imgUrl: string;
@@ -67,7 +66,7 @@ const ProductCard = ({
           <div className="flex flex-col justify-start gap-1">
             <RatingsStars rating={rating} />
             <div className="flex flex-row justify-between items-center">
-              <Link href={`product/${id}`}>
+              <Link href={`products/${id}`}>
                 <h1 className="medium-sm text-dark-1 hover:underline pt-4">
                   {name}
                 </h1>
@@ -128,7 +127,7 @@ const ProductCard = ({
         </div>
         <div className="flex flex-col justify-start gap-1 w-full">
           <RatingsStars rating={rating} />
-          <Link href={`product/${id}`}>
+          <Link href={`products/${id}`}>
             <h1 className="medium-sm text-dark-1 hover:underline">{name}</h1>
           </Link>
           <div className="flex flex-row gap-3">

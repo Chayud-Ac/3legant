@@ -8,7 +8,7 @@ interface ProductHorizontalProps {
     discount?: {
       discountedPrice: number;
       discountPercentage: number;
-      endDate: Date;
+      endDate: string;
     };
     _id: string;
     name: string;
@@ -27,7 +27,7 @@ const ProductHorizontal = ({ title, products }: ProductHorizontalProps) => {
     return null; // Handle case where products are undefined or empty
   }
   return (
-    <div className="flex flex-col p-8 lg:p-10">
+    <div className="flex flex-col p-8 lg:p-10 justify-start items-start">
       <div className="flex flex-row container-1 w-full justify-between items-center max-w-[1360px]">
         <h4 className="h4-medium text-dark-1">{title}</h4>
         <TextLinkButton
@@ -36,7 +36,7 @@ const ProductHorizontal = ({ title, products }: ProductHorizontalProps) => {
           otherClasses="w-[120px] max-sm:hidden"
         />
       </div>
-      <div className="w-screen md:max-w-[1360px] m-auto pl-[32px] lg:pl-[120px] pt-10">
+      <div className="w-screen md:max-w-[1440px] m-auto pl-[32px] lg:pl-[120px] pt-10">
         <div
           id="slider"
           className="flex-row flex gap-2 w-full overflow-x-auto whitespace-nowrap custom-scrollbar scroll-smooth pb-10"

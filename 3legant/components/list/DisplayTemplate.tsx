@@ -24,7 +24,7 @@ interface Product {
   discount?: {
     discountedPrice: number;
     discountPercentage: number;
-    endDate?: Date;
+    endDate?: string;
   };
   category: string;
   description?: string;

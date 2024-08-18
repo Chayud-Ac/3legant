@@ -64,3 +64,29 @@ export function removeKeysFromQuery({
     { skipNull: true }
   );
 }
+
+// this util function will use to check the new arrival product when query the product document with treshold value
+
+export function newArrivalThreshold(daysThreshold: number = 30) {
+  const newArrivalThreshold = new Date();
+  newArrivalThreshold.setDate(newArrivalThreshold.getDate() - daysThreshold);
+  return newArrivalThreshold;
+}
+
+// count down timer this util function use to calculate the offer expire in OffereExpire component
+
+export const calculateTimeLeft = (endDate: string) => {
+  const difference = +new Date(endDate) - +new Date();
+  let timeLeft = {};
+
+  if (difference > 0) {
+    timeLeft = {
+      days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+      hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+      minutes: Math.floor((difference / 1000 / 60) % 60),
+      seconds: Math.floor((difference / 1000) % 60),
+    };
+  }
+
+  return timeLeft;
+};
