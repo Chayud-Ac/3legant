@@ -31,7 +31,7 @@ export async function POST(req: Request) {
 
     const globalQuery: FilterQuery<typeof Product> = {};
 
-    const tresHoldDate = newArrivalThreshold(10);
+    const tresHoldDate = newArrivalThreshold(10); // within 10 day from currentDate
 
     const selectedField = {
       name: 1,
