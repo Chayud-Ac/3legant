@@ -37,16 +37,20 @@ const ProductCard = ({
   console.log(discount);
   if (description) {
     return (
-      <div className="flex flex-col gap-2 sm:flex-row items-center">
+      <div className="flex flex-col gap-2 sm:flex-row items-center hover:shadow-lg transition-shadow hover:rounded-xl">
         {/* image container*/}
+
         <div className="relative group max-w-[272px] max-h-[349px] sm:min-w-[200px] lg:max-w-[462px] lg:max-h-[500px]">
-          <Image
-            src={imgUrl}
-            alt="thumbnail"
-            width={262}
-            height={349}
-            className="w-auto h-auto rounded-lg"
-          />
+          <Link href={`/products/${id}`}>
+            <Image
+              src={imgUrl}
+              alt="thumbnail"
+              width={262}
+              height={349}
+              className="w-auto h-auto rounded-lg "
+            />
+          </Link>
+
           <div className="absolute top-2 left-2 flex flex-col gap-2">
             {newArrival && (
               <div className="flex items-center justify-center w-[67px] h-[24px] bg-light-2 rounded-md">
@@ -67,7 +71,7 @@ const ProductCard = ({
             <RatingsStars rating={rating} />
             <div className="flex flex-row justify-between items-center">
               <Link href={`products/${id}`}>
-                <h1 className="medium-sm text-dark-1 hover:underline pt-4">
+                <h1 className="medium-sm text-dark-1 pt-4 hover:underline">
                   {name}
                 </h1>
               </Link>
@@ -88,7 +92,7 @@ const ProductCard = ({
             </div>
             <p className="regular-xs md:regular-sm sm:pt-4">{description}</p>
             <div className="flex flex-col justify-center pt-4 gap-4">
-              <AddtoCartButton otherClasses="w-full" />
+              {/* <AddtoCartButton otherClasses="w-full" /> */}
               <AddtoWishListButton otherClasses="medium-sm max-sm:hidden" />
             </div>
           </div>
@@ -97,18 +101,21 @@ const ProductCard = ({
     );
   } else {
     return (
-      <div className="flex flex-col gap-2 max-w-[262px]">
+      <div className="flex flex-col gap-2 max-w-[262px] hover:shadow-lg transition-shadow hover:rounded-xl">
         {/* image container*/}
         <div
           className={`relative group max-w-[262px] max-h-[349px] ${otherClasses} `}
         >
-          <Image
-            src={imgUrl}
-            alt="thumbnail"
-            width={262}
-            height={349}
-            className="w-auto h-auto rounded-lg"
-          />
+          <Link href={`/products/${id}`}>
+            <Image
+              src={imgUrl}
+              alt="thumbnail"
+              width={262}
+              height={349}
+              className="w-auto h-auto rounded-lg"
+            />
+          </Link>
+
           <div className="absolute top-2 left-2 flex flex-col gap-2">
             {newArrival && (
               <div className="flex items-center justify-center w-[67px] h-[24px] bg-light-2 rounded-md">
@@ -123,7 +130,7 @@ const ProductCard = ({
               </div>
             )}
           </div>
-          <AddtoCartButton otherClasses="absolute left-1/2 transform -translate-x-1/2 bottom-4  w-4/5  xl:hidden group-hover:block " />
+          {/* <AddtoCartButton otherClasses="absolute left-1/2 transform -translate-x-1/2 bottom-4  w-4/5  xl:hidden group-hover:block " /> */}
         </div>
         <div className="flex flex-col justify-start gap-1 w-full">
           <RatingsStars rating={rating} />
