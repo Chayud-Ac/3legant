@@ -141,7 +141,7 @@ const DisplayProduct = ({
           <div className="flex flex-col gap-3 items-center">
             <div className="flex flex-row w-full gap-4 items-center justify-center">
               <ProductAmountSelection otherClasses="pt-[9px] pb-[9px] pl-6 pr-6" />
-              <AddtoWishListButton otherClasses="w-full border-[2px] border-dark-1 medium-base" />
+              <AddtoWishListButton otherClasses="w-full border-[2px] border-dark-1 medium-base transition duration-300 hover:bg-grey-4 hover:shadow-md" />
             </div>
             <AddtoCartButton otherClasses="w-full" />
             <span className="w-full bg-grey-2 h-[1px] mt-4"></span>
