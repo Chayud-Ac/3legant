@@ -3,7 +3,7 @@ import React from "react";
 import { Button } from "../ui/button";
 
 interface LoadMoreProps {
-  otherClasses: string;
+  otherClasses?: string;
   hasMore: boolean;
   handleLoadMore: () => void;
 }

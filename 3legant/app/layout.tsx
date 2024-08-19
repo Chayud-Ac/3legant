@@ -6,6 +6,7 @@ import "../style/text.css";
 import { Toaster } from "@/components/ui/toaster";
 import AuthProvider from "@/context/AuthProvider";
 import { getServerSession } from "next-auth";
+import { StoreProvider } from "@/store/StoreProvider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -34,13 +35,15 @@ export default function RootLayout({
   const session = getServerSession();
 
   return (
-    <html lang="en">
-      <body className={`${inter.variable} ${poppins.variable}`}>
-        <AuthProvider session={session}>
-          <div>{children}</div>
-        </AuthProvider>
-        <Toaster />
-      </body>
-    </html>
+    <StoreProvider>
+      <html lang="en">
+        <body className={`${inter.variable} ${poppins.variable}`}>
+          <AuthProvider session={session}>
+            <div>{children}</div>
+          </AuthProvider>
+          <Toaster />
+        </body>
+      </html>
+    </StoreProvider>
   );
 }
