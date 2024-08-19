@@ -10,7 +10,7 @@ interface AddtoWishListButtonProps {
 const AddtoWishListButton = ({ otherClasses }: AddtoWishListButtonProps) => {
   return (
     <Button type="submit" className={`${otherClasses}`}>
-      <div className="flex flex-row items-center justify-center gap-2 w-full">
+      <div className="flex flex-row items-center justify-center gap-2">
         <svg
           width="24"
           height="24"

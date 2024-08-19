@@ -91,9 +91,8 @@ const ProductCard = ({
               )}
             </div>
             <p className="regular-xs md:regular-sm sm:pt-4">{description}</p>
-            <div className="flex flex-col justify-center pt-4 gap-4">
-              {/* <AddtoCartButton otherClasses="w-full" /> */}
-              <AddtoWishListButton otherClasses="medium-sm max-sm:hidden" />
+            <div className="flex flex-row justify-center pt-5">
+              <AddtoWishListButton otherClasses="medium-sm max-sm:hidden w-fit" />
             </div>
           </div>
         </div>
