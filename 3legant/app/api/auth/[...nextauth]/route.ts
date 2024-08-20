@@ -5,6 +5,7 @@ import FacebookProvider from "next-auth/providers/facebook";
 import bcrypt from "bcryptjs";
 import User from "@/databases/user.model";
 import { connectToDatabase } from "@/lib/mongoose";
+import { signIn } from "next-auth/react";
 
 export const authOptions: any = {
   providers: [
@@ -25,10 +26,15 @@ export const authOptions: any = {
               user.password
             );
             if (isPasswordCorrect) {
-              return {
-                ...user.toObject(),
-                remember: req?.body?.remember,
-              }; // Returning user object if credentials are correct
+              const userObject = user.toObject();
+              userObject._id = user._id.toString();
+
+              return JSON.parse(
+                JSON.stringify({
+                  ...userObject,
+                  remember: req?.body?.remember,
+                })
+              );
             }
           }
         } catch (err: any) {
@@ -46,18 +52,23 @@ export const authOptions: any = {
   callbacks: {
     async signIn({ user, account }: { user: any; account: any }) {
       if (account.provider === "credentials") {
-        return "true";
+        return true;
       }
       if (account.provider === "google") {
         await connectToDatabase();
         try {
           const existingUser = await User.findOne({ email: user.email });
+          let userObject;
           if (!existingUser) {
             const newUser = new User({
               email: user.email,
             });
             await newUser.save();
+            userObject = JSON.parse(JSON.stringify(newUser));
           }
+          userObject = JSON.parse(JSON.stringify(existingUser));
+          user._id = userObject._id.toString();
+
           return true;
         } catch (err) {
           console.log("Error saving user", err);
@@ -68,7 +79,8 @@ export const authOptions: any = {
     },
     async jwt({ token, user }: { token: any; user: any }) {
       if (user) {
-        token.id = user.id;
+        console.log(user._id);
+        token.id = user._id;
         token.email = user.email;
         token.remember = user.remember;
       }
