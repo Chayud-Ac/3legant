@@ -7,6 +7,8 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import MobileNav from "./MobileNav";
+import CartIconNum from "../CartIconNum";
+import CartSideBar from "../CartSideBar";
 
 const Navbar = () => {
   const [activePath, setActivePath] = useState("/");
@@ -51,7 +53,7 @@ const Navbar = () => {
         })}
       </div>
 
-      <div className="flex flex-row justify-between w-[130px] max-md:justify-end">
+      <div className="flex flex-row items-center justify-between item w-[130px] max-md:justify-end">
         <button type="button" className="max-md:hidden">
           <Image
             src="/assets/icons/search.svg"
@@ -68,23 +70,8 @@ const Navbar = () => {
             height={24}
           />
         </Link>
-        <div
-          className={`flex flex-row justify-between items-center ${cart && "w-[49px]"}`}
-        >
-          <Link href="/cart">
-            <Image
-              src="/assets/icons/shopping_bag.svg"
-              alt="cart"
-              width={24}
-              height={24}
-            />
-          </Link>
-          {cart > 0 && (
-            <div className="bg-dark-1 border rounded-full w-[22px] h-[22px] flex items-center justify-center">
-              <h2 className="text-white text-xs font-bold">{cart}</h2>
-            </div>
-          )}
-        </div>
+        {/* <CartIconNum /> */}
+        <CartSideBar />
       </div>
     </nav>
   );
