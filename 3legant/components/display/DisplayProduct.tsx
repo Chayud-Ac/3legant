@@ -10,7 +10,7 @@ import dynamic from "next/dynamic";
 import AddtoWishListButton from "../shared/AddtoWishListButton";
 import AddtoCartButton from "../shared/AddtoCartButton";
 import ProductAmountSelection from "../shared/ProductAmountSelection";
-import ReviewProduct from "./ReviewProduct";
+import { useSession } from "next-auth/react";
 
 interface SingleProduct {
   discount?: {
@@ -63,6 +63,12 @@ const DisplayProduct = ({
     setCurrentImagesArray(images[colorKey]);
   };
 
+  const [currentAmount, setCurrentAmount] = useState(1);
+
+  const { data: session, status } = useSession();
+  console.log(session);
+
+  console.log(name);
   return (
     <div className="flex flex-col justify-center items-start w-full gap-4 max-w-[1440px] container-1 sm:flex-row sm:gap-16">
       {/* carouseal image */}
@@ -140,10 +146,23 @@ const DisplayProduct = ({
 
           <div className="flex flex-col gap-3 items-center">
             <div className="flex flex-row w-full gap-4 items-center justify-center">
-              <ProductAmountSelection otherClasses="pt-[9px] pb-[9px] pl-6 pr-6" />
+              <ProductAmountSelection
+                otherClasses="pt-[9px] pb-[9px] pl-6 pr-6"
+                currentAmount={currentAmount}
+                setCurrentAmount={setCurrentAmount}
+              />
               <AddtoWishListButton otherClasses="w-full border-[2px] border-dark-1 medium-base transition duration-300 hover:bg-grey-4 hover:shadow-md" />
             </div>
-            <AddtoCartButton otherClasses="w-full" />
+            <AddtoCartButton
+              otherClasses="w-full"
+              productId={_id}
+              name={name}
+              quantity={currentAmount}
+              price={price}
+              color={currentColor}
+              category={category}
+              slug={slug}
+            />
             <span className="w-full bg-grey-2 h-[1px] mt-4"></span>
           </div>
         </div>
