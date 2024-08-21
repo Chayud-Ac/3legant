@@ -43,7 +43,7 @@ const CartItemAmountSelection = ({
   };
   return (
     <div
-      className={`flex flex-row gap-3 items-center justify-center rounded-md border border-dark-3 w-fit ${otherClasses}`}
+      className={`flex flex-row gap-3 items-center justify-center rounded-md border border-grey-1 w-fit ${otherClasses}`}
     >
       <Image
         // add the decrement amount function from redux

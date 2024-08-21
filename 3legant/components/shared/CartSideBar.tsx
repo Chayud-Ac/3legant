@@ -55,7 +55,7 @@ const CartSideBar = () => {
                   </span>
                 </div>
               </div>
-              <Link href={`/cart?cartId=${cartId}`}>
+              <Link href={`/cart`}>
                 <Button className="btn-primary text-center w-full">
                   View Cart
                 </Button>
