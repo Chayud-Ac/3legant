@@ -1,4 +1,10 @@
-import { FeatureCardProps, HeaderImg, NavbarLink, SocialLink } from "@/types";
+import {
+  CartTabContentProps,
+  FeatureCardProps,
+  HeaderImg,
+  NavbarLink,
+  SocialLink,
+} from "@/types";
 
 export const navbarLinks: NavbarLink[] = [
   {
@@ -69,4 +75,10 @@ export const featureCardLists: FeatureCardProps[] = [
     title: "24/7 Support",
     describtion: "Phone and Email support",
   },
+];
+
+export const cartTabContent: CartTabContentProps[] = [
+  { name: "shopping cart", No: 1, path: "/cart" },
+  { name: "Check out details", No: 2, path: "/checkout" },
+  { name: "Order complete", No: 3, path: "/order" },
 ];

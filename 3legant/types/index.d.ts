@@ -32,3 +32,9 @@ export interface URLProps {
   params: { id: string };
   searchParams: { [key: string]: string | undefined };
 }
+
+export interface CartTabContentProps {
+  name: string;
+  No: number;
+  path: string;
+}
