@@ -23,3 +23,34 @@ export const SignUpFormSchema = z.object({
     message: "You must accept the privacy policy.",
   }),
 });
+
+export const ContactFormSchema = z.object({
+  firstName: z
+    .string()
+    .min(2, { message: "FIRSTNAME must be at least 2 characters long." })
+    .max(50, { message: "FIRSTNAME can't exceed 50 characters long." }),
+  lastName: z
+    .string()
+    .min(2, { message: "LASTNAME must be at least 2 characters long." })
+    .max(50, { message: "LASTNAME can't exceed 50 characters long." }),
+  phoneNumber: z
+    .string()
+    .min(10, { message: "PHONE NUMBER must be at least 10 number" })
+    .max(15, { message: "PHONE NUMBER  can't exceed 15 number" }),
+  emailAddress: z.string().email({ message: "Invalid email address." }),
+});
+
+export const AddressFormSchema = z.object({
+  street: z
+    .string()
+    .min(10, { message: "Please provide more information of the street" }),
+  country: z.string(),
+  city: z.string(),
+  state: z.string(),
+  zipCode: z.number(),
+});
+
+export const CheckOutFromSchema = z.object({
+  contact: ContactFormSchema,
+  address: AddressFormSchema,
+});
