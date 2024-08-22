@@ -5,15 +5,15 @@ interface CartProps {
   userId: string | undefined;
   items: {
     product: string;
-    color: string; // Assumed to be a string like "red", "blue", etc.
-    quantity: number; // Corrected to be number
+    color: string;
+    quantity: number;
     pricePerUnit: number;
     totalItemsPrice: number;
     category: string;
     slug: string;
     name: string;
   }[];
-  coupon: string | null; // More conventional ordering of types
+  coupon: string | null;
   deliveryOption: string | undefined;
   totalCartAmount: number;
 }

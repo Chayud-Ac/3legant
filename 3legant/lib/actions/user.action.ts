@@ -1,30 +1,47 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { connectToDatabase } from "../mongoose";
+import { UpdateUserAddressParams, UpdateUserParams } from "./shared.types";
+import User from "@/databases/user.model";
+import Address from "@/databases/address.model";
 
-export async function userSignup() {
+export async function updateUser(params: UpdateUserParams) {
   try {
     connectToDatabase();
+    const { userId, updateData, path } = params;
+    await User.findOneAndUpdate({ userId }, updateData, {
+      new: true,
+    });
+    revalidatePath(path);
   } catch (error) {
     throw error;
   }
 }
 
-// {"_id":{"$oid":"66bb715d7c7dcaa8f2d1d131"},
-//   "name": "Sample Product",
-//   "description": "This is a sample product description.",
-//   "price": 49.99,
-//   "colorStock": {
-//     "Red": 10,
-//     "Blue": 15,
-//     "Green": 5
-//   },
-//   "totalStock": 30,
-//   "category": "Living Room",
-//   "images": {
-//     "Red": ["red-image1.jpg", "red-image2.jpg"],
-//     "Blue": ["blue-image1.jpg", "blue-image2.jpg"],
-//     "Green": ["green-image1.jpg"]
-//   },
-//   "thumbnail": "thumbnail-image.jpg"
-// }
+export async function updateUserAddress(params: UpdateUserAddressParams) {
+  try {
+    connectToDatabase();
+    const { userId, updateData, path } = params;
+    const user = await User.findById(userId).populate("address");
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    if (user.address) {
+      await Address.findByIdAndUpdate(user.address._id, updateData, {
+        new: true,
+      });
+    } else {
+      // If the user doesn't have an address, create one and associate it with the user
+      const newAddress = new Address(updateData);
+      await newAddress.save();
+      user.address = newAddress._id;
+      await user.save();
+    }
+    revalidatePath(path);
+  } catch (error) {
+    throw error;
+  }
+}
