@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  Form,
   FormControl,
   FormField,
   FormItem,
@@ -16,11 +17,151 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-interface ContactFormProps {
-  control: Control<any>;
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { Button } from "../ui/button";
+import Link from "next/link";
+import { AddressFormSchema } from "@/lib/validation";
+import { z } from "zod";
+
+interface AddressFormProps {
+  control?: Control<any>;
 }
 
-const AddressForm = ({ control }: ContactFormProps) => {
+const AddressForm = ({ control }: AddressFormProps) => {
+  const form = useForm<z.infer<typeof AddressFormSchema>>({
+    resolver: zodResolver(AddressFormSchema),
+    defaultValues: {
+      street: "",
+      country: "",
+      city: "",
+      state: "",
+      zipCode: 0,
+    },
+  });
+
+  // 2. Define a submit handler.
+  function onSubmit(values: z.infer<typeof AddressFormSchema>) {
+    // Do something with the form values.
+    // ✅ This will be type-safe and validated.
+    console.log(values);
+  }
+
+  if (!control) {
+    return (
+      <div className="flex flex-col gap-3 w-full md:flex-row">
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-8 w-full"
+          >
+            <div className="flex flex-col gap-5 px-10 py-5 ">
+              <p className="text-dark-2 medium-xl">Your Address</p>
+              <FormField
+                control={form.control}
+                name="street"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel>
+                      <span className="text-grey-1 medium-xs">
+                        STREE ADDRESS
+                      </span>
+                    </FormLabel>
+                    <FormControl>
+                      <Input placeholder="Street Address" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="country"
+                render={({ field }) => (
+                  <FormItem className="text-grey-1">
+                    <FormLabel>
+                      <span className="text-grey-2 medium-xs">COUNTRY</span>
+                    </FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="COUNTRY" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="Thailand">Thailand</SelectItem>
+                        <SelectItem value="USA">USA</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="city"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel>
+                      <span className="text-grey-1 medium-xs">TOWN / CITY</span>
+                    </FormLabel>
+                    <FormControl>
+                      <Input placeholder="TOWN / CITY" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <div className="flex flex-row gap-10">
+                <FormField
+                  control={form.control}
+                  name="state"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel>
+                        <span className="text-grey-1 medium-xs">STATE</span>
+                      </FormLabel>
+                      <FormControl>
+                        <Input placeholder="State" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="zipCode"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel>
+                        <span className="text-grey-1 medium-xs">ZIP CODE</span>
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          placeholder="Zip Code"
+                          {...field}
+                          onChange={(e) =>
+                            field.onChange(e.target.valueAsNumber)
+                          }
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <Button className="btn-primary max-w-[200px]">Save Change</Button>
+            </div>
+          </form>
+        </Form>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col gap-5 border rounded-md px-10 py-5 border-dark-1">
       <p className="text-dark-2 medium-xl">Shipping Address</p>

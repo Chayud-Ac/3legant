@@ -4,6 +4,7 @@ import {
   HeaderImg,
   NavbarLink,
   SocialLink,
+  profileTabContentProps,
 } from "@/types";
 
 export const navbarLinks: NavbarLink[] = [
@@ -81,4 +82,12 @@ export const cartTabContent: CartTabContentProps[] = [
   { name: "shopping cart", No: 1, path: "/cart" },
   { name: "Check out details", No: 2, path: "/checkout" },
   { name: "Order complete", No: 3, path: "/order" },
+];
+
+export const profileTabContent: profileTabContentProps[] = [
+  { name: "Account", value: "account" },
+  { name: "Address", value: "address" },
+  { name: "Orders", value: "order" },
+  { name: "Wishlist", value: "wishlist" },
+  { name: "Log out", value: "logout" },
 ];
