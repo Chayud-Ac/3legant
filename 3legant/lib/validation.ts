@@ -54,3 +54,19 @@ export const CheckOutFromSchema = z.object({
   contact: ContactFormSchema,
   address: AddressFormSchema,
 });
+
+export const AccountFormSchema = z.object({
+  firstName: z
+    .string()
+    .min(2, { message: "FIRSTNAME must be at least 2 characters long." })
+    .max(50, { message: "FIRSTNAME can't exceed 50 characters long." }),
+  lastName: z
+    .string()
+    .min(2, { message: "LASTNAME must be at least 2 characters long." })
+    .max(50, { message: "LASTNAME can't exceed 50 characters long." }),
+  displayName: z
+    .string()
+    .min(2, { message: "displayName must be at least 2 characters long." })
+    .max(50, { message: "displayName can't exceed 50 characters long." }),
+  emailAddress: z.string().email({ message: "Invalid email address." }),
+});

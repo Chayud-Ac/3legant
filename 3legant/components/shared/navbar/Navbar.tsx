@@ -16,7 +16,7 @@ const Navbar = () => {
 
   // !TODO id is getting from the cookies session after user signIn we will redirect to that particular user depending on the id /profile/id
   // !TODO create cartContext and store all the cart function and cart number which those will be pass across the component in the application
-  const [id, setId] = useState("");
+  const [id, setId] = useState(1);
   const [cart, setCart] = useState(0);
 
   useEffect(() => {
@@ -53,7 +53,7 @@ const Navbar = () => {
         })}
       </div>
 
-      <div className="flex flex-row items-center justify-between item w-[130px] max-md:justify-end">
+      <div className="flex flex-row items-center justify-between item w-[130px] max-md:justify-center max-md:gap-2">
         <button type="button" className="max-md:hidden">
           <Image
             src="/assets/icons/search.svg"
@@ -62,7 +62,7 @@ const Navbar = () => {
             height={24}
           />
         </button>
-        <Link href={`profile/${id}`} className="max-md:hidden">
+        <Link href={`profile/${id}`}>
           <Image
             src="/assets/icons/user-circle.svg"
             alt="user-icon"

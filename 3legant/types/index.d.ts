@@ -38,3 +38,8 @@ export interface CartTabContentProps {
   No: number;
   path: string;
 }
+
+export interface profileTabContentProps {
+  name: string;
+  value: string;
+}
