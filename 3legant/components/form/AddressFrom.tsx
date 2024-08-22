@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Form,
   FormControl,
@@ -23,12 +23,39 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 import { AddressFormSchema } from "@/lib/validation";
 import { z } from "zod";
+import { updateUserAddress } from "@/lib/actions/user.action";
+import { usePathname } from "next/navigation";
 
 interface AddressFormProps {
   control?: Control<any>;
+  userId: string;
 }
 
-const AddressForm = ({ control }: AddressFormProps) => {
+async function getAddress(userId: string) {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/api/user/${userId}?q=address`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (response.ok) {
+      return response.json();
+    } else {
+      throw new Error("Cannot fetch the user");
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
+const AddressForm = ({ control, userId }: AddressFormProps) => {
+  console.log(userId);
+  const pathname = usePathname();
   const form = useForm<z.infer<typeof AddressFormSchema>>({
     resolver: zodResolver(AddressFormSchema),
     defaultValues: {
@@ -40,11 +67,39 @@ const AddressForm = ({ control }: AddressFormProps) => {
     },
   });
 
+  const { reset } = form;
+
+  useEffect(() => {
+    async function fetchAddress() {
+      try {
+        const userAddress = await getAddress(userId);
+        if (userAddress) {
+          console.log(userAddress);
+          reset({
+            street: userAddress.data.street || "",
+            country: userAddress.data.country || "",
+            city: userAddress.data.city || "",
+            state: userAddress.data.state || "",
+            zipCode: userAddress.data.zipCode || "",
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    }
+    fetchAddress();
+  }, [userId, reset]);
+
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof AddressFormSchema>) {
+  async function onSubmit(values: z.infer<typeof AddressFormSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values);
+    await updateUserAddress({
+      userId: userId,
+      updateData: values,
+      path: pathname,
+    });
   }
 
   if (!control) {
@@ -82,10 +137,7 @@ const AddressForm = ({ control }: AddressFormProps) => {
                     <FormLabel>
                       <span className="text-grey-2 medium-xs">COUNTRY</span>
                     </FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+                    <Select onValueChange={field.onChange} value={field.value}>
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="COUNTRY" />

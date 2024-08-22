@@ -12,12 +12,26 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import DisplayTabProfile from "@/components/display/DisplayTabProfile";
+import { formUrlQuery } from "@/lib/utils";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
-const page = () => {
+const page = ({ params }: { params: { userId: string } }) => {
+  const userId = params.userId;
+
+  const router = useRouter();
+  console.log(params);
   const [currentTab, setCurrentTab] = useState("account");
   const handleTabChange = (value: string) => {
     setCurrentTab(value);
-    console.log(currentTab);
+    const newUrl = formUrlQuery({
+      params: params.toString(),
+      queryObject: {
+        q: value,
+      },
+    });
+    console.log(newUrl);
+    router.push(newUrl, { scroll: false });
   };
 
   return (
@@ -31,6 +45,7 @@ const page = () => {
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
             <p className="text-dark-1 medium-2xl">Sofia Havertz</p>
+            <p className="text-dark-1 regular-xs italic">Test1@gmail.com</p>
           </div>
           {/* desktop version */}
           <div className="flex flex-col w-full gap-6 max-md:hidden">
@@ -73,7 +88,7 @@ const page = () => {
           </Select>
         </div>
         {/* Tab Content display base on the currentTab state */}
-        <DisplayTabProfile type={currentTab} />
+        <DisplayTabProfile type={currentTab} userId={userId} />
       </div>
     </div>
   );

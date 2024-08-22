@@ -88,7 +88,7 @@ const MobileNav = () => {
               </div>
               <div className="relative inline-flex items-center">
                 <div className="flex flex-row justify-between items-center mb-4 w-full">
-                  <Link href="/profile">
+                  <Link href={`/profile/${1}?q=account`}>
                     <h1 className="text-grey-1 medium-lg hover:text-dark-2 transition-colors duration-300 ">
                       WishList
                     </h1>

@@ -9,21 +9,22 @@ import { useEffect } from "react";
 import MobileNav from "./MobileNav";
 import CartIconNum from "../CartIconNum";
 import CartSideBar from "../CartSideBar";
+import { useSession } from "next-auth/react";
+import { useDispatch } from "react-redux";
+import { setUser } from "@/store/slices/userSlice";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
-const Navbar = () => {
+const Navbar = ({ session }: any) => {
   const [activePath, setActivePath] = useState("/");
   const pathname = usePathname();
 
-  // !TODO id is getting from the cookies session after user signIn we will redirect to that particular user depending on the id /profile/id
-  // !TODO create cartContext and store all the cart function and cart number which those will be pass across the component in the application
-  const [id, setId] = useState(1);
-  const [cart, setCart] = useState(0);
+  const id = session.user.id;
 
   useEffect(() => {
     setActivePath(pathname);
   }, [pathname]);
 
-  console.log(pathname);
   return (
     <nav className="flex-between z-50 w-full container-1 py-4 items-center inline-flex">
       <div className="flex flex-row gap-1">
@@ -62,7 +63,7 @@ const Navbar = () => {
             height={24}
           />
         </button>
-        <Link href={`profile/${id}`}>
+        <Link href={`/profile/${id}?q=account`}>
           <Image
             src="/assets/icons/user-circle.svg"
             alt="user-icon"

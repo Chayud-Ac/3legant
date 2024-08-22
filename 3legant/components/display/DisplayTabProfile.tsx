@@ -3,12 +3,14 @@ import AddressForm from "../form/AddressFrom";
 
 interface DisplayTabProfileProps {
   type: string;
+  userId: string;
 }
 
-const DisplayTabProfile = ({ type }: DisplayTabProfileProps) => {
+const DisplayTabProfile = ({ type, userId }: DisplayTabProfileProps) => {
+  console.log(userId);
   const componentsMap: { [key: string]: JSX.Element } = {
-    account: <AccountForm />,
-    address: <AddressForm />,
+    account: <AccountForm userId={userId} />,
+    address: <AddressForm userId={userId} />,
     order: <div className="w-full">Order</div>,
     wishlist: <div className="w-full">Wishlist</div>,
   };

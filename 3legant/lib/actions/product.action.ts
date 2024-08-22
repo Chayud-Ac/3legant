@@ -1,7 +1,7 @@
 "use server";
 
 import { GetDiscountProducts } from "./shared.types";
-import { GetNewArrivalProdcuts } from "./shared.types";
+import { GetNewArrivalProducts } from "./shared.types";
 import { connectToDatabase } from "../mongoose";
 import Discount from "@/databases/discount.model";
 import Product from "@/databases/product.model";
@@ -59,7 +59,7 @@ export async function getDiscountProducts(params: GetDiscountProducts) {
   }
 }
 
-export async function getNewArrivalProducts(params: GetNewArrivalProdcuts) {
+export async function getNewArrivalProducts(params: GetNewArrivalProducts) {
   await connectToDatabase();
 
   try {

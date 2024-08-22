@@ -68,5 +68,4 @@ export const AccountFormSchema = z.object({
     .string()
     .min(2, { message: "displayName must be at least 2 characters long." })
     .max(50, { message: "displayName can't exceed 50 characters long." }),
-  emailAddress: z.string().email({ message: "Invalid email address." }),
 });

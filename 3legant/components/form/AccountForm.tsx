@@ -1,13 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Form, FormDescription } from "@/components/ui/form";
-
 import { AccountFormSchema } from "@/lib/validation";
 import Link from "next/link";
-
 import {
   FormControl,
   FormField,
@@ -16,25 +14,75 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
-import { Control } from "react-hook-form";
+import { usePathname } from "next/navigation";
+import { updateUser } from "@/lib/actions/user.action";
 
-const AccountForm = () => {
+interface AccountFormProps {
+  userId: string;
+}
+
+async function getUser(userId: string) {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/api/user/${userId}?q=account`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (response.ok) {
+      return response.json();
+    } else {
+      throw new Error("Cannot fetch the user");
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
+const AccountForm = ({ userId }: AccountFormProps) => {
+  const pathname = usePathname();
   const form = useForm<z.infer<typeof AccountFormSchema>>({
     resolver: zodResolver(AccountFormSchema),
     defaultValues: {
       firstName: "",
       lastName: "",
       displayName: "",
-      emailAddress: "",
     },
   });
 
-  // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof AccountFormSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
+  const { reset } = form;
+
+  useEffect(() => {
+    async function fetchUser() {
+      try {
+        const userData = await getUser(userId);
+        if (userData) {
+          reset({
+            firstName: userData.data.firstName || "",
+            lastName: userData.data.lastName || "",
+            displayName: userData.data.displayName || "",
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    }
+    fetchUser();
+  }, [userId, reset]);
+
+  async function onSubmit(values: z.infer<typeof AccountFormSchema>) {
     console.log(values);
+    await updateUser({
+      userId: userId,
+      updateData: values,
+      path: pathname,
+    });
   }
+
   return (
     <div className="flex flex-col gap-3 w-full md:flex-row">
       <Form {...form}>
@@ -95,25 +143,10 @@ const AccountForm = () => {
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="emailAddress"
-              render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormLabel>
-                    <span className="text-grey-1 medium-xs">EMAIL ADDRESS</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input placeholder="Your Email" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button className="btn-primary max-w-[200px]">Save Change</Button>
+            <Button className="btn-primary max-w-[200px]">Save Changes</Button>
             <div className="flex flex-row items-center gap-2">
               <p className="regular-xs text-grey-2">
-                Do you want to reset pass word ?
+                Do you want to reset your password?
               </p>
               <Link
                 href="/password"

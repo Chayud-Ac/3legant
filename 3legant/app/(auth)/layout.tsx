@@ -1,8 +1,6 @@
 import Image from "next/image";
-import { userSignup } from "@/lib/actions/user.action";
 
 const layout = ({ children }: { children: React.ReactNode }) => {
-  userSignup();
   return (
     <section>
       <div className="flex flex-col justify-center gap-[40px] max-md:items-center md:gap-[56px] md:flex-row ">
