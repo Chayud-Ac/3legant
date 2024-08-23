@@ -1,11 +1,12 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import RatingsStars from "../shared/RatingsStars";
 import { Textarea } from "../ui/textarea";
+import ReplyForm from "../form/ReplyForm";
 
 const ProductReviewCard = () => {
   return (
     <div className="flex justify-start items-start w-full pt-10">
-      <div className="flex flex-row gap-3 md:gap-8 bg-grey-4 p-4 rounded-lg">
+      <div className="flex flex-row gap-3 md:gap-5 bg-grey-4 p-4 rounded-lg">
         <Avatar className="w-[40px] h-[40px] md:w-[60px] md:h-[60px]">
           <AvatarImage src="https://github.com/shadcn.png" />
           <AvatarFallback>CN</AvatarFallback>
@@ -56,19 +57,7 @@ const ProductReviewCard = () => {
             <span className="medium-xs text-dark-4 text-center">
               load more reply
             </span>
-            <div className="flex flex-row mt-2 gap-4 items-center ">
-              <Avatar className="w-[40px] h-[40px] md:w-[60px] md:h-[60px]">
-                <AvatarImage src="https://github.com/shadcn.png" />
-                <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
-
-              <div className="flex flex-col w-full">
-                <Textarea
-                  placeholder="Write your reply"
-                  className="border-none bg-grey-5"
-                />
-              </div>
-            </div>
+            <ReplyForm />
           </div>
         </div>
       </div>

@@ -34,3 +34,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# JSON google storage key
+voltaic-spider-432610-c2-b8e6e5b6afe9.json

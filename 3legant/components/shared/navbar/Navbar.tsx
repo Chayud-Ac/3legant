@@ -19,6 +19,7 @@ const Navbar = ({ session }: any) => {
   const [activePath, setActivePath] = useState("/");
   const pathname = usePathname();
 
+  console.log("test");
   const id = session.user.id;
 
   useEffect(() => {

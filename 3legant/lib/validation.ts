@@ -69,3 +69,10 @@ export const AccountFormSchema = z.object({
     .min(2, { message: "displayName must be at least 2 characters long." })
     .max(50, { message: "displayName can't exceed 50 characters long." }),
 });
+
+export const ImageUploadFormSchema = z.object({
+  image: z
+    //Rest of validations done via react dropzone
+    .instanceof(File)
+    .refine((file) => file.size !== 0, "Please upload an image"),
+});
