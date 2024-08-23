@@ -15,6 +15,7 @@ import DisplayTabProfile from "@/components/display/DisplayTabProfile";
 import { formUrlQuery } from "@/lib/utils";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
+import ProfileImageUpload from "@/components/form/ProfileImageUpload";
 
 const page = ({ params }: { params: { userId: string } }) => {
   const userId = params.userId;
@@ -30,7 +31,7 @@ const page = ({ params }: { params: { userId: string } }) => {
         q: value,
       },
     });
-    console.log(newUrl);
+    console.log(userId);
     router.push(newUrl, { scroll: false });
   };
 
@@ -40,10 +41,7 @@ const page = ({ params }: { params: { userId: string } }) => {
       <div className="flex flex-col justify-center gap-10 md:flex-row w-full max-w-[1440px] pt-8 md:pt-10 ">
         <div className="flex flex-col justify-center items-center gap-10 px-4 py-10 bg-grey-4 rounded-md w-full max-w-[332px]">
           <div className="flex flex-col gap-2 items-center justify-center">
-            <Avatar className="w-[100px] h-[100px]">
-              <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
+            <ProfileImageUpload userId={userId} />
             <p className="text-dark-1 medium-2xl">Sofia Havertz</p>
             <p className="text-dark-1 regular-xs italic">Test1@gmail.com</p>
           </div>
