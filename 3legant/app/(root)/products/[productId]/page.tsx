@@ -85,7 +85,7 @@ const Page = async ({ params }: { params: { productId: string } }) => {
 
       <NewArrivalProductsList />
 
-      <ReviewProduct />
+      <ReviewProduct productId={params.productId} />
     </section>
   );
 };

@@ -28,7 +28,7 @@ import { usePathname } from "next/navigation";
 
 interface AddressFormProps {
   control?: Control<any>;
-  userId: string;
+  userId?: string;
 }
 
 async function getAddress(userId: string) {
@@ -73,19 +73,21 @@ const AddressForm = ({ control, userId }: AddressFormProps) => {
     console.log("userAddress");
     async function fetchAddress() {
       try {
-        const userData = await getAddress(userId);
-        console.log(userData);
-        if (userData) {
+        if (userId) {
+          const userData = await getAddress(userId);
           console.log(userData);
-          reset({
-            street: userData.data.street || "",
-            country: userData.data.country || "",
-            city: userData.data.city || "",
-            state: userData.data.state || "",
-            zipCode: userData.data.zipCode || "",
-          });
+          if (userData) {
+            console.log(userData);
+            reset({
+              street: userData.data.street || "",
+              country: userData.data.country || "",
+              city: userData.data.city || "",
+              state: userData.data.state || "",
+              zipCode: userData.data.zipCode || "",
+            });
+          }
+          console.log(userData);
         }
-        console.log(userData);
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -99,11 +101,13 @@ const AddressForm = ({ control, userId }: AddressFormProps) => {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values);
-    await updateUserAddress({
-      userId: userId,
-      updateData: values,
-      path: pathname,
-    });
+    if (userId) {
+      await updateUserAddress({
+        userId: userId,
+        updateData: values,
+        path: pathname,
+      });
+    }
   }
 
   if (!control) {
