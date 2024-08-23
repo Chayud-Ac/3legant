@@ -1,6 +1,7 @@
 import { connectToDatabase } from "@/lib/mongoose";
 import { NextRequest, NextResponse } from "next/server";
 import User from "@/databases/user.model";
+import Address from "@/databases/address.model";
 
 export async function GET(
   req: NextRequest,
@@ -11,6 +12,8 @@ export async function GET(
 
     const userId = params.userId;
     const query = req.nextUrl.searchParams.get("q");
+
+    console.log(query);
 
     if (!userId) {
       return new NextResponse(JSON.stringify({ message: "No UserFound" }), {
@@ -31,19 +34,18 @@ export async function GET(
           lastName: 1,
           displayName: 1,
         });
+        console.log(data);
         break;
 
       case "address":
-        const addressDocument = await User.findById(userId)
-          .select({
-            _id: 0,
-            address: 1,
-          })
-          .populate({
-            path: "address",
-          });
+        console.log("test");
+        const user = await User.findById(userId).select({
+          _id: 0,
+          address: 1,
+        });
 
-        data = addressDocument.address;
+        data = await Address.findById(user.address);
+
         break;
 
       case "order":

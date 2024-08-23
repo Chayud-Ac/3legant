@@ -70,24 +70,28 @@ const AddressForm = ({ control, userId }: AddressFormProps) => {
   const { reset } = form;
 
   useEffect(() => {
+    console.log("userAddress");
     async function fetchAddress() {
       try {
-        const userAddress = await getAddress(userId);
-        if (userAddress) {
-          console.log(userAddress);
+        const userData = await getAddress(userId);
+        console.log(userData);
+        if (userData) {
+          console.log(userData);
           reset({
-            street: userAddress.data.street || "",
-            country: userAddress.data.country || "",
-            city: userAddress.data.city || "",
-            state: userAddress.data.state || "",
-            zipCode: userAddress.data.zipCode || "",
+            street: userData.data.street || "",
+            country: userData.data.country || "",
+            city: userData.data.city || "",
+            state: userData.data.state || "",
+            zipCode: userData.data.zipCode || "",
           });
         }
+        console.log(userData);
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
     }
     fetchAddress();
+    console.log("userAddress");
   }, [userId, reset]);
 
   // 2. Define a submit handler.
