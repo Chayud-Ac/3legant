@@ -5,15 +5,23 @@ import { Textarea } from "../ui/textarea";
 import { replyReview } from "@/lib/actions/review.action";
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
+import { ReplyState } from "../list/ProductReviewList";
 
 interface ReplyFormProps {
   reviewId: string;
   reply: boolean;
-  setReplyObject: (value: any) => void;
+  setReplyObject: React.Dispatch<React.SetStateAction<ReplyState>>;
+  userSession: any;
 }
 
-const ReplyForm = ({ reviewId, reply, setReplyObject }: ReplyFormProps) => {
+const ReplyForm = ({
+  reviewId,
+  reply,
+  setReplyObject,
+  userSession,
+}: ReplyFormProps) => {
   const { data: session, status } = useSession();
+  console.log(reviewId);
 
   const [comment, setComment] = useState("");
 
@@ -24,16 +32,34 @@ const ReplyForm = ({ reviewId, reply, setReplyObject }: ReplyFormProps) => {
       console.log("Please login");
     } else {
       try {
-        const newReply = await replyReview({
+        const result = await replyReview({
           reviewId,
-          userId: session?.user?.id,
+          userId: userSession?.user?.id,
           comment,
           path: pathname.toString(),
         });
 
-        setComment("");
+        const newReplyObject = result.parseNewReply;
+        console.log(newReplyObject);
 
-        console.log(newReply);
+        setReplyObject((prevState) => ({
+          ...prevState,
+          [reviewId]: [
+            ...(prevState[reviewId] || []),
+            {
+              user: {
+                _id: userSession.user.id,
+                displayName: userSession.user.displayName,
+                image: userSession.user.image,
+              },
+              comment: newReplyObject.comment,
+              createdAt: newReplyObject.createdAt,
+              _id: newReplyObject._id,
+            },
+          ],
+        }));
+
+        setComment("");
       } catch (error) {
         console.error("Failed to submit reply:", error);
         throw new Error("An error occurred while submitting the reply.");
@@ -53,7 +79,7 @@ const ReplyForm = ({ reviewId, reply, setReplyObject }: ReplyFormProps) => {
       className={`flex flex-row mt-2 gap-4 items-center transition-opacity duration-500 ease-in-out`}
     >
       <Avatar className="w-[40px] h-[40px] md:w-[60px] md:h-[60px]">
-        <AvatarImage src="https://github.com/shadcn.png" />
+        <AvatarImage src={userSession.user.image} />
         <AvatarFallback>CN</AvatarFallback>
       </Avatar>
 

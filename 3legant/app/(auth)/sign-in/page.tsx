@@ -37,10 +37,8 @@ const Page = () => {
       remember: false,
     },
   });
-  console.log("Google Client ID:", process.env.MONGODB_URL);
 
   async function onSubmit(values: z.infer<typeof SignInFormSchema>) {
-    console.log(values);
     setLoading(true);
     const { email, password, remember } = values;
 

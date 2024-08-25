@@ -5,10 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { usePathname } from "next/navigation";
 import { reviewProduct } from "@/lib/actions/review.action";
+import { Review } from "../list/ProductReviewList";
 
 interface ProductReviewFormProps {
   userSession: any;
   productId: string;
+  setReviewList: React.Dispatch<React.SetStateAction<Review[]>>;
 }
 
 // รีวิว ไม่ต้อง ใช้ z form validation ก็ได้บางคนอาจไม่ได้คอมเม้น แค่ rating อย่างเดียว
@@ -16,13 +18,12 @@ interface ProductReviewFormProps {
 const ProductReviewForm = ({
   userSession,
   productId,
+  setReviewList,
 }: ProductReviewFormProps) => {
   const pathname = usePathname();
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState("");
   const userId = userSession.user.id;
-
-  console.log(pathname.toString());
 
   const handleRatingChange = (newRating: number) => {
     if (!userSession) {
@@ -37,7 +38,7 @@ const ProductReviewForm = ({
       console.log("Please login");
     }
     // add toast and loading later
-    const makeReview = await reviewProduct({
+    const newReview = await reviewProduct({
       productId,
       userId,
       reviewData: {
@@ -47,6 +48,11 @@ const ProductReviewForm = ({
       path: pathname.toString(),
     });
 
+    newReview.parseNewReview["user"] = userSession.user;
+
+    console.log(newReview);
+
+    setReviewList((prev) => [...prev, newReview.parseNewReview]);
     setRating(5);
     setComment("");
   };

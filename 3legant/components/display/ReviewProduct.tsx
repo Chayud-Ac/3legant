@@ -23,11 +23,15 @@ const ReviewProduct = async ({
     userSession = session;
   }
 
+  console.log(userSession);
+
+  console.log(productId);
   return (
-    <div className="flex flex-col justify-center items-center w-full max-w-[1440px] gap-10 container-1">
-      <ProductReviewList totalReviews={totalReviews} productId={productId} />
-      <ProductReviewForm userSession={userSession} productId={productId} />
-    </div>
+    <ProductReviewList
+      totalReviews={totalReviews}
+      productId={productId}
+      userSession={userSession}
+    />
   );
 };
 

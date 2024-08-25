@@ -6,15 +6,16 @@ import LoadMore from "../shared/LoadMore";
 import Filter from "../shared/Filter";
 import { reviewFilters } from "@/constant/filter";
 import { useSearchParams } from "next/navigation";
+import ProductReviewForm from "../form/ProductReviewForm";
 
 interface ProductReviewListProps {
   totalReviews?: number;
   productId: string;
+  userSession: any;
 }
 
-interface ReplyState {
+export interface ReplyState {
   [reviewId: string]: {
-    _id: string;
     user: {
       _id: string;
       displayName?: string;
@@ -22,10 +23,11 @@ interface ReplyState {
     };
     comment: string;
     createdAt: string;
+    _id: string;
   }[];
 }
 
-interface Review {
+export interface Review {
   _id: string;
   product: string;
   user: {
@@ -35,8 +37,8 @@ interface Review {
   };
   rating: number;
   comment: string;
-  likes?: number;
-  replies: {
+  likes: number;
+  replies?: {
     _id: string;
     user: {
       _id: string;
@@ -44,25 +46,26 @@ interface Review {
       image?: string;
     };
     comment: string;
-    createdAt: string; // You can use Date if you plan to work with Date objects
+    createdAt: string;
+    // You can use Date if you plan to work with Date objects
   }[];
   createdAt: string;
+  hasMoreReply: boolean;
 }
 
 const ProductReviewList = ({
   totalReviews,
   productId,
+  userSession,
 }: ProductReviewListProps) => {
   const searchParams = useSearchParams();
   const query = searchParams.get("r");
-
   const [currentBatch, setCurrentBatch] = useState(1);
   const [reviewList, setReviewList] = useState<Review[]>([]);
   const [replyObject, setReplyObject] = useState<ReplyState>({});
-
   const [hasMore, setHasMore] = useState(true);
 
-  console.log(currentBatch, reviewList, hasMore, replyObject);
+  console.log(replyObject);
 
   useEffect(() => {
     setCurrentBatch(1);
@@ -94,7 +97,7 @@ const ProductReviewList = ({
       }
     };
     fetchReviews();
-  }, [query, totalReviews]);
+  }, [query, productId]);
 
   const fetchLoadMore = async () => {
     const response = await fetch(
@@ -120,38 +123,48 @@ const ProductReviewList = ({
   };
 
   return (
-    <div className="flex flex-col gap-5 pt-10">
-      <div className="flex flex-row justify-between items-center">
-        <span className="text-dark-1 h6-medium">{totalReviews} Reviews</span>
-        <Filter
-          filter={reviewFilters}
-          title="filter comment"
-          filterKey="r"
-          hideTitle={true}
-          type="single"
-          otherClasses="text-dark-1"
-          containerClasses="w-full max-w-[250px] flex-col gap-2 justify-center items-center"
-        />
+    <div className="flex flex-col justify-center items-center w-full max-w-[1440px] gap-10 container-1">
+      <ProductReviewForm
+        userSession={userSession}
+        productId={productId}
+        setReviewList={setReviewList}
+      />
+      <div className="flex flex-col gap-5 pt-10 w-full">
+        <div className="flex flex-row justify-between items-center w-full">
+          <span className="text-dark-1 h6-medium">{totalReviews} Reviews</span>
+          <Filter
+            filter={reviewFilters}
+            title="filter comment"
+            filterKey="r"
+            hideTitle={true}
+            type="single"
+            otherClasses="text-dark-1"
+            containerClasses="w-full max-w-[250px] flex-col gap-2 justify-center items-center"
+          />
+        </div>
+        {reviewList.map((review) => (
+          <ProductReviewCard
+            _id={review._id}
+            reviewUser={review.user}
+            rating={review.rating}
+            comment={review.comment}
+            likes={review.likes}
+            replies={replyObject[review._id]}
+            createdAt={review.createdAt}
+            hasMoreReply={review.hasMoreReply}
+            setReplyObject={setReplyObject}
+            userSession={userSession}
+            query={query}
+          />
+        ))}
+        {hasMore && (
+          <LoadMore
+            hasMore={true}
+            handleLoadMore={() => fetchLoadMore()}
+            otherClasses="pt-10"
+          />
+        )}
       </div>
-      {reviewList.map((review) => (
-        <ProductReviewCard
-          _id={review._id}
-          reviewUser={review.user}
-          rating={review.rating}
-          comment={review.comment}
-          likes={review.likes}
-          replies={replyObject[review._id]}
-          createdAt={review.createdAt}
-          setReplyObject={setReplyObject}
-        />
-      ))}
-      {hasMore && (
-        <LoadMore
-          hasMore={true}
-          handleLoadMore={() => fetchLoadMore()}
-          otherClasses="pt-10"
-        />
-      )}
     </div>
   );
 };

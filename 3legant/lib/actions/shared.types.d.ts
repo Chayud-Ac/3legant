@@ -37,3 +37,10 @@ export interface replyReviewParams {
   comment: string;
   path: string;
 }
+
+export interface getReviewRepliesParams {
+  reviewId: string;
+  currentBatch?: number;
+  batchSize: number;
+  path: string;
+}

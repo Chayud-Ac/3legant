@@ -1,11 +1,14 @@
 "use server";
 import Product from "@/databases/product.model";
 import { connectToDatabase } from "../mongoose";
-import { replyReviewParams, reviewProductParams } from "./shared.types";
+import {
+  getReviewRepliesParams,
+  replyReviewParams,
+  reviewProductParams,
+} from "./shared.types";
 import Review from "@/databases/review.model";
 import mongoose, { Schema } from "mongoose";
 import { revalidatePath } from "next/cache";
-import console from "console";
 
 export async function reviewProduct(params: reviewProductParams) {
   try {
@@ -48,7 +51,11 @@ export async function reviewProduct(params: reviewProductParams) {
     // Revalidate the path if necessary
     revalidatePath(path);
 
-    return { message: "Success" };
+    const parseNewReview = JSON.parse(JSON.stringify(newReview));
+    const { __v, ...reviewWithoutIdAndVersion } = parseNewReview;
+
+    console.log(reviewWithoutIdAndVersion);
+    return { parseNewReview: reviewWithoutIdAndVersion };
   } catch (error) {
     throw error;
   }
@@ -74,18 +81,63 @@ export async function replyReview(params: replyReviewParams) {
           },
         },
       },
-      { new: true }
+      { new: true, fields: { replies: { $slice: -1 } } }
     );
 
-    console.log(updatedReview);
+    const newReply = updatedReview.replies[updatedReview.replies.length - 1];
 
-    const updatedReviewObject = JSON.parse(JSON.stringify(updatedReview));
+    const parseNewReply = JSON.parse(JSON.stringify(newReply));
 
-    console.log(updatedReviewObject);
+    console.log(parseNewReply);
 
     revalidatePath(path);
 
-    return { updatedReviewObject };
+    return { parseNewReply };
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getReviewReplies(params: getReviewRepliesParams) {
+  try {
+    connectToDatabase();
+    const { reviewId, path, currentBatch = 1, batchSize } = params;
+
+    const skipAmount = (currentBatch - 1) * batchSize + 1;
+    const limitAmount = skipAmount + batchSize;
+
+    console.log(skipAmount);
+
+    const replies = await Review.findById(reviewId)
+      .select({
+        replies: { $slice: [skipAmount, limitAmount] },
+        _id: 0,
+        product: 0,
+        user: 0,
+        rating: 0,
+        comment: 0,
+        likes: 0,
+        createdAt: 0,
+        __v: 0,
+      })
+      .populate({
+        path: "replies.user",
+        select: "displayName image -_id",
+      });
+
+    const totalRepliesCount = await Review.findById(reviewId)
+      .select({ replies: 1, _id: 0 })
+      .then((review) => review?.replies.length || 0);
+
+    const hasMore = skipAmount + limitAmount < totalRepliesCount;
+
+    const parseReplies = JSON.parse(JSON.stringify(replies));
+
+    console.log(parseReplies);
+
+    revalidatePath(path);
+
+    return { replies: parseReplies.replies, hasMore };
   } catch (error) {
     throw error;
   }

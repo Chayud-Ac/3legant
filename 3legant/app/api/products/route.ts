@@ -27,8 +27,6 @@ export async function POST(req: Request) {
       minPrice,
     } = params;
 
-    console.log(cursor, pageSize, searchQuery, room, maxPrice, minPrice);
-
     const globalQuery: FilterQuery<typeof Product> = {};
 
     const tresHoldDate = newArrivalThreshold(10); // within 10 day from currentDate
@@ -101,8 +99,6 @@ export async function POST(req: Request) {
     }
 
     nextCursor = products.length > 0 ? products[products.length - 1]._id : null;
-
-    console.log(products);
 
     return new NextResponse(JSON.stringify({ products, nextCursor, hasMore }), {
       status: 200,
