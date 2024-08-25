@@ -13,7 +13,7 @@ import { useState } from "react";
 
 interface FilterProps {
   type: "single" | "multiple";
-  title: string;
+  title?: string;
   filter: {
     name: string;
     value: string;
@@ -23,6 +23,7 @@ interface FilterProps {
   otherClasses?: string;
   containerClasses?: string;
   titleMain?: string;
+  hideTitle?: boolean;
   setTitleMain?: (value: string) => void;
 }
 
@@ -32,6 +33,7 @@ const Filter = ({
   otherClasses,
   containerClasses,
   filterKey,
+  hideTitle,
   setTitleMain,
 }: FilterProps) => {
   const searchParams = useSearchParams();
@@ -62,7 +64,9 @@ const Filter = ({
   };
   return (
     <div className={`flex relative ${containerClasses}`}>
-      <p className="text-grey-2 medium-xs">{title}</p>
+      <p className={`${hideTitle && "hidden"} text-grey-2 medium-xs`}>
+        {title}
+      </p>
       <Select
         value={currentQueryValue || undefined}
         onValueChange={(value) => handleUpdateParams(value)}

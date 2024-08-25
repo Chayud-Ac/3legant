@@ -31,7 +31,6 @@ interface SingleProduct {
 }
 
 async function getProduct(productId: string) {
-  console.log(productId);
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_SERVER_URL}/api/products/${productId}`,
@@ -85,7 +84,10 @@ const Page = async ({ params }: { params: { productId: string } }) => {
 
       <NewArrivalProductsList />
 
-      <ReviewProduct productId={params.productId} />
+      <ReviewProduct
+        productId={params.productId}
+        totalReviews={product.totalReviews}
+      />
     </section>
   );
 };

@@ -51,8 +51,6 @@ export async function getDiscountProducts(params: GetDiscountProducts) {
       products = discountProducts.products;
     }
 
-    console.log(JSON.parse(JSON.stringify(products)));
-
     return { products };
   } catch (error) {
     throw error;

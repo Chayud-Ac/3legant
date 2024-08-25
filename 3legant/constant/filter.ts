@@ -29,6 +29,13 @@ export const priceOptionRange: {
   option6: { minPrice: 400, maxPrice: 999999999 },
 };
 
+export const reviewFilters = [
+  { name: "All Reviews", value: "allReviews" },
+  { name: "Newest", value: "newest" }, // Represents all prices
+  { name: "Most Like", value: "mostLike" },
+  { name: "Most Rating", value: "mostRating" },
+];
+
 // {"_id":{"$oid":"66bcb8296115e57bdf1e94f0"},
 //   "name": "Plateware Wooden",
 //   "slug": "plateware-wooden",

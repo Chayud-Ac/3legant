@@ -15,7 +15,7 @@ export async function GET(
     await connectToDatabase();
 
     const productId = params.productId;
-    console.log(productId);
+
     if (!productId) {
       return new NextResponse(JSON.stringify({ message: "No productId" }), {
         status: 400,

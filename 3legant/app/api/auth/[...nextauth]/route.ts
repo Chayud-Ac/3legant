@@ -68,6 +68,8 @@ export const authOptions: any = {
           }
           userObject = JSON.parse(JSON.stringify(existingUser));
           user._id = userObject._id.toString();
+          user.displayName = userObject.displayName;
+          user.image = userObject.image;
 
           return true;
         } catch (err) {
@@ -83,6 +85,8 @@ export const authOptions: any = {
         token.id = user._id;
         token.email = user.email;
         token.remember = user.remember;
+        token.displayName = user.displayName;
+        token.image = user.image;
       }
       return token;
     },
@@ -90,6 +94,8 @@ export const authOptions: any = {
       session.user = {
         id: token.id,
         email: token.email,
+        displayName: token.displayName,
+        image: token.image,
       };
 
       if (token.remember) {

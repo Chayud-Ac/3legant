@@ -30,3 +30,17 @@ export interface reviewProductParams {
   reviewData: Partial<IReview>;
   path: string;
 }
+
+export interface replyReviewParams {
+  reviewId: string;
+  userId: string;
+  comment: string;
+  path: string;
+}
+
+export interface getReviewRepliesParams {
+  reviewId: string;
+  currentBatch?: number;
+  batchSize: number;
+  path: string;
+}

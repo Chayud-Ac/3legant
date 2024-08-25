@@ -23,13 +23,11 @@ const ProductCarousel = ({
   discount,
 }: ProductCarouselProps) => {
   // Convert the images object into an array of image URLs for easier handling
-  console.log(imagesArray);
+
   const imagesUrlArray = imagesArray.map(
     (image) =>
       `${process.env.NEXT_PUBLIC_GOOGLE_CLOUD_BUCKET}/${category}/${slug}/${image}`
   );
-
-  console.log(imagesUrlArray);
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const sliderRef = useRef(null);
@@ -72,8 +70,6 @@ const ProductCarousel = ({
   const goToSlide = (index: number) => {
     setCurrentIndex(index);
   };
-
-  console.log(imagesUrlArray[currentIndex]);
 
   return (
     <div className="flex flex-col gap-6 w-full sm:max-w-[548px]">
