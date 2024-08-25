@@ -1,10 +1,11 @@
 "use server";
 import Product from "@/databases/product.model";
 import { connectToDatabase } from "../mongoose";
-import { reviewProductParams } from "./shared.types";
+import { replyReviewParams, reviewProductParams } from "./shared.types";
 import Review from "@/databases/review.model";
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import { revalidatePath } from "next/cache";
+import console from "console";
 
 export async function reviewProduct(params: reviewProductParams) {
   try {
@@ -20,7 +21,7 @@ export async function reviewProduct(params: reviewProductParams) {
       user: new mongoose.Types.ObjectId(userId),
       rating: reviewData.rating,
       comment: reviewData.comment,
-      likes: [],
+      likes: 0,
       replies: [],
       createdAt: new Date(),
     });
@@ -48,6 +49,43 @@ export async function reviewProduct(params: reviewProductParams) {
     revalidatePath(path);
 
     return { message: "Success" };
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function replyReview(params: replyReviewParams) {
+  try {
+    connectToDatabase();
+    const { reviewId, userId, comment, path } = params;
+    console.log(params);
+    if (!userId) {
+      throw new Error("Please log in");
+    }
+
+    const updatedReview = await Review.findByIdAndUpdate(
+      reviewId,
+      {
+        $push: {
+          replies: {
+            user: new mongoose.Types.ObjectId(userId),
+            comment: comment,
+            createdAt: new Date(),
+          },
+        },
+      },
+      { new: true }
+    );
+
+    console.log(updatedReview);
+
+    const updatedReviewObject = JSON.parse(JSON.stringify(updatedReview));
+
+    console.log(updatedReviewObject);
+
+    revalidatePath(path);
+
+    return { updatedReviewObject };
   } catch (error) {
     throw error;
   }

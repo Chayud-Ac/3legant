@@ -22,6 +22,8 @@ const ProductReviewForm = ({
   const [comment, setComment] = useState("");
   const userId = userSession.user.id;
 
+  console.log(pathname.toString());
+
   const handleRatingChange = (newRating: number) => {
     if (!userSession) {
       console.log("Please login");

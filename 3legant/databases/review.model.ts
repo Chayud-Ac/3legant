@@ -11,7 +11,7 @@ export interface IReview extends Document {
   user: Schema.Types.ObjectId;
   rating: number;
   comment: string;
-  likes?: Schema.Types.ObjectId[];
+  likes?: number;
   replies?: IReply[]; // Array of reply objects
   createdAt: Date;
 }
@@ -27,7 +27,7 @@ const reviewSchema = new Schema<IReview>({
   user: { type: Schema.Types.ObjectId, ref: "User", required: true },
   rating: { type: Number, required: true },
   comment: { type: String, required: true },
-  likes: [{ type: Schema.Types.ObjectId, ref: "User" }], // people who likes this review
+  likes: { type: Number },
   replies: [replySchema], // array of reply objects which include keys of user (who reply) , comment (content string) , createdAt (Date)
   createdAt: { type: Date, default: Date.now },
 });
@@ -39,3 +39,5 @@ export default Review;
 /**
  * Paste one or more documents here
  */
+
+// 66bc93efde454f0e8f7163fe

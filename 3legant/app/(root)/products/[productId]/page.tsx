@@ -85,7 +85,10 @@ const Page = async ({ params }: { params: { productId: string } }) => {
 
       <NewArrivalProductsList />
 
-      <ReviewProduct productId={params.productId} />
+      <ReviewProduct
+        productId={params.productId}
+        totalReviews={product.totalReviews}
+      />
     </section>
   );
 };
