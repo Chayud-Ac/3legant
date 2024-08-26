@@ -151,7 +151,13 @@ const DisplayProduct = ({
                 currentAmount={currentAmount}
                 setCurrentAmount={setCurrentAmount}
               />
-              <AddtoWishListButton otherClasses="w-full border-[2px] border-dark-1 medium-base transition duration-300 hover:bg-grey-4 hover:shadow-md" />
+              <AddtoWishListButton
+                otherClasses="w-full border-[2px] border-dark-1 medium-base transition duration-300 hover:bg-grey-4 hover:shadow-md"
+                product={_id}
+                name={name}
+                price={price}
+                imgUrl={`${process.env.NEXT_PUBLIC_GOOGLE_CLOUD_BUCKET}/${category}/${slug}/thumbnail.svg`}
+              />
             </div>
             <AddtoCartButton
               otherClasses="w-full"

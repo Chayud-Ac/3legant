@@ -3,13 +3,16 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { useState } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 const WishListIconNum = () => {
-  const [wishList, setWishList] = useState(1);
+  const wishlist = useSelector((state: RootState) => state.wishlist);
+  const lengthWishList = wishlist.items.length;
+
   return (
     <div
-      className={`flex flex-row justify-between items-center ${wishList && "w-[49px]"}`}
+      className={`flex flex-row justify-between items-center ${lengthWishList && "w-[49px]"}`}
     >
       <Link href="/cart">
         <Image
@@ -19,9 +22,9 @@ const WishListIconNum = () => {
           height={24}
         />
       </Link>
-      {wishList > 0 && (
+      {lengthWishList > 0 && (
         <div className="bg-dark-1 border rounded-full w-[22px] h-[22px] flex items-center justify-center">
-          <h2 className="text-white text-xs font-bold">{wishList}</h2>
+          <h2 className="text-white text-xs font-bold">{lengthWishList}</h2>
         </div>
       )}
     </div>

@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import cartReducer from "@/store/slices/cartSlice";
 import userReducer from "@/store/slices/userSlice";
+import wishlistReducer from "@/store/slices/wishListSlice";
 
 // เก็บค่า State ใน store
 // ใน reducer object เรา จะเก็บค่า reducer function ต่างๆ เช่น cartReducer , wishListReducer
@@ -10,6 +11,7 @@ export const store = configureStore({
   reducer: {
     cart: cartReducer,
     user: userReducer,
+    wishlist: wishlistReducer,
   },
 });
 
