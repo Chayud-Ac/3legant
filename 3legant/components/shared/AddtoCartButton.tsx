@@ -9,7 +9,7 @@ import { removeItem } from "@/store/slices/cartSlice";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 
-interface AddtoCartButton {
+interface AddtoCartButtonProps {
   otherClasses?: string;
   productId: string;
   quantity: number;
@@ -29,7 +29,7 @@ const AddtoCartButton = ({
   category,
   slug,
   name,
-}: AddtoCartButton) => {
+}: AddtoCartButtonProps) => {
   const dispatch = useDispatch();
 
   const cart = useSelector((state: RootState) => state.cart);

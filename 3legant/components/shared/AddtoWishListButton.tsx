@@ -2,14 +2,46 @@
 
 import React from "react";
 import { Button } from "../ui/button";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import { addItem } from "@/store/slices/wishListSlice";
 
 interface AddtoWishListButtonProps {
   otherClasses?: string;
+  product: string;
+  imgUrl: string;
+  name: string;
+  price: number;
 }
 
-const AddtoWishListButton = ({ otherClasses }: AddtoWishListButtonProps) => {
+const AddtoWishListButton = ({
+  otherClasses,
+  product,
+  imgUrl,
+  name,
+  price,
+}: AddtoWishListButtonProps) => {
+  const dispatch = useDispatch();
+  const wishlist = useSelector((state: RootState) => state.wishlist);
+  console.log(wishlist.items);
+
+  const handleAddToWishList = () => {
+    dispatch(
+      addItem({
+        product,
+        imgUrl,
+        name,
+        price,
+      })
+    );
+  };
+
   return (
-    <Button type="submit" className={`${otherClasses}`}>
+    <Button
+      type="submit"
+      className={`${otherClasses}`}
+      onClick={handleAddToWishList}
+    >
       <div className="flex flex-row items-center justify-center gap-2">
         <svg
           width="24"
@@ -18,6 +50,7 @@ const AddtoWishListButton = ({ otherClasses }: AddtoWishListButtonProps) => {
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
           className="group"
+          onClick={handleAddToWishList}
         >
           <path
             fillRule="evenodd"

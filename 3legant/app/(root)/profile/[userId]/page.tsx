@@ -38,15 +38,15 @@ const page = ({ params }: { params: { userId: string } }) => {
   return (
     <div className="flex flex-col justify-center items-center w-full container-1 py-10">
       <h1 className="h3-medium text-dark-1">My Account</h1>
-      <div className="flex flex-col justify-center gap-10 md:flex-row w-full max-w-[1440px] pt-8 md:pt-10 ">
-        <div className="flex flex-col justify-center items-center gap-10 px-4 py-10 bg-grey-4 rounded-md w-full max-w-[332px]">
+      <div className="flex flex-col justify-center gap-10 lg:flex-row w-full max-w-[1440px] pt-8 md:pt-10 ">
+        <div className="flex flex-col justify-center items-center gap-10 px-4 py-10 bg-grey-4 rounded-md w-full  lg:max-w-[332px] h-fit">
           <div className="flex flex-col gap-2 items-center justify-center">
             <ProfileImageUpload userId={userId} />
             <p className="text-dark-1 medium-2xl">Sofia Havertz</p>
             <p className="text-dark-1 regular-xs italic">Test1@gmail.com</p>
           </div>
           {/* desktop version */}
-          <div className="flex flex-col w-full gap-6 max-md:hidden">
+          <div className="flex flex-col w-full gap-6 max-lg:hidden">
             {profileTabContent.map((item, index) => {
               const isActive = item.value === currentTab;
               return (
@@ -71,7 +71,7 @@ const page = ({ params }: { params: { userId: string } }) => {
           </div>
           {/* Ipad mobile selector version */}
           <Select onValueChange={handleTabChange} value={currentTab}>
-            <SelectTrigger className="w-full text-dark-3 medium-base md:hidden">
+            <SelectTrigger className="w-full text-dark-3 medium-base lg:hidden">
               <SelectValue placeholder={`${currentTab}`} />
             </SelectTrigger>
             <SelectContent className="text-dark-3 medium-base">

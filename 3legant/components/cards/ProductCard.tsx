@@ -35,6 +35,7 @@ const ProductCard = ({
   // ProductCard has two different styles one is with description and another is without the describtion
   // So we check base on the describtion if the describtion is pass to this component or not
   console.log(discount);
+  console.log(imgUrl);
   if (description) {
     return (
       <div className="flex flex-col gap-2 sm:flex-row items-center hover:shadow-lg transition-shadow hover:rounded-xl">
@@ -75,7 +76,13 @@ const ProductCard = ({
                   {name}
                 </h1>
               </Link>
-              <AddtoWishListButton otherClasses="sm:hidden mb-[-15px]" />
+              <AddtoWishListButton
+                otherClasses="sm:hidden mb-[-15px]"
+                product={id}
+                imgUrl={imgUrl}
+                price={price}
+                name={name}
+              />
             </div>
             <div className="flex flex-row gap-3 pt-2">
               {discount ? (
@@ -92,7 +99,13 @@ const ProductCard = ({
             </div>
             <p className="regular-xs md:regular-sm sm:pt-4">{description}</p>
             <div className="flex flex-row justify-center pt-5">
-              <AddtoWishListButton otherClasses="medium-sm max-sm:hidden w-fit" />
+              <AddtoWishListButton
+                otherClasses="medium-sm max-sm:hidden w-fit"
+                product={id}
+                imgUrl={imgUrl}
+                price={price}
+                name={name}
+              />
             </div>
           </div>
         </div>

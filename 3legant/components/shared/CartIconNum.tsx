@@ -17,7 +17,7 @@ const CartIconNum = ({ disableLink }: CartIconNumProps) => {
   console.log(lengthCart);
   return (
     <div
-      className={`flex flex-row justify-between items-center ${cart && "w-[49px]"}`}
+      className={`flex flex-row justify-between items-center ${lengthCart > 0 && "w-[49px]"}`}
     >
       {disableLink ? (
         <Image

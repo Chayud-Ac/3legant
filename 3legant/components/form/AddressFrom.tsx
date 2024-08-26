@@ -112,7 +112,7 @@ const AddressForm = ({ control, userId }: AddressFormProps) => {
 
   if (!control) {
     return (
-      <div className="flex flex-col gap-3 w-full md:flex-row">
+      <div className="flex flex-col gap-3 w-full md:flex-row max-w-[900px]">
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
