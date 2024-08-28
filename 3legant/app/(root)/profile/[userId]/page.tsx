@@ -13,26 +13,27 @@ import {
 } from "@/components/ui/select";
 import DisplayTabProfile from "@/components/display/DisplayTabProfile";
 import { formUrlQuery } from "@/lib/utils";
-import { useSearchParams } from "next/navigation";
+import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import ProfileImageUpload from "@/components/form/ProfileImageUpload";
 
 const page = ({ params }: { params: { userId: string } }) => {
   const userId = params.userId;
-
   const router = useRouter();
-  console.log(params);
   const [currentTab, setCurrentTab] = useState("account");
   const handleTabChange = (value: string) => {
-    setCurrentTab(value);
-    const newUrl = formUrlQuery({
-      params: params.toString(),
-      queryObject: {
-        q: value,
-      },
-    });
-    console.log(userId);
-    router.push(newUrl, { scroll: false });
+    if (value === "logout") {
+      signOut({ callbackUrl: "/sign-in", redirect: true });
+    } else {
+      setCurrentTab(value);
+      const newUrl = formUrlQuery({
+        params: params.toString(),
+        queryObject: {
+          q: value,
+        },
+      });
+      router.push(newUrl, { scroll: false });
+    }
   };
 
   return (
@@ -40,11 +41,8 @@ const page = ({ params }: { params: { userId: string } }) => {
       <h1 className="h3-medium text-dark-1">My Account</h1>
       <div className="flex flex-col justify-center gap-10 lg:flex-row w-full max-w-[1440px] pt-8 md:pt-10 ">
         <div className="flex flex-col justify-center items-center gap-10 px-4 py-10 bg-grey-4 rounded-md w-full  lg:max-w-[332px] h-fit">
-          <div className="flex flex-col gap-2 items-center justify-center">
-            <ProfileImageUpload userId={userId} />
-            <p className="text-dark-1 medium-2xl">Sofia Havertz</p>
-            <p className="text-dark-1 regular-xs italic">Test1@gmail.com</p>
-          </div>
+          <ProfileImageUpload userId={userId} />
+
           {/* desktop version */}
           <div className="flex flex-col w-full gap-6 max-lg:hidden">
             {profileTabContent.map((item, index) => {

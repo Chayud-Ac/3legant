@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface WishlistItem {
   product: string;
@@ -14,6 +14,21 @@ interface WishlistProps {
 const initialState: WishlistProps = {
   items: [],
 };
+
+export const fetchWishList = createAsyncThunk(
+  "wishlist/fetchWishList",
+  async (userId: string) => {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/api/user/${userId}?q=wishlist`
+    );
+    if (!response.ok) {
+      throw new Error("Failed to fetch cart");
+    }
+    const { data } = await response.json();
+    console.log(data);
+    return data;
+  }
+);
 
 const wishlistSlice = createSlice({
   name: "wishlist",
@@ -32,6 +47,25 @@ const wishlistSlice = createSlice({
         (item) => item.product !== action.payload.product
       );
     },
+  },
+
+  extraReducers: (builder) => {
+    builder
+      .addCase(
+        fetchWishList.fulfilled,
+        (state, action: PayloadAction<WishlistItem[] | null>) => {
+          if (action.payload) {
+            console.log(action.payload);
+            state.items = action.payload;
+          } else {
+            state.items = [];
+          }
+        }
+      )
+      .addCase(fetchWishList.rejected, (state, action) => {
+        console.error("Failed to fetch WishList:", action.error.message);
+        state.items = [];
+      });
   },
 });
 

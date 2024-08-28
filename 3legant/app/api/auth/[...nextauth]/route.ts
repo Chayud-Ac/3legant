@@ -56,17 +56,22 @@ export const authOptions: any = {
       }
       if (account.provider === "google") {
         await connectToDatabase();
+
         try {
           const existingUser = await User.findOne({ email: user.email });
           let userObject;
           if (!existingUser) {
             const newUser = new User({
               email: user.email,
+              image: user.image,
+              displayName: user.name,
             });
             await newUser.save();
             userObject = JSON.parse(JSON.stringify(newUser));
+          } else {
+            userObject = JSON.parse(JSON.stringify(existingUser));
           }
-          userObject = JSON.parse(JSON.stringify(existingUser));
+
           user._id = userObject._id.toString();
           user.displayName = userObject.displayName;
           user.image = userObject.image;

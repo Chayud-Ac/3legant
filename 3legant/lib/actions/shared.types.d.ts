@@ -44,3 +44,40 @@ export interface getReviewRepliesParams {
   batchSize: number;
   path: string;
 }
+
+export interface getUserImageParams {
+  userId: string;
+}
+
+export interface addItemToCartParams {
+  userId: string;
+  cartItem: {
+    productId: string;
+    color: string;
+    quantity: number;
+    pricePerUnit: number;
+    totalItemsPrice: number;
+  };
+}
+
+export interface incrementItemQuantityParams {
+  cartId: string;
+  product: string;
+  color: string;
+}
+
+export interface removeFromCartParams {
+  cartId: string;
+  product: string;
+  color: string;
+}
+
+export interface addItemToWishListParams {
+  userId: string;
+  product: string;
+}
+
+export interface removeItemFromWishListParams {
+  userId: string;
+  product: string;
+}

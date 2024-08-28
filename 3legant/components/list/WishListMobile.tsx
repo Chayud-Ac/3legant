@@ -47,7 +47,7 @@ const WishListMobile = () => {
                     >
                       View Product
                     </Link>
-                    <RemoveFromWishList />
+                    <RemoveFromWishList product={item.product} />
                   </div>
                 </div>
               </td>

@@ -7,6 +7,7 @@ import { Toaster } from "@/components/ui/toaster";
 import AuthProvider from "@/context/AuthProvider";
 import { getServerSession } from "next-auth";
 import { StoreProvider } from "@/store/StoreProvider";
+import { authOptions } from "./api/auth/[...nextauth]/route";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -32,18 +33,17 @@ export default function RootLayout({
   children: React.ReactNode;
   pageProps: any; // or define a specific type if you have one
 }>) {
-  const session = getServerSession();
+  const session = getServerSession(authOptions);
+  console.log(session);
 
   return (
-    <StoreProvider>
+    <AuthProvider session={session}>
       <html lang="en">
         <body className={`${inter.variable} ${poppins.variable}`}>
-          <AuthProvider session={session}>
-            <div>{children}</div>
-          </AuthProvider>
+          <div>{children}</div>
           <Toaster />
         </body>
       </html>
-    </StoreProvider>
+    </AuthProvider>
   );
 }

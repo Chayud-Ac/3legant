@@ -2,9 +2,16 @@
 
 import { revalidatePath } from "next/cache";
 import { connectToDatabase } from "../mongoose";
-import { UpdateUserAddressParams, UpdateUserParams } from "./shared.types";
+import {
+  UpdateUserAddressParams,
+  UpdateUserParams,
+  addItemToWishListParams,
+  getUserImageParams,
+  removeItemFromWishListParams,
+} from "./shared.types";
 import User from "@/databases/user.model";
 import Address from "@/databases/address.model";
+import mongoose from "mongoose";
 
 export async function updateUser(params: UpdateUserParams) {
   try {
@@ -41,6 +48,86 @@ export async function updateUserAddress(params: UpdateUserAddressParams) {
       await user.save();
     }
     revalidatePath(path);
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getUserImage(params: getUserImageParams) {
+  try {
+    connectToDatabase();
+    const { userId } = params;
+    const user = await User.findById(userId).select({
+      _id: 0,
+      image: 1,
+    });
+
+    const parseUser = JSON.parse(JSON.stringify(user));
+    console.log(parseUser);
+    return { parseUser };
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function addItemToWishList(params: addItemToWishListParams) {
+  try {
+    connectToDatabase();
+    const { userId, product } = params;
+
+    const productObjectId = new mongoose.Types.ObjectId(product);
+    const user = await User.findById(userId);
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const isProductInWishlist = user.wishlist.includes(productObjectId);
+    if (isProductInWishlist) {
+      return null;
+    }
+    user.wishlist.push(productObjectId);
+    await user.save();
+
+    console.log(user.wishlist);
+
+    return { message: "Added to WishList", wishlist: user.wishlist };
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function removeItemFromWishList(
+  params: removeItemFromWishListParams
+) {
+  try {
+    connectToDatabase();
+    const { userId, product } = params;
+
+    const productObjectId = new mongoose.Types.ObjectId(product);
+
+    // Find the user by userId
+    const user = await User.findById(userId);
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    // Check if the product is in the wishlist
+    const isProductInWishlist = user.wishlist.includes(productObjectId);
+    if (!isProductInWishlist) {
+      return { message: "Product is not in wishlist" };
+    }
+
+    // Remove the product from the wishlist
+    user.wishlist = user.wishlist.filter(
+      (item: any) => !item.equals(productObjectId)
+    );
+
+    // Save the updated user document
+    await user.save();
+
+    console.log(user.wishlist);
+
+    return { message: "Removed from WishList", wishlist: user.wishlist };
   } catch (error) {
     throw error;
   }

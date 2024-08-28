@@ -33,10 +33,10 @@ const CartSummary = () => {
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="pickUp" id="r2" />
               <Label htmlFor="r1" className="text-dark-1 regular-base">
-                Pick Up
+                Overnight Shipping
               </Label>
             </div>
-            <span className="text-dark-1 regular-base">$0</span>
+            <span className="text-dark-1 regular-base">$30.00</span>
           </div>
         </RadioGroup>
         <div className="flex flex-col gap-4">

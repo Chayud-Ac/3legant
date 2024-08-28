@@ -11,7 +11,7 @@ const WishListDesktop = () => {
     <table className="table-fixed w-full max-w-[900px] max-sm:hidden">
       <thead className="border-b border-grey-2">
         <tr className="medium-base text-dark-1 ">
-          <th className="text-start  py-5">Product</th>
+          <th className="text-start py-5 w-[350px]">Product</th>
           <th className="text-center py-5">Price</th>
           <th className="text-center py-5">Action</th>
         </tr>
@@ -19,15 +19,15 @@ const WishListDesktop = () => {
       <tbody>
         {wishlist.items.map((item, index) => (
           <React.Fragment key={index}>
-            <tr className="border-b border-grey-2">
-              <td className="flex items-center justify-start py-8">
-                <div className="flex flex-row items-center justify-center gap-5">
+            <tr className="border-b border-grey-2 ">
+              <td>
+                <div className="flex flex-row items-center gap-2 py-4">
                   <Image
                     src={item.imgUrl}
                     alt={item.name}
-                    width={80}
-                    height={96}
-                    className="w-auto h-auto max-w-[100px] max-h-[119px] rounded-md"
+                    width={150}
+                    height={169}
+                    className="w-auto h-auto max-w-[200px] max-h-[219px] rounded-md"
                   />
                   <Link
                     href={`products/${item.product}`}
@@ -41,7 +41,7 @@ const WishListDesktop = () => {
                 <span>${item.price}</span>
               </td>
               <td className="text-center ">
-                <RemoveFromWishList />
+                <RemoveFromWishList product={item.product} />
               </td>
             </tr>
           </React.Fragment>

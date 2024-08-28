@@ -19,8 +19,10 @@ const Navbar = ({ session }: any) => {
   const [activePath, setActivePath] = useState("/");
   const pathname = usePathname();
 
-  console.log("test");
-  const id = session.user.id;
+  let id;
+  if (session) {
+    id = session.user.id;
+  }
 
   useEffect(() => {
     setActivePath(pathname);
@@ -55,7 +57,7 @@ const Navbar = ({ session }: any) => {
         })}
       </div>
 
-      <div className="flex flex-row items-center justify-between item w-[130px] max-md:justify-center max-md:gap-2">
+      <div className="flex flex-row items-center justify-center gap-5 item max-w-[140px] max-md:justify-end max-md:gap-2">
         <button type="button" className="max-md:hidden">
           <Image
             src="/assets/icons/search.svg"
@@ -64,16 +66,26 @@ const Navbar = ({ session }: any) => {
             height={24}
           />
         </button>
-        <Link href={`/profile/${id}?q=account`}>
-          <Image
-            src="/assets/icons/user-circle.svg"
-            alt="user-icon"
-            width={24}
-            height={24}
-          />
-        </Link>
+        {session && id && (
+          <Link href={`/profile/${id}?q=account`}>
+            <Image
+              src="/assets/icons/user-circle.svg"
+              alt="user-icon"
+              width={24}
+              height={24}
+            />
+          </Link>
+        )}
         {/* <CartIconNum /> */}
         <CartSideBar />
+        {!session && !id && (
+          <Link
+            href="/sign-in"
+            className="bg-grey-1 text-light-2 py-2 px-2 rounded-md medium-xs hover:opacity-80 duration-300"
+          >
+            SignIn
+          </Link>
+        )}
       </div>
     </nav>
   );

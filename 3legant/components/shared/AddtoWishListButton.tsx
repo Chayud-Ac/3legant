@@ -5,6 +5,7 @@ import { Button } from "../ui/button";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { addItem } from "@/store/slices/wishListSlice";
+import { addItemToWishList } from "@/lib/actions/user.action";
 
 interface AddtoWishListButtonProps {
   otherClasses?: string;
@@ -23,17 +24,30 @@ const AddtoWishListButton = ({
 }: AddtoWishListButtonProps) => {
   const dispatch = useDispatch();
   const wishlist = useSelector((state: RootState) => state.wishlist);
+  const user = useSelector((state: RootState) => state.user);
+
   console.log(wishlist.items);
 
-  const handleAddToWishList = () => {
-    dispatch(
-      addItem({
-        product,
-        imgUrl,
-        name,
-        price,
-      })
-    );
+  const handleAddToWishList = async () => {
+    try {
+      const result = await addItemToWishList({
+        userId: user.id,
+        product: product,
+      });
+
+      if (result) {
+        dispatch(
+          addItem({
+            product,
+            imgUrl,
+            name,
+            price,
+          })
+        );
+      }
+    } catch (error) {
+      throw error;
+    }
   };
 
   return (

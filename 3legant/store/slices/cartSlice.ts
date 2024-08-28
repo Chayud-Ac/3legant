@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface CartProps {
   cartId: string | undefined;
@@ -26,6 +26,21 @@ const initialState: CartProps = {
   deliveryOption: undefined,
   totalCartAmount: 0,
 };
+
+export const fetchCart = createAsyncThunk(
+  "cart/fetchCart",
+  async (userId: string) => {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/api/user/${userId}?q=cart`
+    );
+    if (!response.ok) {
+      throw new Error("Failed to fetch cart");
+    }
+    const { data } = await response.json();
+    console.log(data);
+    return data; // Assume data is in the format of CartProps
+  }
+);
 
 const cartSlice = createSlice({
   name: "cart",
@@ -56,8 +71,9 @@ const cartSlice = createSlice({
       );
       if (existingItem) {
         existingItem.quantity += quantity;
-        existingItem.totalItemsPrice =
-          existingItem.quantity * existingItem.pricePerUnit;
+        existingItem.totalItemsPrice = parseFloat(
+          (existingItem.quantity * existingItem.pricePerUnit).toFixed(2)
+        );
       } else {
         state.items.push({
           product: productId,
@@ -67,12 +83,13 @@ const cartSlice = createSlice({
           category,
           slug,
           name,
-          totalItemsPrice: quantity * pricePerUnit,
+          totalItemsPrice: parseFloat((quantity * pricePerUnit).toFixed(2)),
         });
       }
-      state.totalCartAmount = state.items.reduce(
-        (total, item) => total + item.totalItemsPrice,
-        0
+      state.totalCartAmount = parseFloat(
+        state.items
+          .reduce((total, item) => total + item.totalItemsPrice, 0)
+          .toFixed(2)
       );
     },
     incrementItemQuantity(
@@ -85,11 +102,14 @@ const cartSlice = createSlice({
       );
       if (item) {
         item.quantity += 1;
-        item.totalItemsPrice = item.quantity * item.pricePerUnit;
+        item.totalItemsPrice = parseFloat(
+          (item.quantity * item.pricePerUnit).toFixed(2)
+        );
       }
-      state.totalCartAmount = state.items.reduce(
-        (total, item) => total + item.totalItemsPrice,
-        0
+      state.totalCartAmount = parseFloat(
+        state.items
+          .reduce((total, item) => total + item.totalItemsPrice, 0)
+          .toFixed(2)
       );
     },
 
@@ -103,11 +123,14 @@ const cartSlice = createSlice({
       );
       if (item && item.quantity > 1) {
         item.quantity -= 1;
-        item.totalItemsPrice = item.quantity * item.pricePerUnit;
+        item.totalItemsPrice = parseFloat(
+          (item.quantity * item.pricePerUnit).toFixed(2)
+        );
       }
-      state.totalCartAmount = state.items.reduce(
-        (total, item) => total + item.totalItemsPrice,
-        0
+      state.totalCartAmount = parseFloat(
+        state.items
+          .reduce((total, item) => total + item.totalItemsPrice, 0)
+          .toFixed(2)
       );
     },
 
@@ -119,12 +142,40 @@ const cartSlice = createSlice({
       state.items = state.items.filter(
         (item) => item.product !== productId || item.color !== color
       );
-      state.totalCartAmount = state.items.reduce(
-        (total, item) => total + item.totalItemsPrice,
-        0
+      state.totalCartAmount = parseFloat(
+        state.items
+          .reduce((total, item) => total + item.totalItemsPrice, 0)
+          .toFixed(2)
       );
     },
     // Additional actions for handling coupon and delivery options can be added here
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(
+        fetchCart.fulfilled,
+        (state, action: PayloadAction<CartProps | null>) => {
+          if (action.payload) {
+            state.cartId = action.payload.cartId;
+            state.userId = action.payload.userId;
+            state.items = action.payload.items;
+            state.coupon = action.payload.coupon;
+            state.deliveryOption = action.payload.deliveryOption;
+            state.totalCartAmount = action.payload.totalCartAmount;
+          } else {
+            // Handle the case where the cart is null or doesn't exist
+            state.cartId = undefined;
+            state.userId = undefined;
+            state.items = [];
+            state.coupon = null;
+            state.deliveryOption = undefined;
+            state.totalCartAmount = 0;
+          }
+        }
+      )
+      .addCase(fetchCart.rejected, (state, action) => {
+        console.error("Failed to fetch cart:", action.error.message);
+      });
   },
 });
 

@@ -12,7 +12,12 @@ interface CartIconNumProps {
 
 const CartIconNum = ({ disableLink }: CartIconNumProps) => {
   const cart = useSelector((state: RootState) => state.cart);
-  const lengthCart = cart.items.length;
+  let lengthCart;
+  if (cart.items) {
+    lengthCart = cart.items.length;
+  } else {
+    lengthCart = 0;
+  }
 
   console.log(lengthCart);
   return (
