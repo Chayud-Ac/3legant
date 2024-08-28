@@ -2,13 +2,36 @@
 import { RootState } from "@/store/store";
 import Image from "next/image";
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import CartItemAmountSelection from "../shared/CartItemAmountSelection";
+import { removeItem } from "@/store/slices/cartSlice";
+import { removeFromCart } from "@/lib/actions/cartaction.action";
 
 const CartItemListDesktop = () => {
   const cart = useSelector((state: RootState) => state.cart);
-  console.log(cart);
-  console.log(cart.items[0]);
+  const dispatch = useDispatch();
+
+  const handleRemoveItem = (productId: string, color: string) => {
+    try {
+      dispatch(
+        removeItem({
+          productId,
+          color,
+        })
+      );
+
+      if (cart.cartId) {
+        removeFromCart({
+          cartId: cart.cartId,
+          product: productId,
+          color: color,
+        });
+      }
+    } catch (error) {
+      throw error;
+    }
+  };
+
   return (
     <table className="table-fixed w-full max-sm:hidden">
       <thead className="border-b border-grey-2">
@@ -44,7 +67,12 @@ const CartItemListDesktop = () => {
                       height={20}
                       className="h-auto w-auto max-w-[20px] max-h-[20px]"
                     />
-                    <span className="text-grey-2 medium-sm">Remove</span>
+                    <span
+                      className="text-grey-2 medium-sm"
+                      onClick={() => handleRemoveItem(item.product, item.color)}
+                    >
+                      Remove
+                    </span>
                   </div>
                 </div>
               </td>

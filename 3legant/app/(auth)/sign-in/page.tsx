@@ -69,6 +69,7 @@ const Page = () => {
 
   async function handleSocialLogin(social: string) {
     const res = await signIn(social, { callbackUrl: "/" });
+    console.log(res);
   }
 
   return (

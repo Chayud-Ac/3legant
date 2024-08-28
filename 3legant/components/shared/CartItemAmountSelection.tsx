@@ -4,6 +4,10 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { useDispatch } from "react-redux";
 import Image from "next/image";
+import {
+  decrementItemQuantityAction,
+  incrementItemQuantityAction,
+} from "@/lib/actions/cartaction.action";
 
 interface CartItemAmountSelectionProps {
   productId: string;
@@ -20,26 +24,51 @@ const CartItemAmountSelection = ({
 }: CartItemAmountSelectionProps) => {
   const cart = useSelector((state: RootState) => state.cart);
 
-  console.log(cart.items);
+  console.log(cart);
 
   const dispatch = useDispatch();
 
-  const handleDecrementAmount = () => {
-    dispatch(
-      decrementItemQuantity({
-        productId: productId,
-        color: color,
-      })
-    );
+  const handleDecrementAmount = async () => {
+    if (quantity === 1) return;
+    try {
+      dispatch(
+        decrementItemQuantity({
+          productId: productId,
+          color: color,
+        })
+      );
+
+      if (cart.cartId) {
+        await decrementItemQuantityAction({
+          cartId: cart.cartId,
+          product: productId,
+          color: color,
+        });
+      }
+    } catch (error) {
+      throw error;
+    }
   };
 
-  const handleIncrementAmount = () => {
-    dispatch(
-      incrementItemQuantity({
-        productId: productId,
-        color: color,
-      })
-    );
+  const handleIncrementAmount = async () => {
+    try {
+      dispatch(
+        incrementItemQuantity({
+          productId: productId,
+          color: color,
+        })
+      );
+
+      if (cart.cartId) {
+        await incrementItemQuantityAction({
+          cartId: cart.cartId,
+          product: productId,
+          color: color,
+        });
+      }
+    } catch (error) {
+      throw error;
+    }
   };
   return (
     <div

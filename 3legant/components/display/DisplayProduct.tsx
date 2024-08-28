@@ -65,9 +65,6 @@ const DisplayProduct = ({
 
   const [currentAmount, setCurrentAmount] = useState(1);
 
-  const { data: session, status } = useSession();
-  console.log(session);
-
   console.log(name);
   return (
     <div className="flex flex-col justify-center items-start w-full gap-4 max-w-[1440px] container-1 sm:flex-row sm:gap-16">

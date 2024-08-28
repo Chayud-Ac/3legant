@@ -2,11 +2,9 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { useSession } from "next-auth/react";
 
 interface UserProps {
-  userId: string;
-  firstName?: string;
-  lastName?: string;
-  displayName?: string;
+  id: string;
   email?: string;
+  displayName?: string;
   image?: string;
 }
 
@@ -14,11 +12,9 @@ interface UserProps {
 // ให้มันเป็น global state เพราะ เราอยาก access state พวกนี้หลาย หน้า Eg. review session , navbar , account และเผือมี page อื่นๆเพิ่มเติมใน อนาคต
 
 const initialState: UserProps = {
-  userId: "",
-  firstName: "",
-  lastName: "",
-  displayName: "",
+  id: "",
   email: "",
+  displayName: "",
   image: "",
 };
 

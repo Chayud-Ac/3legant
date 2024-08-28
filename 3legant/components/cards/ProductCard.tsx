@@ -1,7 +1,6 @@
 import Image from "next/image";
 import React from "react";
 import RatingsStars from "../shared/RatingsStars";
-import AddtoCartButton from "../shared/AddtoCartButton";
 import Link from "next/link";
 import AddtoWishListButton from "../shared/AddtoWishListButton";
 
@@ -142,7 +141,6 @@ const ProductCard = ({
               </div>
             )}
           </div>
-          {/* <AddtoCartButton otherClasses="absolute left-1/2 transform -translate-x-1/2 bottom-4  w-4/5  xl:hidden group-hover:block " /> */}
         </div>
         <div className="flex flex-col justify-start gap-1 w-full">
           <RatingsStars rating={rating} />

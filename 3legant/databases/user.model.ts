@@ -21,7 +21,7 @@ const UserSchema = new Schema<IUser>({
   lastName: { type: String },
   displayName: { type: String },
   email: { type: String, required: true },
-  password: { type: String, required: true },
+  password: { type: String },
   image: { type: String },
   address: { type: Schema.Types.ObjectId, ref: "Address" },
   wishlist: [{ type: Schema.Types.ObjectId, ref: "Product" }],

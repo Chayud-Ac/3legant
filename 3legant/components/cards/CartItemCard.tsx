@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import CartItemAmountSelection from "../shared/CartItemAmountSelection";
 import { removeItem } from "@/store/slices/cartSlice";
+import { removeFromCart } from "@/lib/actions/cartaction.action";
 
 interface CartItemCardProps {
   product: string;
@@ -27,13 +28,25 @@ const CartItemCard = ({
   console.log(cart);
   const dispatch = useDispatch();
 
-  const handleRemoveItem = () => {
-    dispatch(
-      removeItem({
-        productId: product,
-        color: color,
-      })
-    );
+  const handleRemoveItem = async () => {
+    try {
+      dispatch(
+        removeItem({
+          productId: product,
+          color: color,
+        })
+      );
+
+      if (cart.cartId) {
+        await removeFromCart({
+          cartId: cart.cartId,
+          product: product,
+          color: color,
+        });
+      }
+    } catch (error) {
+      throw error;
+    }
   };
   return (
     <div className="flex flex-row justify-between w-full items-center">
