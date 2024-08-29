@@ -32,16 +32,18 @@ const NavContent = () => {
         const isActive = item.route === activePath;
         return (
           <SheetClose asChild key={item.label}>
-            <div className="relative inline-flex items-center ">
-              <Link href={item.route}>
+            <Link href={item.route}>
+              <div className="relative inline-flex items-center">
                 <h1
-                  className={`${isActive ? "text-dark-2" : "text-grey-1"} medium-base mb-4 hover:text-dark-2 transition-colors duration-300`}
+                  className={`${
+                    isActive ? "text-dark-2" : "text-grey-1"
+                  } medium-base mb-4 hover:text-dark-2 transition-colors duration-300`}
                 >
                   {item.label}
                 </h1>
-              </Link>
-              <span className="absolute left-0 bottom-0 w-full h-[2px] bg-grey-5"></span>
-            </div>
+                <span className="absolute left-0 bottom-0 w-full h-[2px] bg-grey-5"></span>
+              </div>
+            </Link>
           </SheetClose>
         );
       })}
@@ -49,7 +51,16 @@ const NavContent = () => {
   );
 };
 
-const MobileNav = () => {
+interface MobileNavProps {
+  session: any;
+}
+
+const MobileNav = ({ session }: MobileNavProps) => {
+  let id;
+  if (session) {
+    id = session.user.id;
+  }
+
   return (
     <div className="md:hidden">
       <Sheet>
@@ -76,26 +87,31 @@ const MobileNav = () => {
             </div>
             <div className="flex flex-col gap-4">
               <div className="relative inline-flex items-center">
-                <div className="flex flex-row justify-between items-center mb-4 w-full">
+                <SheetClose
+                  asChild
+                  className="flex flex-row justify-between items-center mb-4 w-full"
+                >
                   <Link href="/cart">
-                    <h1 className="text-grey-1 medium-lg hover:text-dark-2 transition-colors duration-300 ">
+                    <h1 className="text-grey-1 medium-lg hover:text-dark-2 transition-colors duration-300">
                       Cart
                     </h1>
+                    <CartIconNum disableLink={true} />
                   </Link>
-                  <CartIconNum />
-                </div>
+                </SheetClose>
                 <span className="absolute left-0 bottom-0 w-full h-[2px] bg-grey-5"></span>
               </div>
               <div className="relative inline-flex items-center">
-                <div className="flex flex-row justify-between items-center mb-4 w-full">
-                  <Link href={`/profile/${1}?q=account`}>
-                    <h1 className="text-grey-1 medium-lg hover:text-dark-2 transition-colors duration-300 ">
+                <SheetClose
+                  asChild
+                  className="flex flex-row justify-between items-center mb-4 w-full"
+                >
+                  <Link href={`/profile/${id}?q=account`}>
+                    <h1 className="text-grey-1 medium-lg hover:text-dark-2 transition-colors duration-300">
                       WishList
                     </h1>
+                    <WishListIconNum disableLink={true} />
                   </Link>
-                  <WishListIconNum />
-                </div>
-
+                </SheetClose>
                 <span className="absolute left-0 bottom-0 w-full h-[2px] bg-grey-5"></span>
               </div>
             </div>

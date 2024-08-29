@@ -6,7 +6,11 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 
-const WishListIconNum = () => {
+interface WishListIconNumProps {
+  disableLink?: boolean;
+}
+
+const WishListIconNum = ({ disableLink }: WishListIconNumProps) => {
   const wishlist = useSelector((state: RootState) => state.wishlist);
   const lengthWishList = wishlist.items.length;
 
@@ -14,14 +18,24 @@ const WishListIconNum = () => {
     <div
       className={`flex flex-row justify-between items-center ${lengthWishList && "w-[49px]"}`}
     >
-      <Link href="/cart">
+      {disableLink ? (
         <Image
           src="/assets/icons/wishlist.svg"
           alt="cart"
           width={24}
           height={24}
         />
-      </Link>
+      ) : (
+        <Link href="/cart">
+          <Image
+            src="/assets/icons/wishlist.svg"
+            alt="cart"
+            width={24}
+            height={24}
+          />
+        </Link>
+      )}
+
       {lengthWishList > 0 && (
         <div className="bg-dark-1 border rounded-full w-[22px] h-[22px] flex items-center justify-center">
           <h2 className="text-white text-xs font-bold">{lengthWishList}</h2>
