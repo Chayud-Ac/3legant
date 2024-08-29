@@ -55,11 +55,13 @@ const CartSideBar = () => {
                   </span>
                 </div>
               </div>
-              <Link href={`/cart`}>
-                <Button className="btn-primary text-center w-full">
-                  View Cart
-                </Button>
-              </Link>
+              <SheetClose asChild>
+                <Link href={`/cart`}>
+                  <Button className="btn-primary text-center w-full">
+                    View Cart
+                  </Button>
+                </Link>
+              </SheetClose>
               <p className="regular-xs text-grey-2 text-center">
                 You can apply coupon and select delivery options in Cart Page
               </p>

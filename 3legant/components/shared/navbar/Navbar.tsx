@@ -31,7 +31,7 @@ const Navbar = ({ session }: any) => {
   return (
     <nav className="flex-between z-50 w-full container-1 py-4 items-center inline-flex">
       <div className="flex flex-row gap-1">
-        <MobileNav />
+        <MobileNav session={session} />
         <Link href="/">
           <Image
             src="/assets/images/logo.svg"
