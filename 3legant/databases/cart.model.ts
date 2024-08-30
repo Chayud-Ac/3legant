@@ -27,7 +27,7 @@ const cartSchema = new Schema<ICart>({
     },
   ],
   coupon: { type: Schema.Types.ObjectId, ref: "Coupon" },
-  deliveryOption: { type: Schema.Types.ObjectId, ref: "DeliveryOption" },
+  deliveryOption: { type: Schema.Types.ObjectId, ref: "Delivery" },
   totalCartAmount: { type: Number, required: true },
   isActive: { type: Boolean, default: true },
 });

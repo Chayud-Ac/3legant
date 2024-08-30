@@ -50,6 +50,7 @@ export interface getUserImageParams {
 }
 
 export interface addItemToCartParams {
+  cartId?: string;
   userId: string;
   cartItem: {
     productId: string;
@@ -80,4 +81,18 @@ export interface addItemToWishListParams {
 export interface removeItemFromWishListParams {
   userId: string;
   product: string;
+}
+
+export interface applyCouponParams {
+  cartId: string;
+  code: string;
+}
+
+export interface selectDeliveryOptionsParams {
+  cartId: string;
+  deliveryOption: string;
+}
+
+export interface removeCouponParams {
+  cartId: string;
 }

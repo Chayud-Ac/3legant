@@ -1,4 +1,8 @@
-import { incrementItemQuantity } from "@/store/slices/cartSlice";
+import {
+  applyCoupon,
+  incrementItemQuantity,
+  removeCoupon,
+} from "@/store/slices/cartSlice";
 import { decrementItemQuantity } from "@/store/slices/cartSlice";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
@@ -31,19 +35,27 @@ const CartItemAmountSelection = ({
   const handleDecrementAmount = async () => {
     if (quantity === 1) return;
     try {
-      dispatch(
-        decrementItemQuantity({
-          productId: productId,
-          color: color,
-        })
-      );
-
       if (cart.cartId) {
-        await decrementItemQuantityAction({
+        const result = await decrementItemQuantityAction({
           cartId: cart.cartId,
           product: productId,
           color: color,
         });
+
+        if (result.success) {
+          const { data } = result;
+          dispatch(
+            decrementItemQuantity({
+              productId: productId,
+              color: color,
+              newTotalCartAmount: data.newTotalCartAmount,
+            })
+          );
+
+          if (data.removeCoupon) {
+            dispatch(removeCoupon({}));
+          }
+        }
       }
     } catch (error) {
       throw error;
@@ -52,19 +64,23 @@ const CartItemAmountSelection = ({
 
   const handleIncrementAmount = async () => {
     try {
-      dispatch(
-        incrementItemQuantity({
-          productId: productId,
-          color: color,
-        })
-      );
-
       if (cart.cartId) {
-        await incrementItemQuantityAction({
+        const result = await incrementItemQuantityAction({
           cartId: cart.cartId,
           product: productId,
           color: color,
         });
+
+        if (result.success) {
+          const { data } = result;
+          dispatch(
+            incrementItemQuantity({
+              productId: productId,
+              color: color,
+              newTotalCartAmount: data.newTotalCartAmount,
+            })
+          );
+        }
       }
     } catch (error) {
       throw error;

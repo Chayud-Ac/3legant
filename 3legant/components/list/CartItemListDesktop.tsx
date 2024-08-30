@@ -4,28 +4,36 @@ import Image from "next/image";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CartItemAmountSelection from "../shared/CartItemAmountSelection";
-import { removeItem } from "@/store/slices/cartSlice";
+import { removeCoupon, removeItem } from "@/store/slices/cartSlice";
 import { removeFromCart } from "@/lib/actions/cartaction.action";
 
 const CartItemListDesktop = () => {
   const cart = useSelector((state: RootState) => state.cart);
   const dispatch = useDispatch();
 
-  const handleRemoveItem = (productId: string, color: string) => {
+  const handleRemoveItem = async (productId: string, color: string) => {
     try {
-      dispatch(
-        removeItem({
-          productId,
-          color,
-        })
-      );
-
       if (cart.cartId) {
-        removeFromCart({
+        const result = await removeFromCart({
           cartId: cart.cartId,
           product: productId,
           color: color,
         });
+
+        if (result.success) {
+          const { data } = result;
+          dispatch(
+            removeItem({
+              productId: productId,
+              color: color,
+              newTotalCartAmount: data.newTotalCartAmount,
+            })
+          );
+
+          if (data.removeCoupon) {
+            dispatch(removeCoupon({}));
+          }
+        }
       }
     } catch (error) {
       throw error;
