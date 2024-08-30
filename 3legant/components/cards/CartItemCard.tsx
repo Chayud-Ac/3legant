@@ -2,7 +2,7 @@ import { RootState } from "@/store/store";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import CartItemAmountSelection from "../shared/CartItemAmountSelection";
-import { removeItem } from "@/store/slices/cartSlice";
+import { removeCoupon, removeItem } from "@/store/slices/cartSlice";
 import { removeFromCart } from "@/lib/actions/cartaction.action";
 
 interface CartItemCardProps {
@@ -30,19 +30,27 @@ const CartItemCard = ({
 
   const handleRemoveItem = async () => {
     try {
-      dispatch(
-        removeItem({
-          productId: product,
-          color: color,
-        })
-      );
-
       if (cart.cartId) {
-        await removeFromCart({
+        const result = await removeFromCart({
           cartId: cart.cartId,
           product: product,
           color: color,
         });
+
+        if (result.success) {
+          const { data } = result;
+          dispatch(
+            removeItem({
+              productId: product,
+              color: color,
+              newTotalCartAmount: data.newTotalCartAmount,
+            })
+          );
+
+          if (data.removeCoupon) {
+            dispatch(removeCoupon({}));
+          }
+        }
       }
     } catch (error) {
       throw error;

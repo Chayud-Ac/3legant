@@ -4,6 +4,7 @@ import User from "@/databases/user.model";
 import Address from "@/databases/address.model";
 import { Cart } from "@/databases/cart.model";
 import mongoose from "mongoose";
+import Delivery from "@/databases/delivery.model";
 
 export async function GET(
   req: NextRequest,
@@ -58,12 +59,22 @@ export async function GET(
         const cart = await Cart.findOne({
           user: userObjectId,
           isActive: true,
-        }).populate({
-          path: "cartItems.product",
-          select: "category slug name",
-        });
+        })
+          .populate({
+            path: "coupon",
+            select: "code discount -_id",
+          })
+          .populate({
+            path: "cartItems.product",
+            select: "category slug name",
+          });
 
-        console.log(JSON.parse(JSON.stringify(cart)));
+        const delivery = await Delivery.findById(cart.deliveryOption);
+
+        const deepCloneDelivery = JSON.parse(JSON.stringify(delivery));
+
+        console.log(deepCloneDelivery);
+        console.log(cart.coupon);
 
         // create format that match with the state in redux
         let formattedCart;
@@ -81,10 +92,12 @@ export async function GET(
               slug: item.product.slug, // Populated from Product model
               name: item.product.name, // Populated from Product model
             })),
-            coupon: cart.coupon ? cart.coupon.toString() : null,
+            coupon: cart.coupon
+              ? cart.coupon
+              : { code: undefined, discount: undefined },
             deliveryOption: cart.deliveryOption
-              ? cart.deliveryOption.toString()
-              : undefined,
+              ? deepCloneDelivery
+              : { _id: undefined, name: undefined, price: 0 },
             totalCartAmount: cart.totalCartAmount,
           };
         }

@@ -6,7 +6,6 @@ export interface ICoupon extends Document {
   expiration: Date;
   isActive: boolean;
   minPrice: number;
-  maxPrice: number;
 }
 
 const couponSchema = new Schema<ICoupon>({
@@ -15,7 +14,6 @@ const couponSchema = new Schema<ICoupon>({
   expiration: { type: Date },
   isActive: { type: Boolean, required: true },
   minPrice: { type: Number, required: true },
-  maxPrice: { type: Number, required: true },
 });
 
 export const Coupon = models.Coupon || model<ICoupon>("Coupon", couponSchema);

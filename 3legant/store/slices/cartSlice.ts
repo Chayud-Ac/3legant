@@ -13,19 +13,37 @@ interface CartProps {
     slug: string;
     name: string;
   }[];
-  coupon: string | null;
-  deliveryOption: string | undefined;
-  totalCartAmount: number;
+  coupon: {
+    code?: string;
+    discount?: number;
+  };
+  deliveryOption: {
+    _id?: string;
+    name?: string;
+    price?: number;
+  };
+  totalCartAmount: number; //
 }
 
 const initialState: CartProps = {
   cartId: undefined,
   userId: undefined,
   items: [],
-  coupon: null,
-  deliveryOption: undefined,
+  coupon: {
+    code: undefined,
+    discount: undefined,
+  },
+  deliveryOption: {
+    _id: undefined,
+    name: undefined,
+    price: 0,
+  },
   totalCartAmount: 0,
 };
+
+interface CouponPayload {
+  totalCartAmount?: number;
+}
 
 export const fetchCart = createAsyncThunk(
   "cart/fetchCart",
@@ -62,10 +80,19 @@ const cartSlice = createSlice({
         slug: string;
         name: string;
         totalItemsPrice: number;
+        totalCartAmount: number;
       }>
     ) {
-      const { productId, color, quantity, pricePerUnit, category, slug, name } =
-        action.payload;
+      const {
+        productId,
+        color,
+        quantity,
+        pricePerUnit,
+        category,
+        slug,
+        name,
+        totalCartAmount,
+      } = action.payload;
       const existingItem = state.items.find(
         (item) => item.product === productId && item.color === color
       );
@@ -86,17 +113,18 @@ const cartSlice = createSlice({
           totalItemsPrice: parseFloat((quantity * pricePerUnit).toFixed(2)),
         });
       }
-      state.totalCartAmount = parseFloat(
-        state.items
-          .reduce((total, item) => total + item.totalItemsPrice, 0)
-          .toFixed(2)
-      );
+      state.totalCartAmount = totalCartAmount;
     },
+
     incrementItemQuantity(
       state,
-      action: PayloadAction<{ productId: string; color: string }>
+      action: PayloadAction<{
+        productId: string;
+        color: string;
+        newTotalCartAmount: number;
+      }>
     ) {
-      const { productId, color } = action.payload;
+      const { productId, color, newTotalCartAmount } = action.payload;
       const item = state.items.find(
         (item) => item.product === productId && item.color === color
       );
@@ -106,18 +134,19 @@ const cartSlice = createSlice({
           (item.quantity * item.pricePerUnit).toFixed(2)
         );
       }
-      state.totalCartAmount = parseFloat(
-        state.items
-          .reduce((total, item) => total + item.totalItemsPrice, 0)
-          .toFixed(2)
-      );
+
+      state.totalCartAmount = newTotalCartAmount;
     },
 
     decrementItemQuantity(
       state,
-      action: PayloadAction<{ productId: string; color: string }>
+      action: PayloadAction<{
+        productId: string;
+        color: string;
+        newTotalCartAmount: number;
+      }>
     ) {
-      const { productId, color } = action.payload;
+      const { productId, color, newTotalCartAmount } = action.payload;
       const item = state.items.find(
         (item) => item.product === productId && item.color === color
       );
@@ -127,28 +156,72 @@ const cartSlice = createSlice({
           (item.quantity * item.pricePerUnit).toFixed(2)
         );
       }
-      state.totalCartAmount = parseFloat(
-        state.items
-          .reduce((total, item) => total + item.totalItemsPrice, 0)
-          .toFixed(2)
-      );
+
+      state.totalCartAmount = newTotalCartAmount;
     },
 
     removeItem(
       state,
-      action: PayloadAction<{ productId: string; color: string }>
+      action: PayloadAction<{
+        productId: string;
+        color: string;
+        newTotalCartAmount: number;
+      }>
     ) {
-      const { productId, color } = action.payload;
+      const { productId, color, newTotalCartAmount } = action.payload;
       state.items = state.items.filter(
         (item) => item.product !== productId || item.color !== color
       );
+
+      state.totalCartAmount = newTotalCartAmount;
+    },
+
+    applyCoupon(
+      state,
+      action: PayloadAction<{
+        code: string;
+        discount: number;
+        newTotalCartAmount: number;
+      }>
+    ) {
+      const { code, discount, newTotalCartAmount } = action.payload;
+      state.coupon.code = code;
+      state.coupon.discount = discount;
+      state.totalCartAmount = newTotalCartAmount;
+    },
+
+    removeCoupon(state, action: PayloadAction<CouponPayload>) {
+      state.coupon.code = undefined;
+      state.coupon.discount = undefined;
+
+      // Optionally update the totalCartAmount if provided
+      if (action.payload.totalCartAmount !== undefined) {
+        state.totalCartAmount = action.payload.totalCartAmount;
+      }
+    },
+
+    selectDeliveryOptions(
+      state,
+      action: PayloadAction<{
+        _id: string;
+        name: string;
+        price: number;
+      }>
+    ) {
+      state.deliveryOption = action.payload;
+      const itemsTotalAmount = state.items.reduce(
+        (total, item) => total + item.totalItemsPrice,
+        0
+      );
+
       state.totalCartAmount = parseFloat(
-        state.items
-          .reduce((total, item) => total + item.totalItemsPrice, 0)
-          .toFixed(2)
+        (
+          itemsTotalAmount -
+          (state.coupon?.discount || 0) +
+          (state.deliveryOption?.price || 0)
+        ).toFixed(2)
       );
     },
-    // Additional actions for handling coupon and delivery options can be added here
   },
   extraReducers: (builder) => {
     builder
@@ -167,8 +240,15 @@ const cartSlice = createSlice({
             state.cartId = undefined;
             state.userId = undefined;
             state.items = [];
-            state.coupon = null;
-            state.deliveryOption = undefined;
+            state.coupon = {
+              code: undefined,
+              discount: undefined,
+            };
+            state.deliveryOption = {
+              _id: undefined,
+              name: undefined,
+              price: 0,
+            };
             state.totalCartAmount = 0;
           }
         }
@@ -185,6 +265,9 @@ export const {
   incrementItemQuantity,
   decrementItemQuantity,
   removeItem,
+  applyCoupon,
+  selectDeliveryOptions,
+  removeCoupon,
 } = cartSlice.actions;
 export default cartSlice.reducer;
 

@@ -36,25 +36,11 @@ const AddtoCartButton = ({
 
   const cart = useSelector((state: RootState) => state.cart);
   const user = useSelector((state: RootState) => state.user);
-  console.log(user);
-  console.log(cart);
 
   const handleAddToCart = async () => {
     try {
-      dispatch(
-        addItem({
-          productId: productId,
-          color: color, // Example static color, should be selected by user
-          quantity: quantity, // Example quantity
-          pricePerUnit: price,
-          category: category,
-          slug: slug,
-          name: name,
-          totalItemsPrice: parseFloat((price * quantity).toFixed(2)),
-        })
-      );
-
       const result = await addItemToCart({
+        cartId: cart.cartId,
         userId: user.id,
         cartItem: {
           productId: productId,
@@ -65,9 +51,28 @@ const AddtoCartButton = ({
         },
       });
 
-      console.log(result.cart);
-      if (!cart.cartId) {
-        dispatch(setCartId(result.cart._id));
+      if (result.success) {
+        const { data } = result;
+
+        console.log(data.totalCartAmount);
+
+        dispatch(
+          addItem({
+            productId: productId,
+            color: color,
+            quantity: quantity,
+            pricePerUnit: price,
+            category: category,
+            slug: slug,
+            name: name,
+            totalItemsPrice: parseFloat((price * quantity).toFixed(2)),
+            totalCartAmount: data.totalCartAmount,
+          })
+        );
+
+        if (cart.cartId) {
+          dispatch(setCartId(data.cartId));
+        }
       }
     } catch (error) {
       throw error;

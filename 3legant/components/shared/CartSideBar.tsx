@@ -22,7 +22,8 @@ import { Button } from "../ui/button";
 const CartSideBar = () => {
   const cart = useSelector((state: RootState) => state.cart);
   const totalCartAmount = cart.totalCartAmount;
-  const cartId = cart.cartId;
+  const delivery = cart.deliveryOption;
+  const coupon = cart.coupon;
 
   return (
     <div className="">
@@ -44,6 +45,43 @@ const CartSideBar = () => {
             </div>
 
             <div className="flex flex-col gap-3">
+              {(delivery.name || coupon.code) && (
+                <span className="relative w-full h-[2px] bg-grey-5"></span>
+              )}
+              {coupon && coupon.code && (
+                <div className="flex flex-row justify-between items-center">
+                  <div className="flex flex-row gap-2 items-center">
+                    <Image
+                      src="/assets/icons/fast_delivery.svg"
+                      alt="coupon"
+                      width={24}
+                      height={24}
+                      className="w-auto h-auto"
+                    />
+                    <span className="regular-xs">Coupon</span>
+                  </div>
+                  <span className="medium-xs text-accent-green">
+                    ${coupon.discount} ({coupon.code})
+                  </span>
+                </div>
+              )}
+              {delivery && delivery.name && (
+                <div className="flex flex-row justify-between items-center">
+                  <div className="flex flex-row gap-2 items-center">
+                    <Image
+                      src="/assets/icons/fast_delivery.svg"
+                      alt="coupon"
+                      width={24}
+                      height={24}
+                      className="w-auto h-auto"
+                    />
+                    <span className="regular-xs">Delivery</span>
+                  </div>
+                  <span className="medium-xs text-accent-green">
+                    ${delivery.price} ({delivery.name})
+                  </span>
+                </div>
+              )}
               <span className="relative w-full h-[2px] bg-grey-5"></span>
               <div className="relative inline-flex items-center">
                 <div className="flex flex-row justify-between items-center w-full">

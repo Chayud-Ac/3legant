@@ -11,6 +11,7 @@ import { CheckOutFromSchema } from "@/lib/validation";
 import AddressForm from "./AddressFrom";
 import OrderSummary from "../shared/OrderSummary";
 import Link from "next/link";
+import Coupon from "../shared/Coupon";
 
 const CheckoutForm = () => {
   // 1. Define your form.
