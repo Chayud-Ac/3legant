@@ -83,7 +83,7 @@ const AddressForm = ({ control, userId }: AddressFormProps) => {
               country: userData.data.country || "",
               city: userData.data.city || "",
               state: userData.data.state || "",
-              zipCode: userData.data.zipCode || "",
+              zipCode: userData.data.zipCode || 0,
             });
           }
           console.log(userData);
@@ -220,75 +220,20 @@ const AddressForm = ({ control, userId }: AddressFormProps) => {
         </Form>
       </div>
     );
-  }
-
-  return (
-    <div className="flex flex-col gap-5 border rounded-md px-10 py-5 border-dark-1">
-      <p className="text-dark-2 medium-xl">Shipping Address</p>
-      <FormField
-        control={control}
-        name="address.street"
-        render={({ field }) => (
-          <FormItem className="w-full">
-            <FormLabel>
-              <span className="text-grey-1 medium-xs">STREE ADDRESS</span>
-            </FormLabel>
-            <FormControl>
-              <Input placeholder="Street Address" {...field} />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-      <FormField
-        control={control}
-        name="address.country"
-        render={({ field }) => (
-          <FormItem className="text-grey-1">
-            <FormLabel>
-              <span className="text-grey-2 medium-xs">COUNTRY</span>
-            </FormLabel>
-            <Select onValueChange={field.onChange} defaultValue={field.value}>
-              <FormControl>
-                <SelectTrigger>
-                  <SelectValue placeholder="COUNTRY" />
-                </SelectTrigger>
-              </FormControl>
-              <SelectContent>
-                <SelectItem value="Thailand">Thailand</SelectItem>
-                <SelectItem value="USA">USA</SelectItem>
-              </SelectContent>
-            </Select>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-      <FormField
-        control={control}
-        name="address.city"
-        render={({ field }) => (
-          <FormItem className="w-full">
-            <FormLabel>
-              <span className="text-grey-1 medium-xs">TOWN / CITY</span>
-            </FormLabel>
-            <FormControl>
-              <Input placeholder="TOWN / CITY" {...field} />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-      <div className="flex flex-row gap-10">
+  } else {
+    return (
+      <div className="flex flex-col gap-5 border rounded-md px-10 py-5 border-dark-1">
+        <p className="text-dark-2 medium-xl">Shipping Address</p>
         <FormField
           control={control}
-          name="address.state"
+          name="address.street"
           render={({ field }) => (
             <FormItem className="w-full">
               <FormLabel>
-                <span className="text-grey-1 medium-xs">STATE</span>
+                <span className="text-grey-1 medium-xs">STREE ADDRESS</span>
               </FormLabel>
               <FormControl>
-                <Input placeholder="State" {...field} />
+                <Input placeholder="Street Address" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -296,22 +241,85 @@ const AddressForm = ({ control, userId }: AddressFormProps) => {
         />
         <FormField
           control={control}
-          name="address.zipCode"
+          name="address.country"
+          render={({ field }) => (
+            <FormItem className="text-grey-1">
+              <FormLabel>
+                <span className="text-grey-2 medium-xs">COUNTRY</span>
+              </FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="COUNTRY" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectItem value="Thailand">Thailand</SelectItem>
+                  <SelectItem value="USA">USA</SelectItem>
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={control}
+          name="address.city"
           render={({ field }) => (
             <FormItem className="w-full">
               <FormLabel>
-                <span className="text-grey-1 medium-xs">ZIP CODE</span>
+                <span className="text-grey-1 medium-xs">TOWN / CITY</span>
               </FormLabel>
               <FormControl>
-                <Input placeholder="Zip Code" {...field} />
+                <Input placeholder="TOWN / CITY" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
+        <div className="flex flex-row gap-10">
+          <FormField
+            control={control}
+            name="address.state"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel>
+                  <span className="text-grey-1 medium-xs">STATE</span>
+                </FormLabel>
+                <FormControl>
+                  <Input placeholder="State" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={control}
+            name="address.zipCode"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel>
+                  <span className="text-grey-1 medium-xs">ZIP CODE</span>
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    type="number"
+                    placeholder="Zip Code"
+                    {...field}
+                    value={field.value || ""} // Ensures empty string if undefined
+                    onChange={(e) =>
+                      field.onChange(e.target.valueAsNumber || 0)
+                    } // Converts to number
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 };
 
 export default AddressForm;

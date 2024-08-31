@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useRef } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -10,11 +10,20 @@ import ContactForm from "./ContactForm";
 import { CheckOutFromSchema } from "@/lib/validation";
 import AddressForm from "./AddressFrom";
 import OrderSummary from "../shared/OrderSummary";
-import Link from "next/link";
-import Coupon from "../shared/Coupon";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+import PaymentSelectionForm from "./PaymentSelectionForm";
+import { useRouter } from "next/navigation";
+
+if (process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY === undefined) {
+  throw new Error("NEXT_PUBLIC_STRIPE_PUBLIC_KEY is undefined");
+}
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY);
 
 const CheckoutForm = () => {
-  // 1. Define your form.
+  const router = useRouter();
+  const submitButtonRef = useRef<HTMLButtonElement | null>(null);
+
   const form = useForm<z.infer<typeof CheckOutFromSchema>>({
     resolver: zodResolver(CheckOutFromSchema),
     defaultValues: {
@@ -31,15 +40,24 @@ const CheckoutForm = () => {
         state: "",
         zipCode: 0,
       },
+      payment: "stripe",
     },
   });
 
-  // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof CheckOutFromSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
+    console.log("onSubmit called");
     console.log(values);
+
+    console.log(values.payment);
+
+    router.push(`/checkout/${values.payment}`);
   }
+
+  const handlePlaceOrderClick = () => {
+    if (submitButtonRef.current) {
+      submitButtonRef.current.click();
+    }
+  };
 
   return (
     <div className="flex flex-col gap-3 w-full md:flex-row">
@@ -50,21 +68,24 @@ const CheckoutForm = () => {
         >
           <ContactForm control={form.control} />
           <AddressForm control={form.control} />
+          <PaymentSelectionForm control={form.control} />
+          <Button type="submit" ref={submitButtonRef} className="hidden">
+            Submit
+          </Button>
         </form>
       </Form>
       <div className="flex flex-col gap-5 w-full items-center">
         <OrderSummary />
-        <Link href="/payment" className="w-full max-w-[550px]">
-          <Button type="submit" className="btn-primary w-full">
-            placeorder
-          </Button>
-        </Link>
+        <Button
+          type="button"
+          className="btn-primary w-full max-w-[550px]"
+          onClick={handlePlaceOrderClick}
+        >
+          Place Order
+        </Button>
       </div>
     </div>
   );
 };
 
 export default CheckoutForm;
-{
-  /* <Button type="submit">Submit</Button> */
-}
