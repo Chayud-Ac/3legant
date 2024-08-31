@@ -14,15 +14,21 @@ import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import PaymentSelectionForm from "./PaymentSelectionForm";
 import { useRouter } from "next/navigation";
-
-if (process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY === undefined) {
-  throw new Error("NEXT_PUBLIC_STRIPE_PUBLIC_KEY is undefined");
-}
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY);
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import { createOrder } from "@/lib/actions/order.action";
+import { log } from "console";
+import { useOrder } from "@/context/OrderProvider";
 
 const CheckoutForm = () => {
   const router = useRouter();
   const submitButtonRef = useRef<HTMLButtonElement | null>(null);
+  const cart = useSelector((state: RootState) => state.cart);
+  const user = useSelector((state: RootState) => state.user);
+
+  const { orderId, setOrderId } = useOrder();
+
+  console.log(orderId);
 
   const form = useForm<z.infer<typeof CheckOutFromSchema>>({
     resolver: zodResolver(CheckOutFromSchema),
@@ -44,11 +50,29 @@ const CheckoutForm = () => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof CheckOutFromSchema>) {
-    console.log("onSubmit called");
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof CheckOutFromSchema>) {
+    try {
+      //!!TODO add server action to create the order document using the input detail
 
-    console.log(values.payment);
+      if (user.id && cart.cartId) {
+        const result = await createOrder({
+          cartId: cart.cartId,
+          userId: user.id,
+          shippingAddress: values.address,
+          contact: values.contact,
+          paymentMethod: values.payment,
+        });
+
+        if (result.success) {
+          const { data } = result;
+          setOrderId(result.data.orderId);
+        }
+      }
+
+      console.log(values);
+    } catch (error) {
+      throw error;
+    }
 
     router.push(`/checkout/${values.payment}`);
   }
@@ -67,7 +91,9 @@ const CheckoutForm = () => {
           className="space-y-8 w-full"
         >
           <ContactForm control={form.control} />
+
           <AddressForm control={form.control} />
+
           <PaymentSelectionForm control={form.control} />
           <Button type="submit" ref={submitButtonRef} className="hidden">
             Submit
