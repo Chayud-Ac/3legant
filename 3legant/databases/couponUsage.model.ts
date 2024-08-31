@@ -14,5 +14,5 @@ const couponUsageSchema = new Schema<ICouponUsage>({
 
 couponUsageSchema.index({ couponId: 1, userId: 1 }, { unique: true });
 
-const CouponUsage =
+export const CouponUsage =
   models.CouponUsage || model("CouponUsage", couponUsageSchema);

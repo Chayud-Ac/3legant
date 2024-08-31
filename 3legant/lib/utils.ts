@@ -119,3 +119,7 @@ export function timeAgo(dateString: string): string {
 
   return "just now";
 }
+
+export function convertToSubcurrency(amount: number, factor = 100) {
+  return Math.round(amount * factor);
+}

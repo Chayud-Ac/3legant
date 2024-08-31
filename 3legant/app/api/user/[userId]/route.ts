@@ -69,16 +69,14 @@ export async function GET(
             select: "category slug name",
           });
 
-        const delivery = await Delivery.findById(cart.deliveryOption);
-
-        const deepCloneDelivery = JSON.parse(JSON.stringify(delivery));
-
-        console.log(deepCloneDelivery);
-        console.log(cart.coupon);
-
-        // create format that match with the state in redux
         let formattedCart;
+        let delivery;
+
+        // ถ้ามี cart สร้าง แล้ว ก็ format cart ให้ตรงกับ type state ของ cart redux state ถ้ายัง ก็ format cart เป็น null cart redux state ก็จะ set ค่าตั้งต้นเป็น initial state ที่เรากำหนดไว้
+
         if (cart) {
+          delivery = await Delivery.findById(cart.deliveryOption);
+          const deepCloneDelivery = JSON.parse(JSON.stringify(delivery));
           formattedCart = {
             cartId: cart._id.toString(),
             userId: cart.user.toString(),
