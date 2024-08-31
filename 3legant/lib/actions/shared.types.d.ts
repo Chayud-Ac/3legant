@@ -96,3 +96,26 @@ export interface selectDeliveryOptionsParams {
 export interface removeCouponParams {
   cartId: string;
 }
+
+export interface createOrderParams {
+  cartId: string;
+  userId: string;
+  contact: {
+    firstName: string;
+    lastName: string;
+    phoneNumber: string;
+    emailAddress: string;
+  };
+  shippingAddress: {
+    street: string;
+    country: string;
+    city: string;
+    state: string;
+    zipCode: number;
+  };
+  paymentMethod: string;
+}
+
+export interface updateOrderStatusParams {
+  orderId: string;
+}
