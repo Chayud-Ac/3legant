@@ -28,7 +28,7 @@ const ProductHorizontal = ({ title, products }: ProductHorizontalProps) => {
   }
   return (
     <div className="flex flex-col p-8 lg:p-10 justify-start items-start">
-      <div className="flex flex-row container-1 w-full justify-between items-center max-w-[1360px]">
+      <div className="flex flex-row container-1 w-full justify-between items-center max-w-[1440px]">
         <h4 className="h4-medium text-dark-1">{title}</h4>
         <TextLinkButton
           href="/products"

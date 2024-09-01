@@ -3,7 +3,7 @@ import TextLinkButton from "./TextLinkButton";
 
 const NewsSection = () => {
   return (
-    <div className="flex flex-col justify-center w-full max-w-[1560px] mx-auto md:flex-row">
+    <div className="flex flex-col justify-center w-full max-w-[1440px] mx-auto md:flex-row">
       <div className="flex w-full max-w-[880px] h-auto">
         <img
           src="/assets/images/banner.svg"

@@ -4,7 +4,7 @@ import { FeatureCardProps } from "@/types";
 
 const FeatureCard = ({ iconUrl, title, describtion }: FeatureCardProps) => {
   return (
-    <div className="xl:w-[262px] lg:h-[220px] w-full h-auto p-4 bg-grey-4 flex flex-col justify-center items-center rounded-lg">
+    <div className="w-full lg:w-[260px] h-[220px] p-4 bg-grey-4 flex flex-col justify-center items-center rounded-lg">
       <div>
         <Image
           src={iconUrl}
