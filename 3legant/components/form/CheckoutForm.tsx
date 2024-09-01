@@ -92,7 +92,7 @@ const CheckoutForm = () => {
         >
           <ContactForm control={form.control} />
 
-          <AddressForm control={form.control} />
+          <AddressForm control={form.control} otherClasses="px-10 py-5" />
 
           <PaymentSelectionForm control={form.control} />
           <Button type="submit" ref={submitButtonRef} className="hidden">
