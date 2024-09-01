@@ -9,8 +9,8 @@ const WishListDesktop = () => {
   console.log(wishlist.items);
   return (
     <table className="table-fixed w-full max-w-[900px] max-sm:hidden">
-      <thead className="border-b border-grey-2">
-        <tr className="medium-base text-dark-1 ">
+      <thead className="border-b border-grey-2 ">
+        <tr className="medium-base text-dark-1  ">
           <th className="text-start py-5 w-[350px]">Product</th>
           <th className="text-center py-5">Price</th>
           <th className="text-center py-5">Action</th>

@@ -40,7 +40,6 @@ const StripeCheckOut = ({ amount }: StripeCheckOutProps) => {
         }
       } catch (error) {
         console.error("Error:", error);
-        // Handle errors here, e.g., by setting an error state or showing an error message
       }
     };
     if (amount > 0) {

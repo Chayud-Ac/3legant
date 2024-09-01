@@ -102,12 +102,20 @@ const page = () => {
               </span>
             </div>
           </div>
-          <Link
-            href="/history"
-            className="flex btn-primary rounded-full max-w-[200px] items-center justify-center py-3 px-6 regular-xs text-light-2"
-          >
-            Purchase history
-          </Link>
+          <div className="flex flex-col justify-center items-center gap-3">
+            <Link
+              href="/history"
+              className="flex btn-primary rounded-full max-w-[200px] items-center justify-center py-3 px-6 regular-xs text-light-2"
+            >
+              Purchase history
+            </Link>
+            <Link
+              href="/"
+              className="flex bg-grey-3 rounded-full max-w-[200px] items-center justify-center py-1 px-3 regular-xs text-light-1 regular-xs  transition-all duration-300  hover:shadow-sm"
+            >
+              Home
+            </Link>
+          </div>
         </div>
       </div>
     );

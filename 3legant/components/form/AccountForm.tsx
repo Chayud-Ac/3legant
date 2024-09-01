@@ -90,7 +90,7 @@ const AccountForm = ({ userId }: AccountFormProps) => {
           onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-8 w-full"
         >
-          <div className="flex flex-col gap-5 px-10 py-5 ">
+          <div className="flex flex-col gap-5">
             <p className="text-dark-2 medium-xl">Account Details</p>
             <FormField
               control={form.control}

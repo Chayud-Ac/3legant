@@ -54,6 +54,7 @@ export async function updateOrderStatus(params: updateOrderStatusParams) {
   try {
     connectToDatabase();
 
+    console.log(orderId);
     const updatedOrder = await Order.findByIdAndUpdate(
       orderId,
       {
@@ -63,7 +64,7 @@ export async function updateOrderStatus(params: updateOrderStatusParams) {
     )
       .populate({
         path: "cart",
-        select: "totalCartAmount cartItems.product cartItems.color -_id",
+        select: "totalCartAmount cartItems.product cartItems.color ",
         populate: {
           path: "cartItems.product",
           select: "category slug",
@@ -76,7 +77,7 @@ export async function updateOrderStatus(params: updateOrderStatusParams) {
         status: 1,
       });
 
-    const cartId = updatedOrder.cartId;
+    const cartId = updatedOrder.cart._id;
 
     const updateCart = await Cart.findByIdAndUpdate(
       cartId,
@@ -86,15 +87,13 @@ export async function updateOrderStatus(params: updateOrderStatusParams) {
       { new: true }
     );
 
-    console.log(updatedOrder);
-
     const parseNewData = JSON.parse(JSON.stringify(updatedOrder));
-
-    console.log(parseNewData);
 
     return {
       success: true,
       data: parseNewData,
     };
-  } catch (error) {}
+  } catch (error) {
+    throw error;
+  }
 }

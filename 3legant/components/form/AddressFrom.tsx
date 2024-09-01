@@ -29,6 +29,7 @@ import { usePathname } from "next/navigation";
 interface AddressFormProps {
   control?: Control<any>;
   userId?: string;
+  otherClasses?: string;
 }
 
 async function getAddress(userId: string) {
@@ -53,7 +54,7 @@ async function getAddress(userId: string) {
   }
 }
 
-const AddressForm = ({ control, userId }: AddressFormProps) => {
+const AddressForm = ({ control, userId, otherClasses }: AddressFormProps) => {
   console.log(userId);
   const pathname = usePathname();
   const form = useForm<z.infer<typeof AddressFormSchema>>({
@@ -118,7 +119,9 @@ const AddressForm = ({ control, userId }: AddressFormProps) => {
             onSubmit={form.handleSubmit(onSubmit)}
             className="space-y-8 w-full"
           >
-            <div className="flex flex-col gap-5 px-10 py-5 ">
+            <div
+              className={`flex flex-col gap-5 ${otherClasses && "px-10 py-5"} `}
+            >
               <p className="text-dark-2 medium-xl">Your Address</p>
               <FormField
                 control={form.control}

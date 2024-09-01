@@ -5,6 +5,7 @@ import Address from "@/databases/address.model";
 import { Cart } from "@/databases/cart.model";
 import mongoose from "mongoose";
 import Delivery from "@/databases/delivery.model";
+import { Order } from "@/databases/order.model";
 
 export async function GET(
   req: NextRequest,
@@ -52,6 +53,20 @@ export async function GET(
         break;
 
       case "order":
+        console.log("test");
+
+        data = await Order.find({ userId: userId })
+          .select({
+            dateOrdered: 1,
+            status: 1,
+          })
+          .populate({
+            path: "cart",
+            select: "-_id totalCartAmount",
+          });
+
+        console.log(data);
+
         break;
 
       case "cart":
