@@ -4,7 +4,7 @@ import { featureCardLists } from "@/constant";
 
 const FeatureList = () => {
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 max-w-[1440px]  p-4 container-1 py-12 ">
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-7   md:gap-12 max-w-[1440px]  p-4 container-1 py-12 ">
       {featureCardLists.map((item, index) => (
         <FeatureCard
           key={index}
