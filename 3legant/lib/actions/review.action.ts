@@ -14,7 +14,7 @@ export async function reviewProduct(params: reviewProductParams) {
   try {
     connectToDatabase();
     const { productId, userId, reviewData, path } = params;
-    console.log(params);
+
     if (!userId) {
       throw new Error("Please log in");
     }
@@ -48,14 +48,12 @@ export async function reviewProduct(params: reviewProductParams) {
 
     await Product.findByIdAndUpdate(productId, { avgRating });
 
-    // Revalidate the path if necessary
     revalidatePath(path);
 
     const parseNewReview = JSON.parse(JSON.stringify(newReview));
     const { __v, ...reviewWithoutIdAndVersion } = parseNewReview;
 
-    console.log(reviewWithoutIdAndVersion);
-    return { parseNewReview: reviewWithoutIdAndVersion };
+    return { success: true, parseNewReview: reviewWithoutIdAndVersion };
   } catch (error) {
     throw error;
   }

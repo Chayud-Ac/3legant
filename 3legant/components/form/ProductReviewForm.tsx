@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { usePathname } from "next/navigation";
 import { reviewProduct } from "@/lib/actions/review.action";
 import { Review } from "../list/ProductReviewList";
+import { Spinner } from "../shared/Spinner";
 
 interface ProductReviewFormProps {
   userSession: any;
@@ -20,10 +21,11 @@ const ProductReviewForm = ({
   productId,
   setReviewList,
 }: ProductReviewFormProps) => {
+  const userId = userSession.user.id;
   const pathname = usePathname();
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState("");
-  const userId = userSession.user.id;
+  const [submitLoading, setSubmitLoading] = useState(false);
 
   const handleRatingChange = (newRating: number) => {
     if (!userSession) {
@@ -37,24 +39,29 @@ const ProductReviewForm = ({
     if (!userSession) {
       console.log("Please login");
     }
-    // add toast and loading later
-    const newReview = await reviewProduct({
-      productId,
-      userId,
-      reviewData: {
-        rating,
-        comment,
-      },
-      path: pathname.toString(),
-    });
+    setSubmitLoading(true);
 
-    newReview.parseNewReview["user"] = userSession.user;
+    try {
+      const result = await reviewProduct({
+        productId,
+        userId,
+        reviewData: {
+          rating,
+          comment,
+        },
+        path: pathname.toString(),
+      });
 
-    console.log(newReview);
-
-    setReviewList((prev) => [...prev, newReview.parseNewReview]);
-    setRating(5);
-    setComment("");
+      if (result.success) {
+        result.parseNewReview["user"] = userSession.user;
+        setReviewList((prev) => [...prev, result.parseNewReview]);
+        setRating(5);
+        setComment("");
+        setSubmitLoading(false);
+      }
+    } catch (error) {
+      throw error;
+    }
   };
 
   return (
@@ -80,8 +87,12 @@ const ProductReviewForm = ({
           className="pb-10"
           onChange={(e) => setComment(e.target.value)}
         />
-        <Button onClick={() => handleSubmitReview()} className="btn-primary">
-          Write Review
+        <Button
+          onClick={() => handleSubmitReview()}
+          className="btn-primary text-light-2 medium-base w-full py-2 rounded-md disabled:opacity-50 disabled:animate-pulse transition-opacity duration-1000"
+          disabled={submitLoading}
+        >
+          {!submitLoading ? "Write Review" : <Spinner size="small" />}
         </Button>
       </div>
     </div>

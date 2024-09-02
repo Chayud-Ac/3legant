@@ -40,21 +40,29 @@ export async function POST(req: Request) {
           sortQuery.rating = -1;
           break;
         default:
-          sortQuery.createdAt = -1; // Default sorting if none of the above cases match
+          sortQuery.createdAt = -1;
           break;
       }
     }
 
-    // Add secondary sort on _id to ensure consistent ordering
     sortQuery._id = -1;
 
-    // Initialize the filter query
     const filterQuery: any = {
       product: new mongoose.Types.ObjectId(productId),
     };
 
     const reviews = await Review.aggregate([
-      { $match: filterQuery }, // Apply the filter query
+      // 1. Match the filter criteria
+      { $match: filterQuery },
+
+      // 6. Sort the reviews
+      { $sort: sortQuery },
+
+      // 7. Pagination: Skip and Limit
+      { $skip: skipAmount },
+      { $limit: pageSize },
+
+      // 2. Lookup to populate the 'user' field
       {
         $lookup: {
           from: "users",
@@ -63,54 +71,72 @@ export async function POST(req: Request) {
           as: "user",
         },
       },
-      { $unwind: "$user" }, // Unwind the user array to get a single user object
-      { $unwind: { path: "$replies", preserveNullAndEmptyArrays: true } }, // Unwind the replies array
+      { $unwind: "$user" }, // Unwind to convert 'user' array to object
+
+      // 3. Lookup to populate 'replies.userDetails' using a pipeline
       {
         $lookup: {
           from: "users",
-          localField: "replies.user",
-          foreignField: "_id",
-          as: "replies.userDetails",
+          let: { replyUsers: "$replies.user" },
+          pipeline: [
+            { $match: { $expr: { $in: ["$_id", "$$replyUsers"] } } },
+            { $project: { _id: 1, displayName: 1, image: 1 } },
+          ],
+          as: "replyUserDetails",
         },
       },
+
+      // 4. Map 'replies' to include 'userDetails'
       {
-        $unwind: {
-          path: "$replies.userDetails",
-          preserveNullAndEmptyArrays: true,
-        }, // Unwind the userDetails array
-      },
-      {
-        $group: {
-          _id: "$_id",
-          product: { $first: "$product" },
-          user: { $first: "$user" },
-          rating: { $first: "$rating" },
-          comment: { $first: "$comment" },
-          likes: { $first: "$likes" },
-          createdAt: { $first: "$createdAt" },
+        $addFields: {
           replies: {
-            $push: {
-              _id: "$replies._id",
-              user: {
-                _id: "$replies.userDetails._id",
-                displayName: "$replies.userDetails.displayName",
-                image: "$replies.userDetails.image",
+            $map: {
+              input: "$replies",
+              as: "reply",
+              in: {
+                _id: "$$reply._id",
+                user: {
+                  $arrayElemAt: [
+                    {
+                      $filter: {
+                        input: "$replyUserDetails",
+                        as: "userDetail",
+                        cond: { $eq: ["$$userDetail._id", "$$reply.user"] },
+                      },
+                    },
+                    0,
+                  ],
+                },
+                comment: "$$reply.comment",
+                createdAt: "$$reply.createdAt",
               },
-              comment: "$replies.comment",
-              createdAt: "$replies.createdAt",
+            },
+          },
+        },
+      },
+
+      // 5. Filter out invalid replies
+      {
+        $addFields: {
+          filteredReplies: {
+            $filter: {
+              input: "$replies",
+              as: "reply",
+              cond: { $ne: ["$$reply.user", null] }, // Ensures 'user' exists
             },
           },
         },
       },
       {
         $addFields: {
-          replies: { $slice: ["$replies", 1] }, // Limit the replies array to only 1 element
-          hasMoreReply: { $gt: [{ $size: "$replies" }, 1] },
+          replies: {
+            $slice: ["$filteredReplies", 1], // Get the first reply only
+          },
+          hasMoreReply: { $gt: [{ $size: "$filteredReplies" }, 1] }, // Check if more than one reply exists
         },
       },
-      { $sort: sortQuery }, // Sort the documents by the specified sortQuery
-      { $skip: skipAmount }, // Skip the documents for pagination
-      { $limit: pageSize }, // Limit the result to pageSize documents
+
+      // 8. Project the necessary fields
       {
         $project: {
           product: 1,
@@ -122,14 +148,12 @@ export async function POST(req: Request) {
           rating: 1,
           comment: 1,
           likes: 1,
-          replies: 1, // Include the transformed replies field
+          replies: 1,
           createdAt: 1,
-          hasMoreReply: 1, // Check if there are more than 1 reply
+          hasMoreReply: 1,
         },
       },
     ]);
-
-    console.log("Formatted Query Result:", JSON.parse(JSON.stringify(reviews)));
 
     let hasMore = false;
 
@@ -148,3 +172,117 @@ export async function POST(req: Request) {
     });
   }
 }
+
+// [
+//   {
+//     _id: '66d5b1177cac787b61bbd4ab',
+//     product: '66bc93efde454f0e8f7163fe',
+//     user: {
+//       _id: '66b25fde18865a5b13d7c459',
+//       displayName: 'Ac_Chayud',
+//       image:
+//         'https://storage.googleapis.com/profile3legant/36b4af29-f0f1-44d8-8644-e9130b648766.png'
+//     },
+//     rating: 5,
+//     comment: 'Test 6',
+//     replies: [],
+//     createdAt: '2024-09-02T12:35:35.597Z',
+//     hasMoreReply: false
+//   },
+//   {
+//     _id: '66d5b09d7cac787b61bbd3ed',
+//     product: '66bc93efde454f0e8f7163fe',
+//     user: {
+//       _id: '66b25fde18865a5b13d7c459',
+//       displayName: 'Ac_Chayud',
+//       image:
+//         'https://storage.googleapis.com/profile3legant/36b4af29-f0f1-44d8-8644-e9130b648766.png'
+//     },
+//     rating: 5,
+//     comment: 'Test 2 ',
+//     replies: [
+//       {
+//         _id: '66d5b0a67cac787b61bbd3f9',
+//         user: {
+//           _id: '66b25fde18865a5b13d7c459',
+//           displayName: 'Ac_Chayud',
+//           image:
+//             'https://storage.googleapis.com/profile3legant/36b4af29-f0f1-44d8-8644-e9130b648766.png'
+//         },
+//         comment: 'Test Reply 2',
+//         createdAt: '2024-09-02T12:33:42.302Z'
+//       }
+//     ],
+//     createdAt: '2024-09-02T12:33:33.513Z',
+//     hasMoreReply: true
+//   },
+//   {
+//     _id: '66d5b08a7cac787b61bbd3cc',
+//     product: '66bc93efde454f0e8f7163fe',
+//     user: {
+//       _id: '66b25fde18865a5b13d7c459',
+//       displayName: 'Ac_Chayud',
+//       image:
+//         'https://storage.googleapis.com/profile3legant/36b4af29-f0f1-44d8-8644-e9130b648766.png'
+//     },
+//     rating: 5,
+//     comment: 'Test 1 ',
+//     replies: [
+//       {
+//         _id: '66d5b0937cac787b61bbd3d9',
+//         user: {
+//           _id: '66b25fde18865a5b13d7c459',
+//           displayName: 'Ac_Chayud',
+//           image:
+//             'https://storage.googleapis.com/profile3legant/36b4af29-f0f1-44d8-8644-e9130b648766.png'
+//         },
+//         comment: 'test Reply 1',
+//         createdAt: '2024-09-02T12:33:23.702Z'
+//       }
+//     ],
+//     createdAt: '2024-09-02T12:33:14.733Z',
+//     hasMoreReply: true
+//   },
+//   {
+//     _id: '66d5b1137cac787b61bbd49f',
+//     product: '66bc93efde454f0e8f7163fe',
+//     user: {
+//       _id: '66b25fde18865a5b13d7c459',
+//       displayName: 'Ac_Chayud',
+//       image:
+//         'https://storage.googleapis.com/profile3legant/36b4af29-f0f1-44d8-8644-e9130b648766.png'
+//     },
+//     rating: 4,
+//     comment: 'Test 5',
+//     replies: [],
+//     createdAt: '2024-09-02T12:35:31.184Z',
+//     hasMoreReply: false
+//   },
+//   {
+//     _id: '66d5b0ce7cac787b61bbd426',
+//     product: '66bc93efde454f0e8f7163fe',
+//     user: {
+//       _id: '66b25fde18865a5b13d7c459',
+//       displayName: 'Ac_Chayud',
+//       image:
+//         'https://storage.googleapis.com/profile3legant/36b4af29-f0f1-44d8-8644-e9130b648766.png'
+//     },
+//     rating: 3,
+//     comment: 'Test 3 Rating 3 ',
+//     replies: [
+//       {
+//         _id: '66d5b0d47cac787b61bbd432',
+//         user: {
+//           _id: '66b25fde18865a5b13d7c459',
+//           displayName: 'Ac_Chayud',
+//           image:
+//             'https://storage.googleapis.com/profile3legant/36b4af29-f0f1-44d8-8644-e9130b648766.png'
+//         },
+//         comment: 'Test Rating 1',
+//         createdAt: '2024-09-02T12:34:28.822Z'
+//       }
+//     ],
+//     createdAt: '2024-09-02T12:34:22.090Z',
+//     hasMoreReply: true
+//   }
+// ]
