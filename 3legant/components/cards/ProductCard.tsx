@@ -70,7 +70,7 @@ const ProductCard = ({
           <div className="flex flex-col justify-start gap-1">
             <RatingsStars rating={rating} />
             <div className="flex flex-row justify-between items-center">
-              <Link href={`products/${id}`}>
+              <Link href={`/products/${id}`}>
                 <h1 className="medium-sm text-dark-1 pt-4 hover:underline">
                   {name}
                 </h1>
@@ -144,7 +144,7 @@ const ProductCard = ({
         </div>
         <div className="flex flex-col justify-start gap-1 w-full">
           <RatingsStars rating={rating} />
-          <Link href={`products/${id}`}>
+          <Link href={`/products/${id}`}>
             <h1 className="medium-sm text-dark-1 hover:underline">{name}</h1>
           </Link>
           <div className="flex flex-row gap-3">

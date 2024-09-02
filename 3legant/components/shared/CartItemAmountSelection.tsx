@@ -12,6 +12,8 @@ import {
   decrementItemQuantityAction,
   incrementItemQuantityAction,
 } from "@/lib/actions/cartaction.action";
+import { Spinner } from "./Spinner";
+import { useState } from "react";
 
 interface CartItemAmountSelectionProps {
   productId: string;
@@ -26,7 +28,9 @@ const CartItemAmountSelection = ({
   quantity,
   otherClasses,
 }: CartItemAmountSelectionProps) => {
+  const [loading, setLoading] = useState(false);
   const cart = useSelector((state: RootState) => state.cart);
+  const user = useSelector((state: RootState) => state.user);
 
   console.log(cart);
 
@@ -35,60 +39,68 @@ const CartItemAmountSelection = ({
   const handleDecrementAmount = async () => {
     if (quantity === 1) return;
     try {
-      if (cart.cartId) {
-        const result = await decrementItemQuantityAction({
-          cartId: cart.cartId,
-          product: productId,
-          color: color,
-        });
+      setLoading(true);
+      const result = await decrementItemQuantityAction({
+        cartId: cart.cartId,
+        userId: user.id,
+        product: productId,
+        color: color,
+      });
 
-        if (result.success) {
-          const { data } = result;
-          dispatch(
-            decrementItemQuantity({
-              productId: productId,
-              color: color,
-              newTotalCartAmount: data.newTotalCartAmount,
-            })
-          );
+      if (result.success) {
+        const { data } = result;
+        dispatch(
+          decrementItemQuantity({
+            productId: productId,
+            color: color,
+            newTotalCartAmount: data.newTotalCartAmount,
+          })
+        );
+        setLoading(false);
 
-          if (data.removeCoupon) {
-            dispatch(removeCoupon({}));
-          }
+        if (data.removeCoupon) {
+          dispatch(removeCoupon({}));
         }
       }
     } catch (error) {
+      setLoading(false);
       throw error;
     }
   };
 
   const handleIncrementAmount = async () => {
+    // increment กับ decrement มีปัญหา
+    // ตอนuser addItemtoCart cart doc พึ่งสร้าง ทำให้ cartId ยังไม่มี จนกว่า user จะ รีเฟรช page
+    // ต้องใช้ userId ในการ หา cart แทน แล้วเช็ค ตัว isActive เอา
+    // ถ้ามี cartId มา ก็ส่ง cartId และ ใช้ cartId query เอา
     try {
-      if (cart.cartId) {
-        const result = await incrementItemQuantityAction({
-          cartId: cart.cartId,
-          product: productId,
-          color: color,
-        });
+      setLoading(true);
+      const result = await incrementItemQuantityAction({
+        cartId: cart.cartId,
+        userId: user.id,
+        product: productId,
+        color: color,
+      });
 
-        if (result.success) {
-          const { data } = result;
-          dispatch(
-            incrementItemQuantity({
-              productId: productId,
-              color: color,
-              newTotalCartAmount: data.newTotalCartAmount,
-            })
-          );
-        }
+      if (result.success) {
+        const { data } = result;
+        dispatch(
+          incrementItemQuantity({
+            productId: productId,
+            color: color,
+            newTotalCartAmount: data.newTotalCartAmount,
+          })
+        );
+        setLoading(false);
       }
     } catch (error) {
+      setLoading(false);
       throw error;
     }
   };
   return (
     <div
-      className={`flex flex-row gap-3 items-center justify-center rounded-md border border-grey-1 w-fit ${otherClasses}`}
+      className={`flex flex-row gap-3 items-center justify-center rounded-md border border-grey-1 w-fit min-h-fit ${otherClasses}`}
     >
       <Image
         // add the decrement amount function from redux
@@ -99,7 +111,15 @@ const CartItemAmountSelection = ({
         height={20}
         className="w-auto h-auto cursor-pointer hover:bg-grey-3 rounded-md transition"
       />
-      <div>{quantity}</div>
+
+      {loading ? (
+        <div>
+          <Spinner size="small" />
+        </div>
+      ) : (
+        <div>{quantity}</div>
+      )}
+
       <Image
         //add the currentAmount amount function from redux
         onClick={() => handleIncrementAmount()}

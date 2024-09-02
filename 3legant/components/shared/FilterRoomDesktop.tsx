@@ -26,6 +26,8 @@ const FilterRoomDesktop = ({
   const [currentValue, setCurrentValue] = useState(room);
 
   useEffect(() => {
+    // add debounce technique prevent user click click click click click click the filter options
+    // will set delay 3s if no change occur then push the new url
     if (currentValue) {
       const newUrl = formUrlQuery({
         params: searchParams.toString(),
