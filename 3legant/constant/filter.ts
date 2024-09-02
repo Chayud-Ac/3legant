@@ -31,8 +31,7 @@ export const priceOptionRange: {
 
 export const reviewFilters = [
   { name: "All Reviews", value: "allReviews" },
-  { name: "Newest", value: "newest" }, // Represents all prices
-  { name: "Most Like", value: "mostLike" },
+  { name: "Newest", value: "newest" },
   { name: "Most Rating", value: "mostRating" },
 ];
 

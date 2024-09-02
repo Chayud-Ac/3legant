@@ -8,6 +8,8 @@ import { ReplyState } from "../list/ProductReviewList";
 import { getReviewReplies } from "@/lib/actions/review.action";
 import { usePathname } from "next/navigation";
 import { timeAgo } from "@/lib/utils";
+import { Spinner } from "../shared/Spinner";
+import Image from "next/image";
 
 interface Reply {
   user: {
@@ -55,9 +57,11 @@ const ProductReviewCard = ({
   const pathname = usePathname();
   const [currentBatch, setCurrentBatch] = useState(1);
   const [hasMoreFromSingleFetch, setHasMoreFromSingleFetch] = useState(true);
-  console.log(hasMoreFromSingleFetch);
+  const [repliesLoading, setRepliesLoading] = useState(false);
+
   const handleLoadMoreReply = async () => {
     try {
+      setRepliesLoading(true);
       const result = await getReviewReplies({
         reviewId: _id,
         path: pathname.toString(),
@@ -67,12 +71,13 @@ const ProductReviewCard = ({
       setReplyObject((prevState) => ({
         ...prevState,
         [_id]: [...(prevState[_id] || []), ...result.replies],
-      }));
+      })); // clone key ของ replyObject อันเก่า และ อัปเดต value ของ  reviewId (_id) key  โดย add  replies ใหม่ เข้าไป
 
       setHasMoreFromSingleFetch(result.hasMore);
-
       setCurrentBatch((prevState) => prevState + 1);
+      setRepliesLoading(false);
     } catch (error) {
+      setRepliesLoading(false);
       throw error;
     }
   };
@@ -81,8 +86,6 @@ const ProductReviewCard = ({
     setCurrentBatch(1);
     setHasMoreFromSingleFetch(true);
   }, [query]);
-
-  console.log(createdAt);
 
   return (
     <div className="flex justify-start items-start w-full ">
@@ -105,7 +108,13 @@ const ProductReviewCard = ({
           <RatingsStars rating={rating} />
           <p className="regular-sm text-grey-1">{comment}</p>
           <div className="flex flex-row gap-2">
-            <span className="regular-xs text-dark-4 cursor-pointer">Like</span>
+            <Image
+              src="/assets/icons/edit.svg"
+              alt="edit"
+              width={16}
+              height={16}
+              className="w-[16px] h-[16px]"
+            />
             <span
               className="regular-xs text-dark-4 cursor-pointer"
               onClick={() => setReply((prev) => !prev)}
@@ -138,21 +147,7 @@ const ProductReviewCard = ({
                   </div>
                 </div>
               ))}
-              {/* the reply document will add more if the load more reply is click */}
-              {/* <div className="flex flex-row mt-2 gap-4 items-center ">
-              <Avatar className="w-[40px] h-[40px] md:w-[60px] md:h-[60px]">
-                <AvatarImage src="https://github.com/shadcn.png" />
-                <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
 
-              <div className="flex flex-col">
-                <p className="medium-lg text-dark-1">Chayud Mahithiphark</p>
-                <p className="regular-sm text-grey-1">
-                  Agree , I also think consistancy , petient , dedication ,
-                  curiosity , and hardwork will eventually lead you to success !
-                </p>
-              </div>
-            </div> */}
               {hasMoreReply && hasMoreFromSingleFetch && (
                 <div
                   className="flex items-center justify-center"
@@ -161,6 +156,11 @@ const ProductReviewCard = ({
                   <span className="medium-xs text-dark-4 text-center cursor-pointer px-2 py-1 hover:bg-grey-5 rounded-md duration-200">
                     load more replies
                   </span>
+                </div>
+              )}
+              {repliesLoading && (
+                <div className="flex items-center justify-center">
+                  <Spinner size="small" className="text-dark-1" />
                 </div>
               )}
             </div>
