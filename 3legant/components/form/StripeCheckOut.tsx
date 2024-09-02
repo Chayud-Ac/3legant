@@ -65,7 +65,7 @@ const StripeCheckOut = ({ amount }: StripeCheckOutProps) => {
       return;
     }
 
-    // redirect ไป หน้า return_url ประเด็นคือ จะ อัปเดท document ก่อน redirect ก็ไม่ได้ งั้นไป อัปเดท หน้า orderId ละกัน
+    // redirect ไป หน้า return_url ประเด็นคือ จะ อัปเดท document ก่อน redirect ก็ไม่ได้ งั้นไป อัปเดท หน้า orderId
     const { error } = await stripe.confirmPayment({
       elements,
       clientSecret,

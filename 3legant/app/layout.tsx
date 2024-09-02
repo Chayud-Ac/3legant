@@ -34,7 +34,6 @@ export default function RootLayout({
   pageProps: any; // or define a specific type if you have one
 }>) {
   const session = getServerSession(authOptions);
-  console.log(session);
 
   return (
     <AuthProvider session={session}>
