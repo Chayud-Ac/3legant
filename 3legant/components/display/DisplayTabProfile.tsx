@@ -11,7 +11,6 @@ interface DisplayTabProfileProps {
 }
 
 const DisplayTabProfile = ({ type, userId }: DisplayTabProfileProps) => {
-  console.log(userId);
   const componentsMap: { [key: string]: JSX.Element } = {
     account: <AccountForm userId={userId} />,
     address: <AddressForm userId={userId} />,

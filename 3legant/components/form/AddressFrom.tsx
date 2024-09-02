@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Form,
   FormControl,
@@ -25,6 +25,7 @@ import { AddressFormSchema } from "@/lib/validation";
 import { z } from "zod";
 import { updateUserAddress } from "@/lib/actions/user.action";
 import { usePathname } from "next/navigation";
+import { Spinner } from "../shared/Spinner";
 
 interface AddressFormProps {
   control?: Control<any>;
@@ -55,8 +56,9 @@ async function getAddress(userId: string) {
 }
 
 const AddressForm = ({ control, userId, otherClasses }: AddressFormProps) => {
-  console.log(userId);
   const pathname = usePathname();
+  const [loadingSubmit, setLoadingSubmit] = useState(false);
+
   const form = useForm<z.infer<typeof AddressFormSchema>>({
     resolver: zodResolver(AddressFormSchema),
     defaultValues: {
@@ -71,7 +73,6 @@ const AddressForm = ({ control, userId, otherClasses }: AddressFormProps) => {
   const { reset } = form;
 
   useEffect(() => {
-    console.log("userAddress");
     async function fetchAddress() {
       try {
         if (userId) {
@@ -87,27 +88,33 @@ const AddressForm = ({ control, userId, otherClasses }: AddressFormProps) => {
               zipCode: userData.data.zipCode || 0,
             });
           }
-          console.log(userData);
         }
       } catch (error) {
-        console.error("Error fetching user data:", error);
+        throw error;
       }
     }
     fetchAddress();
-    console.log("userAddress");
   }, [userId, reset]);
 
-  // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof AddressFormSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
-    if (userId) {
-      await updateUserAddress({
-        userId: userId,
-        updateData: values,
-        path: pathname,
-      });
+    setLoadingSubmit(true);
+
+    try {
+      if (userId) {
+        const result = await updateUserAddress({
+          userId: userId,
+          updateData: values,
+          path: pathname,
+        });
+        if (result.success) {
+          // toast message
+        } else {
+          // toast message
+        }
+      }
+    } catch (error) {
+    } finally {
+      setLoadingSubmit(false);
     }
   }
 
@@ -217,7 +224,12 @@ const AddressForm = ({ control, userId, otherClasses }: AddressFormProps) => {
                   )}
                 />
               </div>
-              <Button className="btn-primary max-w-[200px]">Save Change</Button>
+              <Button
+                className="btn-primary max-w-[200px]"
+                disabled={loadingSubmit}
+              >
+                {loadingSubmit ? <Spinner size="small" /> : "Save Change"}
+              </Button>
             </div>
           </form>
         </Form>

@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { selectDeliveryOptions } from "@/store/slices/cartSlice";
 import { selectDeliveryOptionsAction } from "@/lib/actions/cartaction.action";
+import { Spinner } from "./Spinner";
 
 interface CartSummaryProps {
   deliveryOptions: {
@@ -24,6 +25,7 @@ const CartSummary = ({ deliveryOptions }: CartSummaryProps) => {
 
   // State to hold the selected delivery option
   const [selectedOption, setSelectedOption] = useState(deliveryOptions[0]);
+  const [loading, setLoading] = useState(false);
 
   // Effect to update selectedOption when cart.deliveryOption is loaded
   useEffect(() => {
@@ -44,6 +46,7 @@ const CartSummary = ({ deliveryOptions }: CartSummaryProps) => {
   };
 
   const handleCheckOutDelivery = async () => {
+    setLoading(true);
     try {
       if (cart.cartId && selectedOption._id) {
         await selectDeliveryOptionsAction({
@@ -53,6 +56,8 @@ const CartSummary = ({ deliveryOptions }: CartSummaryProps) => {
       }
     } catch (error) {
       console.error("Error during checkout:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -121,7 +126,9 @@ const CartSummary = ({ deliveryOptions }: CartSummaryProps) => {
         </div>
       </div>
       <Link href="/checkout" onClick={handleCheckOutDelivery}>
-        <Button className="w-full btn-primary text-center">Checkout</Button>
+        <Button className="w-full btn-primary text-center" disabled={loading}>
+          {loading ? <Spinner className="sm" /> : "Checkout"}
+        </Button>
       </Link>
     </div>
   );

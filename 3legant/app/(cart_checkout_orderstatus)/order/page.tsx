@@ -1,12 +1,15 @@
 "use client";
+import { Spinner } from "@/components/shared/Spinner";
 import { updateOrderStatus } from "@/lib/actions/order.action";
 import { formatDate } from "@/lib/utils";
+import { RootState } from "@/store/store";
 import { SearchParamsProps } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 interface Cart {
   cartItems: {
@@ -35,6 +38,8 @@ const page = () => {
   const [loading, setLoading] = useState(true);
   const [order, setOrder] = useState<Order | null>(null);
 
+  const user = useSelector((state: RootState) => state.user);
+
   useEffect(() => {
     if (!orderId) {
       router.push("/checkout");
@@ -47,8 +52,6 @@ const page = () => {
         console.log(result?.data);
         setOrder(result?.data);
       };
-
-      // called updatedOrderDocument
       updateOrderDocument();
       setLoading(false);
     }
@@ -67,14 +70,14 @@ const page = () => {
             </h1>
           </div>
           <div className="flex flex-row justify-center items-center gap-3">
-            {order.cart.cartItems.map((item) => (
+            {order.cart.cartItems.map((item, index) => (
               <Image
                 src={`${process.env.NEXT_PUBLIC_GOOGLE_CLOUD_BUCKET}/${item.product.category}/${item.product.slug}/${item.color}.svg`}
                 alt="test"
                 width={80}
                 height={96}
-                className="max-w-[80px] max-h-[96] rounded-md"
-                key={item.product._id}
+                className="max-w-[80px] max-h-[96] rounded-md w-auto h-auto"
+                key={index}
               />
             ))}
           </div>
@@ -104,7 +107,7 @@ const page = () => {
           </div>
           <div className="flex flex-col justify-center items-center gap-3">
             <Link
-              href="/history"
+              href={`/profile/${user.id}?q=account`}
               className="flex btn-primary rounded-full max-w-[200px] items-center justify-center py-3 px-6 regular-xs text-light-2"
             >
               Purchase history
@@ -117,6 +120,12 @@ const page = () => {
             </Link>
           </div>
         </div>
+      </div>
+    );
+  } else {
+    return (
+      <div className="flex flex-col items-center justify-center w-full max-w-[1440px] py-10 h-[400px] ">
+        <Spinner size="large" className="text-grey-4" />
       </div>
     );
   }

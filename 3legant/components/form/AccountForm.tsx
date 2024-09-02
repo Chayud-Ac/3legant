@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -16,6 +16,7 @@ import {
 import { Input } from "../ui/input";
 import { usePathname } from "next/navigation";
 import { updateUser } from "@/lib/actions/user.action";
+import { Spinner } from "../shared/Spinner";
 
 interface AccountFormProps {
   userId: string;
@@ -45,6 +46,8 @@ async function getUser(userId: string) {
 
 const AccountForm = ({ userId }: AccountFormProps) => {
   const pathname = usePathname();
+  const [loadingSubmit, setLoadingSubmit] = useState(false);
+
   const form = useForm<z.infer<typeof AccountFormSchema>>({
     resolver: zodResolver(AccountFormSchema),
     defaultValues: {
@@ -75,12 +78,25 @@ const AccountForm = ({ userId }: AccountFormProps) => {
   }, [userId, reset]);
 
   async function onSubmit(values: z.infer<typeof AccountFormSchema>) {
-    console.log(values);
-    await updateUser({
-      userId: userId,
-      updateData: values,
-      path: pathname,
-    });
+    setLoadingSubmit(true);
+
+    try {
+      const result = await updateUser({
+        userId: userId,
+        updateData: values,
+        path: pathname,
+      });
+
+      if (result.success) {
+        // toast
+      } else {
+        // toast
+      }
+    } catch (error) {
+      throw error;
+    } finally {
+      setLoadingSubmit(false);
+    }
   }
 
   return (
@@ -143,18 +159,12 @@ const AccountForm = ({ userId }: AccountFormProps) => {
                 </FormItem>
               )}
             />
-            <Button className="btn-primary max-w-[200px]">Save Changes</Button>
-            <div className="flex flex-row items-center gap-2">
-              <p className="regular-xs text-grey-2">
-                Do you want to reset your password?
-              </p>
-              <Link
-                href="/password"
-                className="regular-xs text-dark-1 underline cursor-pointer"
-              >
-                Click here
-              </Link>
-            </div>
+            <Button
+              className="btn-primary max-w-[200px]"
+              disabled={loadingSubmit}
+            >
+              {loadingSubmit ? <Spinner size="small" /> : "Save Changes"}
+            </Button>
           </div>
         </form>
       </Form>
