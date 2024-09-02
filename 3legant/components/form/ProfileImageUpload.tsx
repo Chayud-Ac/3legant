@@ -12,6 +12,7 @@ import { useSession } from "next-auth/react";
 import { getUserImage } from "@/lib/actions/user.action";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
+import { Spinner } from "../shared/Spinner";
 
 interface ProfileImageUploadProps {
   userId: string;
@@ -23,6 +24,8 @@ const ProfileImageUpload = ({ userId }: ProfileImageUploadProps) => {
   const [profileImageUrl, setProfileImageUrl] = useState<
     string | null | undefined
   >(null);
+
+  const [ImageUploadLoading, setImageUploadLoading] = useState(false);
 
   const form = useForm<z.infer<typeof ImageUploadFormSchema>>({
     resolver: zodResolver(ImageUploadFormSchema),
@@ -41,7 +44,8 @@ const ProfileImageUpload = ({ userId }: ProfileImageUploadProps) => {
   };
 
   const onSubmit = async (values: z.infer<typeof ImageUploadFormSchema>) => {
-    console.log(values);
+    setImageUploadLoading(true);
+
     const formData = new FormData();
     formData.append("image", values.image); // Append the image file
     formData.append("id", userId);
@@ -57,7 +61,6 @@ const ProfileImageUpload = ({ userId }: ProfileImageUploadProps) => {
 
       if (response.ok) {
         const responseData = await response.json();
-        console.log("Upload successful!", responseData);
         setProfileImageUrl(responseData.publicUrl);
         update({ ...session!.user, image: responseData.publicUrl });
       } else {
@@ -65,24 +68,29 @@ const ProfileImageUpload = ({ userId }: ProfileImageUploadProps) => {
       }
     } catch (error) {
       console.error("Error uploading file:", error);
+    } finally {
+      setImageUploadLoading(false);
     }
   };
 
   useEffect(() => {
-    try {
-      const fetchInitialImage = async () => {
+    setImageUploadLoading(true);
+
+    const fetchInitialImage = async () => {
+      try {
         const result = await getUserImage({
           userId: userId,
         });
         if (result) {
           setProfileImageUrl(result.parseUser.image);
         }
-      };
-
-      fetchInitialImage();
-    } catch (error) {
-      throw error;
-    }
+      } catch (error) {
+        throw error;
+      } finally {
+        setImageUploadLoading(false);
+      }
+    };
+    fetchInitialImage();
   }, []);
 
   return (
@@ -96,15 +104,12 @@ const ProfileImageUpload = ({ userId }: ProfileImageUploadProps) => {
               render={({ field }) => (
                 <FormItem>
                   <div className="relative">
-                    <Avatar className="w-[100px] h-[100px]">
-                      <AvatarImage
-                        src={
-                          preview ||
-                          profileImageUrl ||
-                          "https://github.com/shadcn.png"
-                        }
-                      />
-                      <AvatarFallback>CN</AvatarFallback>
+                    <Avatar className="w-[100px] h-[100px] flex items-center justify-center bg-dark-5">
+                      {ImageUploadLoading ? (
+                        <Spinner size="small" />
+                      ) : (
+                        <AvatarImage src={preview || profileImageUrl || ""} />
+                      )}
                     </Avatar>
                     <label htmlFor="file-upload" className="cursor-pointer">
                       <Image
@@ -128,12 +133,14 @@ const ProfileImageUpload = ({ userId }: ProfileImageUploadProps) => {
                 </FormItem>
               )}
             />
-            <button
-              type="submit"
-              className="btn-primary medium-xs text-light-2 p-2 rounded-md"
-            >
-              Upload Image
-            </button>
+            {preview && (
+              <button
+                type="submit"
+                className="btn-primary medium-xs text-light-2 p-2 rounded-md"
+              >
+                Upload Image
+              </button>
+            )}
           </div>
         </form>
       </Form>

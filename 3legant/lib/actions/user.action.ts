@@ -21,6 +21,8 @@ export async function updateUser(params: UpdateUserParams) {
       new: true,
     });
     revalidatePath(path);
+
+    return { success: true, message: "Update successfully" };
   } catch (error) {
     throw error;
   }
@@ -48,6 +50,8 @@ export async function updateUserAddress(params: UpdateUserAddressParams) {
       await user.save();
     }
     revalidatePath(path);
+
+    return { success: true, message: "Update successfully" };
   } catch (error) {
     throw error;
   }

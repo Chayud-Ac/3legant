@@ -60,30 +60,34 @@ const ProductReviewCard = ({
   const [repliesLoading, setRepliesLoading] = useState(false);
 
   const handleLoadMoreReply = async () => {
+    setRepliesLoading(true);
     try {
-      setRepliesLoading(true);
       const result = await getReviewReplies({
         reviewId: _id,
         path: pathname.toString(),
         currentBatch,
         batchSize: 5,
       });
-      setReplyObject((prevState) => ({
-        ...prevState,
-        [_id]: [...(prevState[_id] || []), ...result.replies],
-      })); // clone key ของ replyObject อันเก่า และ อัปเดต value ของ  reviewId (_id) key  โดย add  replies ใหม่ เข้าไป
 
-      setHasMoreFromSingleFetch(result.hasMore);
-      setCurrentBatch((prevState) => prevState + 1);
-      setRepliesLoading(false);
+      if (result.success) {
+        setReplyObject((prevState) => ({
+          ...prevState,
+          [_id]: [...(prevState[_id] || []), ...result.replies],
+        })); // clone key ของ replyObject อันเก่า และ อัปเดต value ของ  reviewId (_id) key  โดย add  replies ใหม่ เข้าไป
+
+        setHasMoreFromSingleFetch(result.hasMore); // set hasmore ของ reply เป็น ค่า ที่ return มาจาก result
+        setCurrentBatch((prevState) => prevState + 1);
+        setRepliesLoading(false);
+      } else {
+        setRepliesLoading(false);
+      }
     } catch (error) {
-      setRepliesLoading(false);
       throw error;
     }
   };
 
   useEffect(() => {
-    setCurrentBatch(1);
+    setCurrentBatch(1); // batch ของ reply เหมือน page No
     setHasMoreFromSingleFetch(true);
   }, [query]);
 

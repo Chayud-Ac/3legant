@@ -17,10 +17,19 @@ import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import ProfileImageUpload from "@/components/form/ProfileImageUpload";
 
-const page = ({ params }: { params: { userId: string } }) => {
+const page = ({
+  params,
+  searchParams,
+}: {
+  params: { userId: string };
+  searchParams: { q: string };
+}) => {
   const userId = params.userId;
+  const query = searchParams.q;
+
   const router = useRouter();
-  const [currentTab, setCurrentTab] = useState("account");
+  const [currentTab, setCurrentTab] = useState(query);
+
   const handleTabChange = (value: string) => {
     if (value === "logout") {
       signOut({ callbackUrl: "/sign-in", redirect: true });
@@ -37,7 +46,7 @@ const page = ({ params }: { params: { userId: string } }) => {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center w-full container-1 py-10">
+    <div className="flex flex-col justify-center items-center w-full container-1 py-10 ">
       <h1 className="h3-medium text-dark-1">My Account</h1>
       <div className="flex flex-col justify-center gap-10  xl:flex-row w-full max-w-[1440px] pt-8 md:pt-10 max-xl:items-center ">
         <div className="flex flex-col justify-center items-center gap-10 px-4 py-10 bg-grey-4 rounded-md w-full  xl:max-w-[332px] h-fit">
@@ -84,7 +93,9 @@ const page = ({ params }: { params: { userId: string } }) => {
           </Select>
         </div>
         {/* Tab Content display base on the currentTab state */}
-        <DisplayTabProfile type={currentTab} userId={userId} />
+        <div className="flex w-full justify-center max-w-[900px] min-h-dvh  ">
+          <DisplayTabProfile type={currentTab} userId={userId} />
+        </div>
       </div>
     </div>
   );

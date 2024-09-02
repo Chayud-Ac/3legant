@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -19,12 +19,14 @@ import { RootState } from "@/store/store";
 import { createOrder } from "@/lib/actions/order.action";
 import { log } from "console";
 import { useOrder } from "@/context/OrderProvider";
+import { Spinner } from "../shared/Spinner";
 
 const CheckoutForm = () => {
   const router = useRouter();
   const submitButtonRef = useRef<HTMLButtonElement | null>(null);
   const cart = useSelector((state: RootState) => state.cart);
   const user = useSelector((state: RootState) => state.user);
+  const [loading, setLoading] = useState(false);
 
   const { orderId, setOrderId } = useOrder();
 
@@ -51,9 +53,8 @@ const CheckoutForm = () => {
   });
 
   async function onSubmit(values: z.infer<typeof CheckOutFromSchema>) {
+    setLoading(true);
     try {
-      //!!TODO add server action to create the order document using the input detail
-
       if (user.id && cart.cartId) {
         const result = await createOrder({
           cartId: cart.cartId,
@@ -66,12 +67,14 @@ const CheckoutForm = () => {
         if (result.success) {
           const { data } = result;
           setOrderId(result.data.orderId);
+        } else {
+          // toast error
         }
       }
-
-      console.log(values);
     } catch (error) {
       throw error;
+    } finally {
+      setLoading(false);
     }
 
     router.push(`/checkout/${values.payment}`);
@@ -106,8 +109,9 @@ const CheckoutForm = () => {
           type="button"
           className="btn-primary w-full max-w-[550px]"
           onClick={handlePlaceOrderClick}
+          disabled={loading}
         >
-          Place Order
+          {loading ? <Spinner size="small" /> : "Place Order"}
         </Button>
       </div>
     </div>
