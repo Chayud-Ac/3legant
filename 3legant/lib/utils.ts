@@ -135,3 +135,17 @@ export function formatDate(dateString: string): string {
 
   return date.toLocaleDateString("en-US", options);
 }
+
+export function convertPathToWord(path: string | undefined) {
+  // Remove the leading '/' if it exists
+  if (!path) {
+    return;
+  }
+  const cleanedPath = path.startsWith("/") ? path.slice(1) : path;
+
+  // Capitalize the first letter and concatenate with the rest of the string
+  const formattedPath =
+    cleanedPath.charAt(0).toUpperCase() + cleanedPath.slice(1);
+
+  return formattedPath;
+}
