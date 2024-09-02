@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useRef } from "react";
 import Filter from "../shared/Filter";
 import { RoomsFilters } from "@/constant/filter";
 import { priceFilters } from "@/constant/filter";
@@ -15,6 +15,7 @@ import MultipleFilter from "../shared/MultipleFilter";
 import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import LoadMore from "../shared/LoadMore";
+import { Spinner } from "../shared/Spinner";
 
 interface Product {
   _id: string;
@@ -32,11 +33,16 @@ interface Product {
 }
 
 const DisplayTemplate = () => {
-  const [sort, setSort] = useState("grid-cols-1");
+  const sortRef = useRef("grid-cols-1");
+  const [sort, setSort] = useState(sortRef.current);
+
   const [products, setProducts] = useState<Product[]>([]);
   const [cursor, setCursor] = useState(null);
   const [hasMore, setHasMore] = useState(false);
   const [titleMain, setTitleMain] = useState("All Rooms");
+  const [mainLoading, setMainLoading] = useState(false);
+  const [loadMoreLoading, setLoadMoreLoading] = useState(false);
+
   const searchParams = useSearchParams();
 
   const maxPriceStr = searchParams.get("maxPrice");
@@ -45,43 +51,52 @@ const DisplayTemplate = () => {
   const minPriceStr = searchParams.get("minPrice");
   const minPriceInt = minPriceStr ? parseInt(minPriceStr, 10) : null;
 
-  console.log(process.env.NEXT_PUBLIC_GOOGLE_CLOUD_BUCKET);
-
   useEffect(() => {
-    const fetchProducts = async () => {
-      const params = {
-        cursor: null,
-        room: searchParams.get("room"),
-        maxPrice: maxPriceInt,
-        minPrice: minPriceInt,
+    // set debounce กัน การ update ตัว filter รัวๆ เราจะ เซ็ท delay ให้ มัน รอ url นิ่ง ก่อน 0.3 วิ
+    // ถ้ามีการ เปลี่ยนแปลงภายใน 0.3 วิ มันจะยังไม่ fetch (clearTimeout)
+    const handler = setTimeout(() => {
+      setMainLoading(true);
+
+      const fetchProducts = async () => {
+        const params = {
+          cursor: null,
+          room: searchParams.get("room"),
+          maxPrice: maxPriceInt,
+          minPrice: minPriceInt,
+        };
+
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/api/products`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(params),
+          }
+        );
+        if (response.ok) {
+          const data = await response.json();
+          setProducts(data.products);
+          setCursor(data.nextCursor);
+          setHasMore(data.hasMore);
+          setMainLoading(false);
+        } else {
+          console.error("Failed to fetch products");
+        }
       };
 
-      console.log(params);
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/products`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(params),
-        }
-      );
-      if (response.ok) {
-        const data = await response.json();
-        setProducts(data.products);
-        setCursor(data.nextCursor);
-        setHasMore(data.hasMore);
-      } else {
-        console.error("Failed to fetch products");
-      }
-    };
+      setCursor(null);
+      fetchProducts();
+    }, 300); // Debounce delay
 
-    setCursor(null);
-    fetchProducts();
+    return () => {
+      clearTimeout(handler); // มีการเปลี่ยนแปลง ของ query ภายใน 0.3 วิ มันจะ clearTimeout
+    };
   }, [searchParams.toString(), titleMain]);
 
   const handleLoadMore = async () => {
+    setLoadMoreLoading(true);
     const params = {
       cursor: cursor,
       room: searchParams.get("room"),
@@ -104,14 +119,15 @@ const DisplayTemplate = () => {
       setProducts((prevProducts) => [...prevProducts, ...data.products]);
       setCursor(data.nextCursor);
       setHasMore(data.hasMore);
+      setLoadMoreLoading(false);
     } else {
       console.error("Failed to fetch products");
+      setLoadMoreLoading(false);
     }
   };
 
-  console.log(products);
   return (
-    <section className="flex flex-row w-full max-w-[1440px] container-1 gap-10 pt-10 pb-10 ">
+    <section className="flex flex-row w-full max-w-[1440px] container-1 gap-10 pt-10 pb-10 min-h-screen ">
       <div
         className={`${sort !== "grid-cols-3" && "hidden"} flex flex-col gap-8 w-[400px] max-lg:hidden`}
       >
@@ -163,53 +179,71 @@ const DisplayTemplate = () => {
           </div>
           <SortDisplay sort={sort} setSort={setSort} />
         </div>
-        {/*--------------------------------------------------------------------------Display grid for Desktop---------------------------------------------------------------------------------------------- */}
-        <div
-          className={`grid ${sort} w-full h-full gap-2 pt-10 max-sm:hidden place-items-center`}
-        >
-          {products.map((product: any) => (
-            <ProductCard
-              key={product._id}
-              id={product._id}
-              name={product.name}
-              price={product.price}
-              rating={product.rating}
-              discount={product.discount}
-              description={
-                sort === "grid-cols-2" || sort === "grid-cols-1"
-                  ? product.description
-                  : undefined
-              }
-              imgUrl={`${process.env.NEXT_PUBLIC_GOOGLE_CLOUD_BUCKET}/${product.category}/${product.slug}/${product.thumbnail}`}
-              newArrival={product.newArrival}
-            />
-          ))}
-        </div>
-        {/*--------------------------------------------------------------------------Display grid for moblie---------------------------------------------------------------------------------------------- */}
-        <div
-          className={`grid ${sort} w-full h-full gap-2 pt-10 place-items-center sm:hidden`}
-        >
-          {products.map((product: any) => (
-            <ProductCard
-              key={product._id}
-              id={product._id}
-              name={product.name}
-              price={product.price}
-              rating={product.rating}
-              discount={product.discount}
-              description={
-                sort === "grid-cols-1" ? product.description : undefined
-              }
-              imgUrl={`${process.env.NEXT_PUBLIC_GOOGLE_CLOUD_BUCKET}/${product.category}/${product.slug}/${product.thumbnail}`}
-              newArrival={product.newArrival}
-            />
-          ))}
-        </div>
-        <LoadMore
-          otherClasses="pt-10"
-          hasMore={hasMore}
-          handleLoadMore={handleLoadMore}
-        />
+
+        {mainLoading ? (
+          <div className="flex items-center justify-center w-full h-[200px]">
+            <Spinner size="large" className="text-grey-3" />
+          </div>
+        ) : (
+          <>
+            {/*--------------------------------------------------------------------------Display grid for Desktop---------------------------------------------------------------------------------------------- */}
+            <div
+              className={`grid ${sort} w-full h-full  gap-8 pt-10 max-sm:hidden  ${sort === "grid-cols-1" ? "place-items-center" : "place-items-start"}  `}
+            >
+              {products.map((product: any) => (
+                <ProductCard
+                  key={product._id}
+                  id={product._id}
+                  name={product.name}
+                  price={product.price}
+                  rating={product.rating}
+                  discount={product.discount}
+                  description={
+                    sort === "grid-cols-2" || sort === "grid-cols-1"
+                      ? product.description
+                      : undefined
+                  }
+                  imgUrl={`${process.env.NEXT_PUBLIC_GOOGLE_CLOUD_BUCKET}/${product.category}/${product.slug}/${product.thumbnail}`}
+                  newArrival={product.newArrival}
+                />
+              ))}
+            </div>
+            {/*--------------------------------------------------------------------------Display grid for moblie---------------------------------------------------------------------------------------------- */}
+            <div
+              className={`grid ${sort} w-full h-full  gap-4 pt-10 place-items-center sm:hidden`}
+            >
+              {products.map((product: any) => (
+                <ProductCard
+                  key={product._id}
+                  id={product._id}
+                  name={product.name}
+                  price={product.price}
+                  rating={product.rating}
+                  discount={product.discount}
+                  description={
+                    sort === "grid-cols-1" ? product.description : undefined
+                  }
+                  imgUrl={`${process.env.NEXT_PUBLIC_GOOGLE_CLOUD_BUCKET}/${product.category}/${product.slug}/${product.thumbnail}`}
+                  newArrival={product.newArrival}
+                />
+              ))}
+            </div>
+          </>
+        )}
+
+        {!mainLoading && !loadMoreLoading && (
+          <LoadMore
+            otherClasses="pt-10"
+            hasMore={hasMore}
+            handleLoadMore={handleLoadMore}
+          />
+        )}
+
+        {loadMoreLoading && (
+          <div className="flex items-center justify-center w-full h-[200px]">
+            <Spinner size="medium" className="text-grey-3" />
+          </div>
+        )}
       </div>
     </section>
   );

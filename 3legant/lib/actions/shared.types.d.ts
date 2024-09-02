@@ -62,7 +62,8 @@ export interface addItemToCartParams {
 }
 
 export interface incrementItemQuantityParams {
-  cartId: string;
+  cartId?: string;
+  userId?: string;
   product: string;
   color: string;
 }

@@ -121,17 +121,37 @@ export async function incrementItemQuantityAction(
 ) {
   try {
     connectToDatabase();
-    const { cartId, product, color } = params;
+    const { cartId, product, color, userId } = params;
 
-    const cart = await Cart.findById(cartId)
-      .populate({
-        path: "deliveryOption",
-        select: "price",
+    let cart;
+    if (cartId) {
+      // ใช้ cartId ถ้ามี cartId
+      cart = await Cart.findById(cartId)
+        .populate({
+          path: "deliveryOption",
+          select: "price",
+        })
+        .populate({
+          path: "coupon",
+          select: "discount minPrice",
+        });
+    } else {
+      // ใช้ userId ถ้ามี cartId ไม่มี หรือ มีปัญหา
+      cart = await Cart.findOne({
+        user: new mongoose.Types.ObjectId(userId),
+        isActive: true,
       })
-      .populate({
-        path: "coupon",
-        select: "discount",
-      });
+        .populate({
+          path: "deliveryOption",
+          select: "price",
+        })
+        .populate({
+          path: "coupon",
+          select: "discount minPrice",
+        });
+    }
+
+    console.log(cart);
 
     if (!cart) {
       throw new Error("cart not found");
@@ -183,17 +203,36 @@ export async function decrementItemQuantityAction(
 ) {
   try {
     connectToDatabase();
-    const { cartId, product, color } = params;
+    const { cartId, product, color, userId } = params;
 
-    const cart = await Cart.findById(cartId)
-      .populate({
-        path: "deliveryOption",
-        select: "price",
+    let cart;
+
+    if (cartId) {
+      // ใช้ cartId ถ้ามี cartId
+      cart = await Cart.findById(cartId)
+        .populate({
+          path: "deliveryOption",
+          select: "price",
+        })
+        .populate({
+          path: "coupon",
+          select: "discount minPrice",
+        });
+    } else {
+      // ใช้ userId ถ้ามี cartId ไม่มี หรือ มีปัญหา
+      cart = await Cart.findOne({
+        user: new mongoose.Types.ObjectId(userId),
+        isActive: true,
       })
-      .populate({
-        path: "coupon",
-        select: "discount minPrice",
-      });
+        .populate({
+          path: "deliveryOption",
+          select: "price",
+        })
+        .populate({
+          path: "coupon",
+          select: "discount minPrice",
+        });
+    }
 
     if (!cart) {
       throw new Error("cart not found");
