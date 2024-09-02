@@ -10,6 +10,9 @@ import { RootState } from "@/store/store";
 import { selectDeliveryOptions } from "@/store/slices/cartSlice";
 import { selectDeliveryOptionsAction } from "@/lib/actions/cartaction.action";
 import { Spinner } from "./Spinner";
+import { useToast } from "../ui/use-toast";
+import { useRouter } from "next/navigation";
+import { ToastAction } from "../ui/toast";
 
 interface CartSummaryProps {
   deliveryOptions: {
@@ -22,6 +25,9 @@ interface CartSummaryProps {
 const CartSummary = ({ deliveryOptions }: CartSummaryProps) => {
   const cart = useSelector((state: RootState) => state.cart);
   const dispatch = useDispatch();
+  const router = useRouter();
+
+  const { toast } = useToast();
 
   // State to hold the selected delivery option
   const [selectedOption, setSelectedOption] = useState(deliveryOptions[0]);
@@ -47,12 +53,30 @@ const CartSummary = ({ deliveryOptions }: CartSummaryProps) => {
 
   const handleCheckOutDelivery = async () => {
     setLoading(true);
+    if (cart.items.length < 1) {
+      toast({
+        title: "Your cart is empty Can't Proceed to Checkcout",
+        variant: "destructive",
+        action: (
+          <ToastAction altText="Try again">
+            <Link href="/products">Views Product</Link>
+          </ToastAction>
+        ),
+      });
+
+      setLoading(false);
+      return null;
+    }
     try {
       if (cart.cartId && selectedOption._id) {
-        await selectDeliveryOptionsAction({
+        const result = await selectDeliveryOptionsAction({
           cartId: cart.cartId,
           deliveryOption: selectedOption._id,
         });
+
+        if (result.success) {
+          router.push("/checkout");
+        }
       }
     } catch (error) {
       console.error("Error during checkout:", error);
@@ -125,11 +149,14 @@ const CartSummary = ({ deliveryOptions }: CartSummaryProps) => {
           </div>
         </div>
       </div>
-      <Link href="/checkout" onClick={handleCheckOutDelivery}>
-        <Button className="w-full btn-primary text-center" disabled={loading}>
-          {loading ? <Spinner className="sm" /> : "Checkout"}
-        </Button>
-      </Link>
+
+      <Button
+        className="w-full btn-primary text-center"
+        disabled={loading}
+        onClick={handleCheckOutDelivery}
+      >
+        {loading ? <Spinner className="sm" /> : "Checkout"}
+      </Button>
     </div>
   );
 };

@@ -11,6 +11,7 @@ import {
   removeCouponServerAction,
 } from "@/lib/actions/cartaction.action";
 import { applyCoupon, removeCoupon } from "@/store/slices/cartSlice";
+import { useToast } from "../ui/use-toast";
 
 const OrderSummary = () => {
   const cart = useSelector((state: RootState) => state.cart);
@@ -20,6 +21,7 @@ const OrderSummary = () => {
 
   const [subTotal, setSubTotal] = useState(0);
   const [couponCode, setCouponCode] = useState("");
+  const { toast } = useToast();
 
   const handleRemoveCoupon = async () => {
     try {
@@ -38,7 +40,9 @@ const OrderSummary = () => {
           );
         }
       }
-    } catch (error) {}
+    } catch (error) {
+      throw error;
+    }
   };
 
   const handleApplyCoupon = async () => {
@@ -63,7 +67,10 @@ const OrderSummary = () => {
           );
           setCouponCode("");
         } else {
-          //!!TODO add toast telling that coupon invalid or set toast message to be the message return back from the server action
+          toast({
+            title: result.message,
+            variant: "destructive",
+          });
         }
       }
     } catch (error) {

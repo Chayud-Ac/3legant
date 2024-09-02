@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { useSession } from "next-auth/react";
 import { addItemToCart } from "@/lib/actions/cartaction.action";
+import { useToast } from "../ui/use-toast";
 
 interface AddtoCartButtonProps {
   otherClasses?: string;
@@ -36,6 +37,7 @@ const AddtoCartButton = ({
 
   const cart = useSelector((state: RootState) => state.cart);
   const user = useSelector((state: RootState) => state.user);
+  const { toast } = useToast();
 
   const handleAddToCart = async () => {
     try {
@@ -53,9 +55,6 @@ const AddtoCartButton = ({
 
       if (result.success) {
         const { data } = result;
-
-        console.log(data.totalCartAmount);
-
         dispatch(
           addItem({
             productId: productId,
@@ -73,6 +72,10 @@ const AddtoCartButton = ({
         if (cart.cartId) {
           dispatch(setCartId(data.cartId));
         }
+
+        toast({
+          title: `Added ${name} ${color} x ${quantity} to cart `,
+        });
       }
     } catch (error) {
       throw error;
