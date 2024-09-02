@@ -135,7 +135,7 @@ export async function getReviewReplies(params: getReviewRepliesParams) {
 
     revalidatePath(path);
 
-    return { replies: parseReplies.replies, hasMore };
+    return { replies: parseReplies.replies, hasMore, success: true };
   } catch (error) {
     throw error;
   }
