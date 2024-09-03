@@ -5,31 +5,48 @@ import { FilterQuery } from "mongoose";
 import { NextResponse } from "next/server";
 import { newArrivalThreshold } from "@/lib/utils";
 
-interface GetProductsParams {
-  cursor?: string; // the last product Id from recent response
-  pageSize?: number; // the amount of data that will be fetched and displayed on the UI
-  searchQuery?: string; // value of Searchquery key for text input query
-  room?: string; // value of room key
-  maxPrice?: number; // value of maxPrice key
-  minPrice?: number; // value of minPrice key
-}
-
-export async function POST(req: Request) {
+export async function GET(req: Request) {
   try {
-    const params: GetProductsParams = await req.json();
-    connectToDatabase();
-    const {
-      cursor,
-      pageSize = 12,
-      searchQuery,
-      room = "allRooms",
-      maxPrice,
-      minPrice,
-    } = params;
+    // destruct searchParams และ พวก query key เพื่อใช้ในการ query
+    const { searchParams } = new URL(req.url);
+    const cursor = searchParams.get("cursor");
+    const pageSize = parseInt(searchParams.get("pageSize") || "12", 10);
+    const searchQuery = searchParams.get("searchQuery");
+    const room = searchParams.get("room") || "allRooms";
+    const maxPriceStr = searchParams.get("maxPrice");
+    const minPriceStr = searchParams.get("minPrice");
+    let maxPrice: number | undefined = undefined;
+    let minPrice: number | undefined = undefined;
+    if (maxPriceStr) {
+      maxPrice = parseInt(maxPriceStr, 10);
+    }
+    if (minPriceStr) {
+      minPrice = parseInt(minPriceStr, 10);
+    }
 
+    await connectToDatabase();
+
+    // searchQuery เป็น string handle ถ้า user พิมหา product ใน global search
+    // ถ้ามี searchQuery เราจะ เซ็ท globalQuery ที่ใช้ query ใน mongo collection หา name หรือ ว่า description field ของ document ให้ตรงกับ ที่ user พิมมา
     const globalQuery: FilterQuery<typeof Product> = {};
+    if (searchQuery) {
+      globalQuery.$or = [
+        { name: { $regex: new RegExp(searchQuery, "i") } },
+        { category: { $regex: new RegExp(searchQuery, "i") } },
+      ];
+    }
 
-    const tresHoldDate = newArrivalThreshold(10); // within 10 day from currentDate
+    // pagination หา ตัว productId ถัดไป
+    if (cursor) {
+      globalQuery._id = { $gt: cursor };
+    }
+
+    if (minPrice !== undefined && maxPrice !== undefined) {
+      globalQuery.price = { $gte: minPrice, $lte: maxPrice };
+    }
+
+    // newArrivalThreshold util function ไว้ใช้ เช็คว่า product เป็น  newArrival ไหม (เช็คภายใน 10 วัน)
+    const tresHoldDate = newArrivalThreshold(10);
 
     const selectedField = {
       name: 1,
@@ -41,7 +58,6 @@ export async function POST(req: Request) {
       discount: 1,
       category: 1,
       newArrival: {
-        // added the newArrival key to the return document which this key will use to logically check the newArrival style in the frontend
         $cond: {
           if: { $gte: ["$createdAt", tresHoldDate] },
           then: true,
@@ -50,27 +66,11 @@ export async function POST(req: Request) {
       },
     };
 
-    if (searchQuery) {
-      globalQuery.$or = [
-        { name: { $regex: new RegExp(searchQuery, "i") } },
-        { description: { $regex: new RegExp(searchQuery, "i") } },
-      ];
-    }
-
-    if (cursor) {
-      globalQuery._id = { $gt: cursor }; // เซ็ท id เป็น productId ตัว สุดท้ายของ การ fetch ครั้งที่แล้ว เพื่อ query ดึง product ถัดจาก id นั้น
-    }
-
-    if (minPrice !== null && maxPrice !== null) {
-      globalQuery.price = { $gte: minPrice, $lte: maxPrice };
-    }
-
     let products = [];
     let hasMore = false;
     let nextCursor = null;
 
-    if (room && room !== "allRooms") {
-      // Query the Room collection and populate products with the global query
+    if (room !== "allRooms") {
       const roomDoc = await Room.findOne({ name: room }).populate({
         path: "products",
         match: globalQuery,
@@ -85,17 +85,18 @@ export async function POST(req: Request) {
         products = roomDoc.products;
       }
     } else {
-      // ถ้าไม่มี room query param มาเรา จะใช้ตัว Product Collection ในการ ดึงข้อมูล products
       products = await Product.find(globalQuery)
         .sort({ _id: 1 })
-        .limit(pageSize + 1) // เซ็ท limit ไว้ เกิน pageSize 1 document เพื่อใช้ เช็คว่ามี productพอ ที่จะ fetch กลับไปครั้งต่อไปไหม
+        .limit(pageSize + 1)
         .select(selectedField)
         .exec();
     }
 
+    // เช็คว่า length product ยังมีมากกว่าจำนวน product ที่ display ใน ui ไหม
+
     if (products.length > pageSize) {
       hasMore = true;
-      products.pop(); // หลังจาก check เสร็จก็ pop ออก ให้เหลือ 12 เท่าเดิม
+      products.pop();
     }
 
     nextCursor = products.length > 0 ? products[products.length - 1]._id : null;
@@ -104,8 +105,11 @@ export async function POST(req: Request) {
       status: 200,
     });
   } catch (err: any) {
-    return new NextResponse(err, {
-      status: 500,
-    });
+    return new NextResponse(
+      JSON.stringify({ error: err.message || "Internal Server Error" }),
+      {
+        status: 500,
+      }
+    );
   }
 }

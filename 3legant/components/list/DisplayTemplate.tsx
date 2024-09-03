@@ -45,12 +45,6 @@ const DisplayTemplate = () => {
 
   const searchParams = useSearchParams();
 
-  const maxPriceStr = searchParams.get("maxPrice");
-  const maxPriceInt = maxPriceStr ? parseInt(maxPriceStr, 10) : null;
-
-  const minPriceStr = searchParams.get("minPrice");
-  const minPriceInt = minPriceStr ? parseInt(minPriceStr, 10) : null;
-
   useEffect(() => {
     // set debounce กัน การ update ตัว filter รัวๆ เราจะ เซ็ท delay ให้ มัน รอ url นิ่ง ก่อน 0.3 วิ
     // ถ้ามีการ เปลี่ยนแปลงภายใน 0.3 วิ มันจะยังไม่ fetch (clearTimeout)
@@ -58,21 +52,23 @@ const DisplayTemplate = () => {
       setMainLoading(true);
 
       const fetchProducts = async () => {
-        const params = {
-          cursor: null,
-          room: searchParams.get("room"),
-          maxPrice: maxPriceInt,
-          minPrice: minPriceInt,
-        };
+        const queryParams = new URLSearchParams();
+
+        const room = searchParams.get("room");
+        const maxPrice = searchParams.get("maxPrice");
+        const minPrice = searchParams.get("minPrice");
+
+        if (room) queryParams.append("room", room);
+        if (maxPrice) queryParams.append("maxPrice", maxPrice);
+        if (minPrice) queryParams.append("minPrice", minPrice);
 
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_SERVER_URL}/api/products`,
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/api/products?${queryParams.toString()}`,
           {
-            method: "POST",
+            method: "GET",
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify(params),
           }
         );
         if (response.ok) {
@@ -97,21 +93,24 @@ const DisplayTemplate = () => {
 
   const handleLoadMore = async () => {
     setLoadMoreLoading(true);
-    const params = {
-      cursor: cursor,
-      room: searchParams.get("room"),
-      minPrice: minPriceInt,
-      maxPrice: maxPriceInt,
-    };
+
+    const queryParams = new URLSearchParams();
+    const room = searchParams.get("room");
+    const maxPrice = searchParams.get("maxPrice");
+    const minPrice = searchParams.get("minPrice");
+
+    if (room) queryParams.append("room", room);
+    if (maxPrice) queryParams.append("maxPrice", maxPrice);
+    if (minPrice) queryParams.append("minPrice", minPrice);
+    if (cursor) queryParams.append("cursor", cursor);
 
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_URL}/api/products`,
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/api/products?${queryParams.toString()}`,
       {
-        method: "POST",
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(params),
       }
     );
     if (response.ok) {
