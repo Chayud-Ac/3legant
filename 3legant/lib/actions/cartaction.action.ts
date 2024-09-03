@@ -285,29 +285,57 @@ export async function removeFromCart(params: removeFromCartParams) {
   try {
     connectToDatabase();
 
-    const { cartId, product, color } = params;
+    const { cartId, product, color, userId } = params;
+    let cart;
 
     // ดึง item ออก
-    const cart = await Cart.findByIdAndUpdate(
-      cartId,
-      {
-        $pull: {
-          cartItems: {
-            product: new mongoose.Types.ObjectId(product),
-            color: color,
+
+    if (cartId) {
+      cart = await Cart.findByIdAndUpdate(
+        cartId,
+        {
+          $pull: {
+            cartItems: {
+              product: new mongoose.Types.ObjectId(product),
+              color: color,
+            },
           },
         },
-      },
-      { new: true }
-    )
-      .populate({
-        path: "deliveryOption",
-        select: "price",
-      })
-      .populate({
-        path: "coupon",
-        select: "discount minPrice",
-      });
+        { new: true }
+      )
+        .populate({
+          path: "deliveryOption",
+          select: "price",
+        })
+        .populate({
+          path: "coupon",
+          select: "discount minPrice",
+        });
+    } else {
+      cart = await Cart.findOneAndUpdate(
+        {
+          user: new mongoose.Types.ObjectId(userId),
+          isActive: true,
+        },
+        {
+          $pull: {
+            cartItems: {
+              product: new mongoose.Types.ObjectId(product),
+              color: color,
+            },
+          },
+        },
+        { new: true }
+      )
+        .populate({
+          path: "deliveryOption",
+          select: "price",
+        })
+        .populate({
+          path: "coupon",
+          select: "discount minPrice",
+        });
+    }
 
     // calculate totalCartAmount ใหม่
 
