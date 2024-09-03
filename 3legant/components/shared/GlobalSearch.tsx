@@ -75,7 +75,7 @@ const GlobalSearch = ({
         isGlobalSearchActive={isGlobalSearchActive}
         setIsActive={setIsActive}
         search={search}
-        className="z-10" // Ensure the dropdown stays below the input field
+        className="z-10 w-[500px]" // Ensure the dropdown stays below the input field
       />
     </div>
   );

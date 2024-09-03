@@ -11,7 +11,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import CartIconNum from "./CartIconNum";
-import SearchInput from "./SearchInput";
+import SearchInput from "./SearchMobile";
 import WishListIconNum from "./WishListIconNum";
 import CartItemCard from "../cards/CartItemCard";
 import CartItemListMoblie from "../list/CartItemListMoblie";
