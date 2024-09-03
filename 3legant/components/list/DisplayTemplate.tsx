@@ -84,7 +84,7 @@ const DisplayTemplate = () => {
 
       setCursor(null);
       fetchProducts();
-    }, 300); // Debounce delay
+    }, 500); // Debounce delay
 
     return () => {
       clearTimeout(handler); // มีการเปลี่ยนแปลง ของ query ภายใน 0.3 วิ มันจะ clearTimeout

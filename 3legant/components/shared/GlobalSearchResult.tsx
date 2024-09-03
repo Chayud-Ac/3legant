@@ -145,7 +145,9 @@ const GlobalSearchResult = ({
               ))}
             </div>
           ) : (
-            <div className="flex relative justify-center items-center w-full h-full ">
+            <div
+              className={`flex relative justify-center items-center w-full h-full  ${!(isGlobalSearchActive || isActive) && "hidden"}`}
+            >
               <div className="flex flex-col items-center justify-center gap-5">
                 <span className="text-dark-1 medium-lg text-center">
                   Can not find the product you're looking for
