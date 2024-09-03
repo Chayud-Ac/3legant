@@ -10,13 +10,13 @@ import {
 } from "@/components/ui/sheet";
 
 import Image from "next/image";
-import SearchInput from "../SearchInput";
 import { navbarLinks } from "@/constant/index";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import CartIconNum from "../CartIconNum";
 import WishListIconNum from "../WishListIconNum";
+import SearchMobile from "../SearchMobile";
 
 const NavContent = () => {
   const pathname = usePathname();
@@ -82,7 +82,7 @@ const MobileNav = ({ session }: MobileNavProps) => {
           <SheetDescription className="hidden"></SheetDescription>
           <div className="flex flex-col flex-1 justify-between">
             <div className="pt-[24px] ">
-              <SearchInput iconPosition="left" placeHolder="Search" />
+              <SearchMobile iconPosition="left" placeHolder="Search" />
               <NavContent />
             </div>
             <div className="flex flex-col gap-4">

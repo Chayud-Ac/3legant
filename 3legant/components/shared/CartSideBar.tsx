@@ -11,7 +11,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import CartIconNum from "./CartIconNum";
-import SearchInput from "./SearchInput";
+import SearchInput from "./SearchMobile";
 import WishListIconNum from "./WishListIconNum";
 import CartItemCard from "../cards/CartItemCard";
 import CartItemListMoblie from "../list/CartItemListMoblie";
@@ -39,8 +39,8 @@ const CartSideBar = () => {
             Cart
           </SheetTitle>
           <SheetDescription className="hidden"></SheetDescription>
-          <div className="flex flex-col flex-1 justify-between pt-3">
-            <div className="pt-[24px] ">
+          <div className="flex flex-col flex-1 justify-between pt-5">
+            <div className="overflow-y-auto max-h-[600px] no-scrollbar ">
               <CartItemListMoblie />
             </div>
 
