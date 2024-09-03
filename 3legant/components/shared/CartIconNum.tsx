@@ -30,6 +30,7 @@ const CartIconNum = ({ disableLink }: CartIconNumProps) => {
           alt="cart"
           width={24}
           height={24}
+          className="w-auto h-auto min-w-6 min-h-6"
         />
       ) : (
         <Link href="/cart">
@@ -38,6 +39,7 @@ const CartIconNum = ({ disableLink }: CartIconNumProps) => {
             alt="cart"
             width={24}
             height={24}
+            className="w-auto h-auto min-w-6 min-h-6"
           />
         </Link>
       )}

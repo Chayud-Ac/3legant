@@ -62,7 +62,7 @@ const MobileNav = ({ session }: MobileNavProps) => {
   }
 
   return (
-    <div className="md:hidden">
+    <div className="xl:hidden">
       <Sheet>
         <SheetTrigger>
           <Image
