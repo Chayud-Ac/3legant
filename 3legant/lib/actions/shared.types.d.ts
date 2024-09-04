@@ -69,9 +69,10 @@ export interface incrementItemQuantityParams {
 }
 
 export interface removeFromCartParams {
-  cartId: string;
+  cartId?: string;
   product: string;
   color: string;
+  userId?: string;
 }
 
 export interface addItemToWishListParams {

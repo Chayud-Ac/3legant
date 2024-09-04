@@ -25,31 +25,30 @@ const CartItemCard = ({
   name,
 }: CartItemCardProps) => {
   const cart = useSelector((state: RootState) => state.cart);
-  console.log(cart);
+  const user = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
 
   const handleRemoveItem = async () => {
     try {
-      if (cart.cartId) {
-        const result = await removeFromCart({
-          cartId: cart.cartId,
-          product: product,
-          color: color,
-        });
+      const result = await removeFromCart({
+        cartId: cart.cartId,
+        userId: user.id,
+        product: product,
+        color: color,
+      });
 
-        if (result.success) {
-          const { data } = result;
-          dispatch(
-            removeItem({
-              productId: product,
-              color: color,
-              newTotalCartAmount: data.newTotalCartAmount,
-            })
-          );
+      if (result.success) {
+        const { data } = result;
+        dispatch(
+          removeItem({
+            productId: product,
+            color: color,
+            newTotalCartAmount: data.newTotalCartAmount,
+          })
+        );
 
-          if (data.removeCoupon) {
-            dispatch(removeCoupon({}));
-          }
+        if (data.removeCoupon) {
+          dispatch(removeCoupon({}));
         }
       }
     } catch (error) {

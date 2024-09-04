@@ -20,6 +20,10 @@ export const navbarLinks: NavbarLink[] = [
     route: "/contact-us",
     label: "Contact Us",
   },
+  {
+    route: "/article",
+    label: "Article",
+  },
 ];
 
 export const socialLinks: SocialLink[] = [

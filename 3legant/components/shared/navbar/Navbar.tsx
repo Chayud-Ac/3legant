@@ -47,7 +47,7 @@ const Navbar = ({ session }: any) => {
           </Link>
         </div>
 
-        <div className="flex-between  flex-row w-[249px] max-xl:hidden">
+        <div className="flex-between  flex-row w-full max-w-[300px] max-xl:hidden">
           {navbarLinks.map((item) => {
             const isActive: boolean = activePath === item.route;
             return (
