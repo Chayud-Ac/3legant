@@ -14,15 +14,8 @@ const storage = new Storage({
 // Create a bucket instance
 const bucket = storage.bucket("profile3legant");
 
-export const config = {
-  api: {
-    bodyParser: false, // Disable Next.js body parsing to allow formData to handle it
-  },
-};
-
 export async function POST(request: Request) {
   try {
-    // Get the Form Data
     const formData = await request.formData();
 
     const file = formData.get("image") as File | null; // Cast to File, which includes the `name` property
