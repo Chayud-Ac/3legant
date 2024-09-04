@@ -21,9 +21,7 @@ export async function POST(request: Request) {
     const file = formData.get("image") as File | null; // Cast to File, which includes the `name` property
 
     if (!file) {
-      return new NextResponse(JSON.stringify({ message: "No Image upload" }), {
-        status: 400,
-      });
+      return NextResponse.json({ message: "No Image upload" }, { status: 400 });
     }
 
     await connectToDatabase();
@@ -36,50 +34,34 @@ export async function POST(request: Request) {
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
-    return new Promise((resolve, reject) => {
-      const blobStream = blob.createWriteStream({
-        resumable: false,
-        contentType: file.type || "application/octet-stream",
+    // Wrap the file upload in a try-catch block
+    try {
+      await new Promise<void>((resolve, reject) => {
+        const blobStream = blob.createWriteStream({
+          resumable: false,
+          contentType: file.type || "application/octet-stream",
+        });
+
+        blobStream.on("finish", resolve);
+        blobStream.on("error", reject);
+
+        blobStream.end(buffer);
       });
 
-      blobStream.end(buffer, async () => {
-        try {
-          // The public URL of the image
-          const publicUrl = `https://storage.googleapis.com/${bucket.name}/${blob.name}`;
+      // The public URL of the image
+      const publicUrl = `https://storage.googleapis.com/${bucket.name}/${blob.name}`;
 
-          // Save the image URL in MongoDB
-          const id = formData.get("id") as string;
-          await User.findByIdAndUpdate(id, { image: publicUrl });
+      // Save the image URL in MongoDB
+      const id = formData.get("id") as string;
+      await User.findByIdAndUpdate(id, { image: publicUrl });
 
-          resolve(
-            new NextResponse(JSON.stringify({ publicUrl }), {
-              status: 200,
-            })
-          );
-        } catch (dbError) {
-          console.error("Database error:", dbError);
-          reject(
-            new NextResponse(
-              JSON.stringify({ message: "Failed to save to database" }),
-              { status: 500 }
-            )
-          );
-        }
-      });
-
-      blobStream.on("error", (err) => {
-        console.error("Blob stream error:", err);
-        reject(
-          new NextResponse(JSON.stringify({ message: "Upload failed" }), {
-            status: 500,
-          })
-        );
-      });
-    });
+      return NextResponse.json({ publicUrl }, { status: 200 });
+    } catch (uploadError) {
+      console.error("Upload error:", uploadError);
+      return NextResponse.json({ message: "Upload failed" }, { status: 500 });
+    }
   } catch (err: any) {
     console.error("Server error:", err);
-    return new NextResponse(JSON.stringify({ error: err.message }), {
-      status: 500,
-    });
+    return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
