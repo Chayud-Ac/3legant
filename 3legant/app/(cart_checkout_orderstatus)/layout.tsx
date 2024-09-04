@@ -1,5 +1,5 @@
 import { getServerSession } from "next-auth";
-import { authOptions } from "../api/auth/[...nextauth]/route";
+import { authOptions } from "@/lib/auth";
 import { StoreProvider } from "@/store/StoreProvider";
 import OrderProvider from "@/context/OrderProvider";
 import CartCheckoutTab from "@/components/shared/CartCheckoutTab";
