@@ -33,8 +33,7 @@ const ProductCard = ({
 }: ProductCardProps) => {
   // ProductCard has two different styles one is with description and another is without the describtion
   // So we check base on the describtion if the describtion is pass to this component or not
-  console.log(discount);
-  console.log(imgUrl);
+
   if (description) {
     return (
       <div className="flex flex-col gap-2 sm:flex-row items-center hover:shadow-lg transition-shadow hover:rounded-xl">

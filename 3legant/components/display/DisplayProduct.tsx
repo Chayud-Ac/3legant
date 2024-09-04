@@ -10,7 +10,6 @@ import dynamic from "next/dynamic";
 import AddtoWishListButton from "../shared/AddtoWishListButton";
 import AddtoCartButton from "../shared/AddtoCartButton";
 import ProductAmountSelection from "../shared/ProductAmountSelection";
-import { useSession } from "next-auth/react";
 
 interface SingleProduct {
   discount?: {
@@ -65,7 +64,6 @@ const DisplayProduct = ({
 
   const [currentAmount, setCurrentAmount] = useState(1);
 
-  console.log(name);
   return (
     <div className="flex flex-col justify-center items-start w-full gap-4 max-w-[1440px] container-1 sm:flex-row sm:gap-16">
       {/* carouseal image */}

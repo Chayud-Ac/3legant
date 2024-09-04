@@ -63,7 +63,7 @@ export async function replyReview(params: replyReviewParams) {
   try {
     connectToDatabase();
     const { reviewId, userId, comment, path } = params;
-    console.log(params);
+
     if (!userId) {
       throw new Error("Please log in");
     }
@@ -86,8 +86,6 @@ export async function replyReview(params: replyReviewParams) {
 
     const parseNewReply = JSON.parse(JSON.stringify(newReply));
 
-    console.log(parseNewReply);
-
     revalidatePath(path);
 
     return { parseNewReply };
@@ -103,8 +101,6 @@ export async function getReviewReplies(params: getReviewRepliesParams) {
 
     const skipAmount = (currentBatch - 1) * batchSize + 1;
     const limitAmount = skipAmount + batchSize;
-
-    console.log(skipAmount);
 
     const replies = await Review.findById(reviewId)
       .select({
@@ -130,8 +126,6 @@ export async function getReviewReplies(params: getReviewRepliesParams) {
     const hasMore = skipAmount + limitAmount < totalRepliesCount;
 
     const parseReplies = JSON.parse(JSON.stringify(replies));
-
-    console.log(parseReplies);
 
     revalidatePath(path);
 

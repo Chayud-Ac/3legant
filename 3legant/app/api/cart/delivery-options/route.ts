@@ -1,9 +1,5 @@
 import { connectToDatabase } from "@/lib/mongoose";
 import { NextRequest, NextResponse } from "next/server";
-import User from "@/databases/user.model";
-import Address from "@/databases/address.model";
-import { Cart } from "@/databases/cart.model";
-import mongoose from "mongoose";
 import Delivery from "@/databases/delivery.model";
 
 export async function GET(req: NextRequest) {

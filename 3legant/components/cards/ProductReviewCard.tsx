@@ -121,7 +121,9 @@ const ProductReviewCard = ({
             />
             <span
               className="regular-xs text-dark-4 cursor-pointer"
-              onClick={() => setReply((prev) => !prev)}
+              onClick={() => {
+                setReply((prev) => !prev);
+              }}
             >
               reply
             </span>

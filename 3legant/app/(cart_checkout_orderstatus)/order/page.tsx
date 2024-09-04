@@ -3,7 +3,6 @@ import { Spinner } from "@/components/shared/Spinner";
 import { updateOrderStatus } from "@/lib/actions/order.action";
 import { formatDate } from "@/lib/utils";
 import { RootState } from "@/store/store";
-import { SearchParamsProps } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
@@ -49,7 +48,6 @@ const page = () => {
           orderId: orderId,
         });
 
-        console.log(result?.data);
         setOrder(result?.data);
       };
       updateOrderDocument();
@@ -69,7 +67,7 @@ const page = () => {
               Your order has been received
             </h1>
           </div>
-          <div className="flex flex-row justify-center items-center gap-3">
+          <div className="flex flex-row justify-center items-center gap-3 overflow-x-auto">
             {order.cart.cartItems.map((item, index) => (
               <Image
                 src={`${process.env.NEXT_PUBLIC_GOOGLE_CLOUD_BUCKET}/${item.product.category}/${item.product.slug}/${item.color}.svg`}
@@ -81,8 +79,8 @@ const page = () => {
               />
             ))}
           </div>
-          <div className="flex flex-col gap-2 items-center justify-center ">
-            <div className="flex flex-row gap-20 w-full  ">
+          <div className="flex flex-col gap-2 items-center justify-center w-full max-w-[420px] ">
+            <div className="flex flex-row justify-between w-full  ">
               <span className="medium-sm text-grey-2">Order code:</span>
               <span className="medium-sm text-dark-2">#{order._id}</span>
             </div>

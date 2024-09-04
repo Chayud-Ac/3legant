@@ -1,11 +1,9 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
-import FacebookProvider from "next-auth/providers/facebook";
 import bcrypt from "bcryptjs";
 import User from "@/databases/user.model";
 import { connectToDatabase } from "@/lib/mongoose";
-import { signIn } from "next-auth/react";
 
 export const authOptions: any = {
   providers: [
@@ -78,7 +76,6 @@ export const authOptions: any = {
 
           return true;
         } catch (err) {
-          console.log("Error saving user", err);
           return false;
         }
       }
@@ -86,7 +83,6 @@ export const authOptions: any = {
     },
     async jwt({ token, user }: { token: any; user: any }) {
       if (user) {
-        console.log(user._id);
         token.id = user._id;
         token.email = user.email;
         token.remember = user.remember;

@@ -7,15 +7,8 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import MobileNav from "./MobileNav";
-import CartIconNum from "../CartIconNum";
 import CartSideBar from "../CartSideBar";
-import { useSession } from "next-auth/react";
-import { useDispatch } from "react-redux";
-import { setUser } from "@/store/slices/userSlice";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
 import GlobalSearch from "../GlobalSearch";
-import { Input } from "@/components/ui/input";
 
 const Navbar = ({ session }: any) => {
   const [activePath, setActivePath] = useState("/");

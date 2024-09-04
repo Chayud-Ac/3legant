@@ -22,7 +22,6 @@ interface ProductHorizontalProps {
 }
 
 const ProductHorizontal = ({ title, products }: ProductHorizontalProps) => {
-  console.log(products);
   if (!products || products.length === 0) {
     return null; // Handle case where products are undefined or empty
   }

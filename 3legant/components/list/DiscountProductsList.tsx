@@ -12,7 +12,7 @@ const DiscountProductsList = async ({
 }: DiscountProductsListProps) => {
   const result = await getDiscountProducts({ percentage });
   const products = JSON.parse(JSON.stringify(result.products));
-  console.log(products);
+
   return (
     <>
       <ProductHorizontal title={title} products={products} />

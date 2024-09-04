@@ -43,7 +43,6 @@ const CartCheckoutTab = () => {
     setCurrentTab(parentPath);
   }, [pathname, searchParams]);
 
-  console.log(currentTab);
   return (
     <>
       <h1 className="h3-medium text-dark-1">{convertPathToWord(pathname)}</h1>

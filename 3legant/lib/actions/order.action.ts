@@ -11,8 +11,6 @@ export async function createOrder(params: createOrderParams) {
 
     const { cartId, userId, contact, shippingAddress, paymentMethod } = params;
 
-    console.log(cartId, userId, contact, shippingAddress, paymentMethod);
-
     const newOrder = new Order({
       user: userId,
       cart: cartId,
@@ -54,7 +52,6 @@ export async function updateOrderStatus(params: updateOrderStatusParams) {
   try {
     connectToDatabase();
 
-    console.log(orderId);
     const updatedOrder = await Order.findByIdAndUpdate(
       orderId,
       {

@@ -1,7 +1,6 @@
 import CartItemListDesktop from "@/components/list/CartItemListDesktop";
 import CartItemListMoblie from "@/components/list/CartItemListMoblie";
 import CartSummary from "@/components/shared/CartSummary";
-import Coupon from "@/components/shared/Coupon";
 import React from "react";
 
 async function getDeliveryOptions() {

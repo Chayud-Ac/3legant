@@ -20,7 +20,6 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "../ui/button";
-import Link from "next/link";
 import { AddressFormSchema } from "@/lib/validation";
 import { z } from "zod";
 import { updateUserAddress } from "@/lib/actions/user.action";
@@ -77,9 +76,8 @@ const AddressForm = ({ control, userId, otherClasses }: AddressFormProps) => {
       try {
         if (userId) {
           const userData = await getAddress(userId);
-          console.log(userData);
+
           if (userData) {
-            console.log(userData);
             reset({
               street: userData.data.street || "",
               country: userData.data.country || "",

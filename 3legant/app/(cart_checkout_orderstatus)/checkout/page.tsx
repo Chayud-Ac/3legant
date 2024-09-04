@@ -1,5 +1,4 @@
 import CheckoutForm from "@/components/form/CheckoutForm";
-import OrderSummary from "@/components/shared/OrderSummary";
 import React from "react";
 
 const page = () => {

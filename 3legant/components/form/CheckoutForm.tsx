@@ -10,8 +10,6 @@ import ContactForm from "./ContactForm";
 import { CheckOutFromSchema } from "@/lib/validation";
 import AddressForm from "./AddressFrom";
 import OrderSummary from "../shared/OrderSummary";
-import { Elements } from "@stripe/react-stripe-js";
-import { loadStripe } from "@stripe/stripe-js";
 import PaymentSelectionForm from "./PaymentSelectionForm";
 import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
@@ -30,8 +28,6 @@ const CheckoutForm = () => {
   const [loading, setLoading] = useState(false);
 
   const { orderId, setOrderId } = useOrder();
-
-  console.log(orderId);
 
   const form = useForm<z.infer<typeof CheckOutFromSchema>>({
     resolver: zodResolver(CheckOutFromSchema),

@@ -9,7 +9,6 @@ import { formUrlQuery } from "@/lib/utils";
 
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 
 interface FilterProps {
   type: "single" | "multiple";
@@ -55,7 +54,6 @@ const Filter = ({
     // ถ้าไม่มี setTitleMain มา ก็เป็น Filter component ปกติ ที่ใช้เพื่อ Filter ตัว key กับ value นั้นๆ แล้ว formUrl ใหม่
 
     const queryObject = { [filterKey]: value };
-    console.log(queryObject);
     const newUrl = formUrlQuery({
       params: searchParams.toString(),
       queryObject,

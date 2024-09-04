@@ -1,10 +1,6 @@
-import ProductCarousel from "@/components/carousel/ProductCarousel";
 import DisplayProduct from "@/components/display/DisplayProduct";
 import ReviewProduct from "@/components/display/ReviewProduct";
 import NewArrivalProductsList from "@/components/list/NewArrivalProductsList";
-import RatingsStars from "@/components/shared/RatingsStars";
-import dynamic from "next/dynamic";
-import Image from "next/image";
 
 interface SingleProduct {
   discount?: {

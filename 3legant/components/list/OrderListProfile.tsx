@@ -18,7 +18,7 @@ const OrderListProfile = ({ userId }: OrderListProfile) => {
         );
         if (response.ok) {
           const { data } = await response.json();
-          console.log(data);
+
           setOrders(data);
         }
       } catch (error) {
@@ -28,8 +28,6 @@ const OrderListProfile = ({ userId }: OrderListProfile) => {
 
     fetchOrder();
   }, [userId]);
-
-  console.log(orders);
 
   return (
     <div className="flex flex-col gap-3 w-full max-w-[900px] ">

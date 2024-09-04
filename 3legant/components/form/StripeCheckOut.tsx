@@ -21,8 +21,6 @@ const StripeCheckOut = ({ amount }: StripeCheckOutProps) => {
   const [loading, setLoading] = useState(false);
   const { orderId, setOrderId } = useOrder();
 
-  console.log(orderId);
-
   useEffect(() => {
     const createPaymentIntent = async () => {
       try {

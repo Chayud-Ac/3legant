@@ -4,11 +4,10 @@ import { RootState } from "@/store/store";
 import Image from "next/image";
 import RemoveFromWishList from "../shared/RemoveFromWishList";
 import Link from "next/link";
-import { Button } from "../ui/button";
 
 const WishListMobile = () => {
   const wishlist = useSelector((state: RootState) => state.wishlist);
-  console.log(wishlist.items);
+
   return (
     <table className="table-fixed w-full max-w-[900px] sm:hidden">
       <thead className="border-b border-grey-2">

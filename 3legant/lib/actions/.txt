@@ -1,2 +1,0 @@
-store all the server action that we can call them as a async function across the project 
-server action is commonly use for mutating the data (create , update )

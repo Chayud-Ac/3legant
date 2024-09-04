@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import { reviewProduct } from "@/lib/actions/review.action";
 import { Review } from "../list/ProductReviewList";
 import { Spinner } from "../shared/Spinner";
+import { useToast } from "../ui/use-toast";
 
 interface ProductReviewFormProps {
   userSession: any;
@@ -21,26 +22,33 @@ const ProductReviewForm = ({
   productId,
   setReviewList,
 }: ProductReviewFormProps) => {
-  const userId = userSession.user.id;
   const pathname = usePathname();
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState("");
   const [submitLoading, setSubmitLoading] = useState(false);
+  const { toast } = useToast();
 
   const handleRatingChange = (newRating: number) => {
     if (!userSession) {
-      console.log("Please login");
+      toast({
+        title: "Please login",
+      });
     }
-    console.log("New Rating Selected:", newRating);
+    toast({
+      title: `new Rating Select ${newRating} `,
+    });
     setRating(newRating);
   };
 
   const handleSubmitReview = async () => {
     if (!userSession) {
-      console.log("Please login");
+      toast({
+        title: "Please login before review",
+      });
+      return null;
     }
     setSubmitLoading(true);
-
+    const userId = userSession.user.id;
     try {
       const result = await reviewProduct({
         productId,

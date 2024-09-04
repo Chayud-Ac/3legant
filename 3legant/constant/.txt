@@ -1,2 +1,0 @@
-store all the constant in this directory 
-element in filter , element in Navbar , etc

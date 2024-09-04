@@ -46,8 +46,6 @@ const OrderSummary = () => {
   };
 
   const handleApplyCoupon = async () => {
-    console.log(couponCode);
-
     try {
       if (cart.cartId) {
         const result = await applyCouponServerAction({
@@ -57,7 +55,7 @@ const OrderSummary = () => {
 
         if (result.success) {
           const { data } = result;
-          console.log(data);
+
           dispatch(
             applyCoupon({
               code: data.code,

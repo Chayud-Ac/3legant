@@ -55,7 +55,7 @@ export const fetchCart = createAsyncThunk(
       throw new Error("Failed to fetch cart");
     }
     const { data } = await response.json();
-    console.log(data);
+
     return data; // Assume data is in the format of CartProps
   }
 );
