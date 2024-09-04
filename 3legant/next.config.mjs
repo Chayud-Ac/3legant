@@ -12,7 +12,7 @@ const nextConfig = {
           { key: "Access-Control-Allow-Credentials", value: "true" },
           {
             key: "Access-Control-Allow-Origin",
-            value: "https://3legant-chi.vercel.app",
+            value: "https://3legant-sepia.vercel.app",
           },
           {
             key: "Access-Control-Allow-Methods",
