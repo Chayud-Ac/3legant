@@ -4,26 +4,15 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   async headers() {
-    const allowedOrigins = [
-      "https://3legant-sepia.vercel.app",
-      "https://3legant-git-main-chayuds-projects.vercel.app",
-      "https://3legant-exwg6w1bm-chayuds-projects.vercel.app",
-    ]; // กำหนด ตัว origin ในนี้ว่า domain ไหนบ้าง ที่สามารถ access ตัว api endpoint ใน api handler ได้
-
     return [
       {
+        // matching all API routes
         source: "/api/:path*",
         headers: [
           { key: "Access-Control-Allow-Credentials", value: "true" },
           {
             key: "Access-Control-Allow-Origin",
-            value: (req) => {
-              const origin = req.headers.origin;
-              if (allowedOrigins.includes(origin)) {
-                return origin;
-              }
-              return allowedOrigins[0]; // Default origin if none match
-            },
+            value: "https://3legant-exwg6w1bm-chayuds-projects.vercel.app",
           },
           {
             key: "Access-Control-Allow-Methods",
