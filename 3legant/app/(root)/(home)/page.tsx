@@ -78,8 +78,6 @@ const Page = async () => {
 
       <NewArrivalProductsList />
 
-      <ArticleList />
-
       <JoinUsNews />
     </section>
   );

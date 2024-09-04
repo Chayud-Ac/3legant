@@ -5,7 +5,7 @@ import Image from "next/image";
 
 const Page = () => {
   return (
-    <section className="flex flex-col justify-center items-center py-10 min-h-screen">
+    <section className="flex flex-col justify-center items-center min-h-screen">
       <div className="flex flex-col container-1 max-w-[1440px]">
         <div className="flex flex-col gap-3 justify-start items-start w-full max-w-[850px]">
           <p className="h6-medium text-dark-1   sm:h4-medium">
