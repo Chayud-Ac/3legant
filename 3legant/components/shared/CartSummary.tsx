@@ -64,7 +64,6 @@ const CartSummary = ({ deliveryOptions }: CartSummaryProps) => {
         ),
       });
 
-      setLoading(false);
       return null;
     }
     try {
@@ -81,7 +80,6 @@ const CartSummary = ({ deliveryOptions }: CartSummaryProps) => {
     } catch (error) {
       console.error("Error during checkout:", error);
     } finally {
-      setLoading(false);
     }
   };
 

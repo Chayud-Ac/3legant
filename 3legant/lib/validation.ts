@@ -53,7 +53,7 @@ export const AddressFormSchema = z.object({
 export const CheckOutFromSchema = z.object({
   contact: ContactFormSchema,
   address: AddressFormSchema,
-  payment: z.enum(["stripe", "qrCode"], {
+  payment: z.enum(["stripe", "cash"], {
     required_error: "You have to select one payment method",
   }),
 });
