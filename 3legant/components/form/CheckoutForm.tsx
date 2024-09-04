@@ -17,7 +17,6 @@ import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { createOrder } from "@/lib/actions/order.action";
-import { log } from "console";
 import { useOrder } from "@/context/OrderProvider";
 import { Spinner } from "../shared/Spinner";
 import { useToast } from "../ui/use-toast";
@@ -68,18 +67,24 @@ const CheckoutForm = () => {
 
         if (result.success) {
           const { data } = result;
-          setOrderId(result.data.orderId);
+          setOrderId(data.orderId);
+
+          if (values.payment === "stripe") {
+            router.push(`/checkout/${values.payment}`);
+          } else {
+            router.push(
+              `/order?orderId=${data.orderId}&redirect_status=succeeded`
+            );
+          }
         } else {
-          // toast error
+          toast({
+            title: "fail to create order",
+          });
         }
       }
     } catch (error) {
       throw error;
-    } finally {
-      setLoading(false);
     }
-
-    router.push(`/checkout/${values.payment}`);
   }
 
   const handlePlaceOrderClick = () => {

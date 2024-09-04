@@ -47,10 +47,10 @@ const PaymentSelectionForm = ({ control }: PaymentSelectionFormProps) => {
                 <div className="flex flex-row w-full justify-between items-center border-grey-4 border rounded-lg pl-4 pr-4 pt-3 pb-3 shadow-sm">
                   <FormItem className="flex items-center space-x-3 space-y-0">
                     <FormControl>
-                      <RadioGroupItem value="qrCode" />
+                      <RadioGroupItem value="cash" />
                     </FormControl>
                     <FormLabel className="text-dark-1 medium-sm">
-                      <span className="text-grey-2 regular-sm">QR code</span>
+                      <span className="text-grey-2 regular-sm">Cash</span>
                     </FormLabel>
                   </FormItem>
                 </div>
