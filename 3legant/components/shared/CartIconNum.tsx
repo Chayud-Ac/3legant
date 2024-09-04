@@ -19,7 +19,6 @@ const CartIconNum = ({ disableLink }: CartIconNumProps) => {
     lengthCart = 0;
   }
 
-  console.log(lengthCart);
   return (
     <div
       className={`flex flex-row justify-between items-center ${lengthCart > 0 && "w-[49px]"}`}

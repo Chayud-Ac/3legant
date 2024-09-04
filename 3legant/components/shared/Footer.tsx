@@ -5,9 +5,9 @@ import { socialLinks } from "@/constant";
 
 const Footer = () => {
   return (
-    <footer className=" bg-dark-2 pb-8">
-      <div className="flex flex-col container-1">
-        <div className="flex-center flex-col gap-20 sm:flex-row mt-12 md:flex-between sm:mt-20">
+    <footer className="flex bg-dark-2 pb-8">
+      <div className="flex flex-col container-1 w-full ">
+        <div className="flex-center flex-col gap-20 sm:flex-row mt-12 md:flex-between sm:mt-20 ">
           <div className="flex flex-row justify-between items-center sm:w-[280px] max-sm:flex-col max-sm:h-20">
             <Image
               src="/assets/icons/logo_white.svg"
@@ -19,12 +19,12 @@ const Footer = () => {
             <span className="bg-grey-1 h-[1px] w-6 sm:hidden"></span>
             <p className="regular-sm text-light-2">Gift & Decoration</p>
           </div>
-          <div className="flex flex-row gap-8 md:w-[250px] justify-between max-sm:flex-col items-center ">
+          <div className="flex flex-row gap-10 md:w-[300px]  max-sm:flex-col items-center ">
             {navbarLinks.map((item) => (
               <Link
                 href={item.route}
                 key={item.label}
-                className="regular-sm text-light-2"
+                className="regular-xs text-light-2 "
               >
                 {item.label}
               </Link>

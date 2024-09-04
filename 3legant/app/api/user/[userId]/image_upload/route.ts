@@ -24,7 +24,7 @@ export async function POST(request: Request) {
   try {
     // Get the Form Data
     const formData = await request.formData();
-    console.log(formData);
+
     const file = formData.get("image") as File | null; // Cast to File, which includes the `name` property
 
     if (!file) {

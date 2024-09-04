@@ -21,7 +21,6 @@ const FilterRoomDesktop = ({
   const searchParams = useSearchParams();
   const router = useRouter();
   const room = searchParams.get("room");
-  console.log(room);
 
   const [currentValue, setCurrentValue] = useState(room);
 
@@ -55,7 +54,7 @@ const FilterRoomDesktop = ({
       <div className="flex flex-col gap-3 h-[260px] overflow-y-scroll whitespace-nowrap scroll-smooth custom-scrollbar-2">
         {filter.map((item) => {
           const isActive = room === item.value;
-          console.log(currentValue);
+
           return (
             <p
               onClick={() => handleCategoryChange(item.value, item.name)}

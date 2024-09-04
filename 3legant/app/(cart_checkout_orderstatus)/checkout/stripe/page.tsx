@@ -19,8 +19,6 @@ const page = () => {
   // Check if totalCartAmount is meaningful
   const isAmountValid = cart.totalCartAmount > 0;
 
-  console.log(cart.totalCartAmount);
-
   return (
     <div className="flex flex-col items-center w-full max-w-[1440px] pt-10">
       {isAmountValid ? (

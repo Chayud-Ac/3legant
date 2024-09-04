@@ -67,7 +67,7 @@ export async function getUserImage(params: getUserImageParams) {
     });
 
     const parseUser = JSON.parse(JSON.stringify(user));
-    console.log(parseUser);
+
     return { parseUser };
   } catch (error) {
     throw error;
@@ -91,8 +91,6 @@ export async function addItemToWishList(params: addItemToWishListParams) {
     }
     user.wishlist.push(productObjectId);
     await user.save();
-
-    console.log(user.wishlist);
 
     return { message: "Added to WishList", wishlist: user.wishlist };
   } catch (error) {
@@ -128,8 +126,6 @@ export async function removeItemFromWishList(
 
     // Save the updated user document
     await user.save();
-
-    console.log(user.wishlist);
 
     return { message: "Removed from WishList", wishlist: user.wishlist };
   } catch (error) {

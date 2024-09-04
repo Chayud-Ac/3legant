@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { useSession } from "next-auth/react";
 
 interface UserProps {
   id: string;

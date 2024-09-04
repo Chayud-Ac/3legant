@@ -25,7 +25,6 @@ export const fetchWishList = createAsyncThunk(
       throw new Error("Failed to fetch cart");
     }
     const { data } = await response.json();
-    console.log(data);
     return data;
   }
 );
@@ -55,7 +54,6 @@ const wishlistSlice = createSlice({
         fetchWishList.fulfilled,
         (state, action: PayloadAction<WishlistItem[] | null>) => {
           if (action.payload) {
-            console.log(action.payload);
             state.items = action.payload;
           } else {
             state.items = [];

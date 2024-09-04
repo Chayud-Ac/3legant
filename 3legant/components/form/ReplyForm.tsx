@@ -1,11 +1,12 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Textarea } from "../ui/textarea";
 import { replyReview } from "@/lib/actions/review.action";
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { ReplyState } from "../list/ProductReviewList";
+import { useToast } from "../ui/use-toast";
 
 interface ReplyFormProps {
   reviewId: string;
@@ -21,15 +22,16 @@ const ReplyForm = ({
   userSession,
 }: ReplyFormProps) => {
   const { data: session, status } = useSession();
-  console.log(reviewId);
-
   const [comment, setComment] = useState("");
-
   const pathname = usePathname();
+  const { toast } = useToast();
 
   const handleReplySubmit = async () => {
     if (!session?.user?.id) {
-      console.log("Please login");
+      toast({
+        title: "Please Login before reply",
+      });
+      return null;
     } else {
       try {
         const result = await replyReview({
@@ -40,7 +42,6 @@ const ReplyForm = ({
         });
 
         const newReplyObject = result.parseNewReply;
-        console.log(newReplyObject);
 
         setReplyObject((prevState) => ({
           ...prevState,
@@ -79,7 +80,9 @@ const ReplyForm = ({
       className={`flex flex-row mt-2 gap-4 items-center transition-opacity duration-500 ease-in-out`}
     >
       <Avatar className="w-[40px] h-[40px] md:w-[60px] md:h-[60px]">
-        <AvatarImage src={userSession.user.image} />
+        {userSession?.user?.image && (
+          <AvatarImage src={userSession.user.image} />
+        )}
         <AvatarFallback>CN</AvatarFallback>
       </Avatar>
 

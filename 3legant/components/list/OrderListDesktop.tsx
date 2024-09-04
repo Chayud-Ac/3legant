@@ -11,7 +11,6 @@ interface OrderListDesktopProps {
 }
 
 const OrderListDesktop = ({ orders }: OrderListDesktopProps) => {
-  console.log(orders);
   return (
     <table className="table-fixed w-full max-w-[900px] max-md:hidden">
       <thead className="border-b border-grey-2">

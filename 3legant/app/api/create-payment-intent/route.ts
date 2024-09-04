@@ -14,7 +14,6 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ clientSecret: paymentIntent.client_secret });
   } catch (error) {
-    console.log(error);
     return NextResponse.json(
       {
         error: `Internal server error : ${error}`,

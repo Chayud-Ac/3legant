@@ -1,1 +1,0 @@
-Will implement the createContext to create state variable that can apply across component without pass them as a props

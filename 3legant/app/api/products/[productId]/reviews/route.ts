@@ -1,8 +1,7 @@
 import { connectToDatabase } from "@/lib/mongoose";
-import Product from "@/databases/product.model";
 import Review from "@/databases/review.model";
 import { NextResponse } from "next/server";
-import mongoose, { FilterQuery } from "mongoose";
+import mongoose from "mongoose";
 
 // route นี้ จะ handle request สำหรับ review section ของ productId นั้นๆ
 // มีการ apply pagination , filter (recent , most rate , etc .. )
@@ -14,11 +13,18 @@ interface GetReviewsParams {
   productId: string;
 }
 
-export async function POST(req: Request) {
+export async function GET(
+  req: Request,
+  { params }: { params: { productId: string } }
+) {
   try {
-    const params: GetReviewsParams = await req.json();
+    const { searchParams } = new URL(req.url);
+    const productId = params.productId;
+    const r = searchParams.get("r");
+    const currentBatch = Number(searchParams.get("currentBatch")) || 1;
+    const pageSize = 5;
+
     connectToDatabase();
-    const { currentBatch = 1, pageSize = 5, r, productId } = params;
 
     const skipAmount = (currentBatch - 1) * pageSize;
 
@@ -161,8 +167,6 @@ export async function POST(req: Request) {
 
     hasMore = totalReviews > skipAmount + reviews.length;
 
-    console.log(JSON.parse(JSON.stringify(reviews)));
-
     return new NextResponse(JSON.stringify({ reviews, hasMore }), {
       status: 200,
     });
@@ -172,119 +176,3 @@ export async function POST(req: Request) {
     });
   }
 }
-
-// [
-//   {
-//     _id: '66d5b1177cac787b61bbd4ab',
-//     product: '66bc93efde454f0e8f7163fe',
-//     user: {
-//       _id: '66b25fde18865a5b13d7c459',
-//       displayName: 'Ac_Chayud',
-//       image:
-//         'https://storage.googleapis.com/profile3legant/36b4af29-f0f1-44d8-8644-e9130b648766.png'
-//     },
-//     rating: 5,
-//     comment: 'Test 6',
-//     replies: [],
-//     createdAt: '2024-09-02T12:35:35.597Z',
-//     hasMoreReply: false
-//   },
-//   {
-//     _id: '66d5b09d7cac787b61bbd3ed',
-//     product: '66bc93efde454f0e8f7163fe',
-//     user: {
-//       _id: '66b25fde18865a5b13d7c459',
-//       displayName: 'Ac_Chayud',
-//       image:
-//         'https://storage.googleapis.com/profile3legant/36b4af29-f0f1-44d8-8644-e9130b648766.png'
-//     },
-//     rating: 5,
-//     comment: 'Test 2 ',
-//     replies: [
-//       {
-//         _id: '66d5b0a67cac787b61bbd3f9',
-//         user: {
-//           _id: '66b25fde18865a5b13d7c459',
-//           displayName: 'Ac_Chayud',
-//           image:
-//             'https://storage.googleapis.com/profile3legant/36b4af29-f0f1-44d8-8644-e9130b648766.png'
-//         },
-//         comment: 'Test Reply 2',
-//         createdAt: '2024-09-02T12:33:42.302Z'
-//       }
-//     ],
-//     createdAt: '2024-09-02T12:33:33.513Z',
-//     hasMoreReply: true
-//   },
-//   {
-//     _id: '66d5b08a7cac787b61bbd3cc',
-//     product: '66bc93efde454f0e8f7163fe',
-//     user: {
-//       _id: '66b25fde18865a5b13d7c459',
-//       displayName: 'Ac_Chayud',
-//       image:
-//         'https://storage.googleapis.com/profile3legant/36b4af29-f0f1-44d8-8644-e9130b648766.png'
-//     },
-//     rating: 5,
-//     comment: 'Test 1 ',
-//     replies: [
-//       {
-//         _id: '66d5b0937cac787b61bbd3d9',
-//         user: {
-//           _id: '66b25fde18865a5b13d7c459',
-//           displayName: 'Ac_Chayud',
-//           image:
-//             'https://storage.googleapis.com/profile3legant/36b4af29-f0f1-44d8-8644-e9130b648766.png'
-//         },
-//         comment: 'test Reply 1',
-//         createdAt: '2024-09-02T12:33:23.702Z'
-//       }
-//     ],
-//     createdAt: '2024-09-02T12:33:14.733Z',
-//     hasMoreReply: true
-//   },
-//   {
-//     _id: '66d5b1137cac787b61bbd49f',
-//     product: '66bc93efde454f0e8f7163fe',
-//     user: {
-//       _id: '66b25fde18865a5b13d7c459',
-//       displayName: 'Ac_Chayud',
-//       image:
-//         'https://storage.googleapis.com/profile3legant/36b4af29-f0f1-44d8-8644-e9130b648766.png'
-//     },
-//     rating: 4,
-//     comment: 'Test 5',
-//     replies: [],
-//     createdAt: '2024-09-02T12:35:31.184Z',
-//     hasMoreReply: false
-//   },
-//   {
-//     _id: '66d5b0ce7cac787b61bbd426',
-//     product: '66bc93efde454f0e8f7163fe',
-//     user: {
-//       _id: '66b25fde18865a5b13d7c459',
-//       displayName: 'Ac_Chayud',
-//       image:
-//         'https://storage.googleapis.com/profile3legant/36b4af29-f0f1-44d8-8644-e9130b648766.png'
-//     },
-//     rating: 3,
-//     comment: 'Test 3 Rating 3 ',
-//     replies: [
-//       {
-//         _id: '66d5b0d47cac787b61bbd432',
-//         user: {
-//           _id: '66b25fde18865a5b13d7c459',
-//           displayName: 'Ac_Chayud',
-//           image:
-//             'https://storage.googleapis.com/profile3legant/36b4af29-f0f1-44d8-8644-e9130b648766.png'
-//         },
-//         comment: 'Test Rating 1',
-//         createdAt: '2024-09-02T12:34:28.822Z'
-//       }
-//     ],
-//     createdAt: '2024-09-02T12:34:22.090Z',
-//     hasMoreReply: true
-//   }
-// ]
-
-// Test 2 Test 1 Test 3 Rating 3

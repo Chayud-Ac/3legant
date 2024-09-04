@@ -80,16 +80,9 @@ const ProductReviewList = ({
     const fetchReviews = async () => {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_SERVER_URL}/api/products/${productId}/reviews`,
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/api/products/${productId}/reviews?r=${query}&currentBatch=1`,
           {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              r: query,
-              productId,
-            }),
+            method: "GET",
           }
         );
         if (response.ok) {
@@ -114,17 +107,9 @@ const ProductReviewList = ({
     try {
       setHasMoreLoading(true);
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/products/${productId}/reviews`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/products/${productId}/reviews?r=${query}&currentBatch=${currentBatch + 1}`,
         {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            r: query,
-            productId,
-            currentBatch: currentBatch + 1,
-          }),
+          method: "GET",
         }
       );
       if (response.ok) {
@@ -180,7 +165,6 @@ const ProductReviewList = ({
           </div>
         ) : (
           reviewList.map((review) => {
-            console.log(review.hasMoreReply);
             return (
               <ProductReviewCard
                 key={review._id}

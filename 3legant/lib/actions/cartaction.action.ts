@@ -151,8 +151,6 @@ export async function incrementItemQuantityAction(
         });
     }
 
-    console.log(cart);
-
     if (!cart) {
       throw new Error("cart not found");
     }
@@ -507,17 +505,20 @@ export async function removeCouponServerAction(params: removeCouponParams) {
       throw new Error("Cart not found");
     }
 
-    cart.coupon = undefined;
+    const coupon = await Coupon.findById(cart.coupon).select({
+      discount: 1,
+    });
+
+    const discount = coupon.discount; // เอา discount กลับไป บวกเพิ่ม
+    cart.coupon = undefined; // เอา discount ออก บวกเพิ่ม
 
     const itemsTotalAmount = cart.cartItems.reduce(
       (total: number, item: any) => total + item.totalItemsPrice,
       0
     );
 
-    const deliveryPrice = cart.deliveryOption?.price || 0;
-
     const newTotalCartAmount = parseFloat(
-      (itemsTotalAmount + deliveryPrice).toFixed(2)
+      (cart.totalCartAmount + discount).toFixed(2)
     );
 
     cart.totalCartAmount = newTotalCartAmount;

@@ -28,7 +28,6 @@ interface PriceQueryParams {
 }
 
 export function formUrlQuery({ params, queryObject }: PriceQueryParams) {
-  console.log(queryObject);
   const currentUrl = qs.parse(params);
 
   for (const key in queryObject) {

@@ -1,11 +1,10 @@
-import FeatureList from "@/components/list/FeatureList";
 import GoogleMap from "@/components/shared/GoogleMap";
 import TextLinkButton from "@/components/shared/TextLinkButton";
 import Image from "next/image";
 
 const Page = () => {
   return (
-    <section className="flex flex-col justify-center items-center min-h-screen">
+    <section className="flex flex-col justify-center items-center min-h-screen pb-5">
       <div className="flex flex-col container-1 max-w-[1440px]">
         <div className="flex flex-col gap-3 justify-start items-start w-full max-w-[850px]">
           <p className="h6-medium text-dark-1   sm:h4-medium">

@@ -1,8 +1,5 @@
 import { getServerSession } from "next-auth";
-import ProductReviewCard from "../cards/ProductReviewCard";
-import ProductReviewForm from "../form/ProductReviewForm";
 import ProductReviewList from "../list/ProductReviewList";
-import LoadMore from "../shared/LoadMore";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 interface ReviewProductProps {

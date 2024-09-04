@@ -69,10 +69,8 @@ const FilterPriceDesktop = ({ title, filter }: FilterDesktopProps) => {
   }, [currentOption, form]);
 
   const handleCheckboxChange = (value: string) => {
-    console.log("Checkbox changed:", value);
-
     const optionObject = priceOptionRange[value];
-    console.log(optionObject);
+
     if (value) {
       const newUrl = formUrlQuery({
         params: searchParams.toString(),

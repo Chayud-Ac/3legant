@@ -8,7 +8,6 @@ interface RatingsStarsProps {
 const RatingsStars = ({ rating }: RatingsStarsProps) => {
   const totalStars = rating;
   const decimalNumber = totalStars % 1;
-  console.log(decimalNumber.toFixed(2));
 
   return (
     <div className="flex flex-row ml-[-2px]">

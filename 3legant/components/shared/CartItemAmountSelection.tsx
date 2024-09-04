@@ -1,8 +1,4 @@
-import {
-  applyCoupon,
-  incrementItemQuantity,
-  removeCoupon,
-} from "@/store/slices/cartSlice";
+import { incrementItemQuantity, removeCoupon } from "@/store/slices/cartSlice";
 import { decrementItemQuantity } from "@/store/slices/cartSlice";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
@@ -31,8 +27,6 @@ const CartItemAmountSelection = ({
   const [loading, setLoading] = useState(false);
   const cart = useSelector((state: RootState) => state.cart);
   const user = useSelector((state: RootState) => state.user);
-
-  console.log(cart);
 
   const dispatch = useDispatch();
 

@@ -26,8 +26,6 @@ const OfferExpired = ({ endDate }: OfferExpiredProps) => {
     return () => clearInterval(timer);
   }, [endDate]);
 
-  console.log(timeLeft);
-
   return (
     <div className="flex flex-col gap-3">
       <p className="regular-base text-dark-5">Offer expired in:</p>

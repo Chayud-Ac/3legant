@@ -11,7 +11,7 @@ interface CartItemListMoblie {
 const CartItemListMoblie = ({ otherClasses }: CartItemListMoblie) => {
   const cart = useSelector((state: RootState) => state.cart);
   const items = cart.items;
-  console.log(items);
+
   return (
     <div
       className={`flex flex-col justify-center w-full gap-5 pt-5 ${otherClasses}`}

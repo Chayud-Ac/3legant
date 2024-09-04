@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Avatar, AvatarImage } from "../ui/avatar";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { ImageUploadFormSchema } from "@/lib/validation";
@@ -10,8 +10,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormField, FormItem } from "../ui/form";
 import { useSession } from "next-auth/react";
 import { getUserImage } from "@/lib/actions/user.action";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
 import { Spinner } from "../shared/Spinner";
 
 interface ProfileImageUploadProps {

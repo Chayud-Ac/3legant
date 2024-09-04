@@ -1,13 +1,8 @@
 import React from "react";
-import { useSession } from "next-auth/react";
-import email from "next-auth/providers/email";
 import HomeHeader from "@/components/header/HomeHeader";
 import CategoryCard from "@/components/cards/CategoryCard";
 import FeatureList from "@/components/list/FeatureList";
-import ProductCard from "@/components/cards/ProductCard";
 import NewsSection from "@/components/shared/NewsSection";
-import ProductHorizontal from "@/components/list/ProductHorizontal";
-import ArticleList from "@/components/list/ArticleList";
 import JoinUsNews from "@/components/shared/JoinUsNews";
 import DiscountProductsList from "@/components/list/DiscountProductsList";
 import NewArrivalProductsList from "@/components/list/NewArrivalProductsList";
