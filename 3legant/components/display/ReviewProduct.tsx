@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth";
 import ProductReviewList from "../list/ProductReviewList";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/lib/auth";
 
 interface ReviewProductProps {
   productId: string;

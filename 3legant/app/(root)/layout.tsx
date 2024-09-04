@@ -3,7 +3,7 @@ import Footer from "@/components/shared/Footer";
 import Navbar from "@/components/shared/navbar/Navbar";
 import NotificationBar from "@/components/shared/NotificationBar";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../api/auth/[...nextauth]/route";
+import { authOptions } from "@/lib/auth";
 import { StoreProvider } from "@/store/StoreProvider";
 
 const layout = async ({ children }: { children: React.ReactNode }) => {
