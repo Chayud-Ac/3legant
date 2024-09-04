@@ -16,6 +16,7 @@ import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import LoadMore from "../shared/LoadMore";
 import { Spinner } from "../shared/Spinner";
+import { response } from "express";
 
 interface Product {
   _id: string;
@@ -62,23 +63,27 @@ const DisplayTemplate = () => {
         if (maxPrice) queryParams.append("maxPrice", maxPrice);
         if (minPrice) queryParams.append("minPrice", minPrice);
 
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_SERVER_URL}/api/products?${queryParams.toString()}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_SERVER_URL}/api/products?${queryParams.toString()}`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          if (response.ok) {
+            const data = await response.json();
+            setProducts(data.products);
+            setCursor(data.nextCursor);
+            setHasMore(data.hasMore);
+            setMainLoading(false);
+          } else {
+            console.error("Failed to fetch products", response);
           }
-        );
-        if (response.ok) {
-          const data = await response.json();
-          setProducts(data.products);
-          setCursor(data.nextCursor);
-          setHasMore(data.hasMore);
-          setMainLoading(false);
-        } else {
-          console.error("Failed to fetch products");
+        } catch (error) {
+          throw error;
         }
       };
 
