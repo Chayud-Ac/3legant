@@ -17,17 +17,15 @@ interface ReplyFormProps {
 
 const ReplyForm = ({
   reviewId,
-  reply,
   setReplyObject,
   userSession,
 }: ReplyFormProps) => {
-  const { data: session, status } = useSession();
   const [comment, setComment] = useState("");
   const pathname = usePathname();
   const { toast } = useToast();
 
   const handleReplySubmit = async () => {
-    if (!session?.user?.id) {
+    if (!userSession.user.id) {
       toast({
         title: "Please Login before reply",
       });
