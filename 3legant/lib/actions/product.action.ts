@@ -67,22 +67,22 @@ export async function getNewArrivalProducts(params: GetNewArrivalProducts) {
     })
       .sort({ createdAt: -1 })
       .select({
-        discount: 1,
-        name: 1,
-        slug: 1,
-        price: 1,
-        thumbnail: 1,
-        avgRating: 1,
-        category: 1,
-        createdAt: 1,
+        description: 0,
+        colorStock: 0,
+        totalStock: 0,
+        images: 0,
       })
       .limit(noOfProduct);
 
-    // Manually mark products as new arrivals
-    const newArrivalProducts = products.map((product: any) => ({
-      ...product._doc,
-      newArrival: new Date(product.createdAt) >= newArrivalDate,
-    }));
+    console.log(JSON.parse(JSON.stringify(products)));
+
+    const newArrivalProducts = products.map((product: any) => {
+      const productData = product.toObject();
+      productData.newArrival = new Date(product.createdAt) >= newArrivalDate;
+      return productData;
+    });
+
+    console.log(newArrivalProducts);
 
     return { products: newArrivalProducts };
   } catch (error) {

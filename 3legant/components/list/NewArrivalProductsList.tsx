@@ -7,6 +7,8 @@ const NewArrivalProductsList = async () => {
 
   const products = JSON.parse(JSON.stringify(result.products));
 
+  console.log(products);
+
   return (
     <>
       <ProductHorizontal title="New Arrival" products={products} />
