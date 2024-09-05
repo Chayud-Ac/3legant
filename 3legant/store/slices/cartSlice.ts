@@ -45,28 +45,14 @@ interface CouponPayload {
   totalCartAmount?: number;
 }
 
-export const fetchCart = createAsyncThunk(
-  "cart/fetchCart",
-  async (userId: string, { rejectWithValue }) => {
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/user/${userId}?q=cart`
-      );
-      if (!response.ok) {
-        throw new Error("Failed to fetch cart");
-      }
-      const { data } = await response.json();
-      return data;
-    } catch (error) {
-      return rejectWithValue(error);
-    }
-  }
-);
-
 const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
+    setCart(state, action: PayloadAction<CartProps>) {
+      return action.payload;
+    },
+
     setCartId(state, action: PayloadAction<string>) {
       state.cartId = action.payload;
     }, // setCartId หลังจากที่ได้รับค่า cartId กลับมา จาก response
@@ -226,46 +212,10 @@ const cartSlice = createSlice({
       );
     },
   },
-  extraReducers: (builder) => {
-    builder
-      .addCase(
-        fetchCart.fulfilled,
-        (state, action: PayloadAction<CartProps | null>) => {
-          if (action.payload) {
-            state.cartId = action.payload.cartId;
-            state.userId = action.payload.userId;
-            state.items = action.payload.items;
-            state.coupon = action.payload.coupon;
-            state.deliveryOption = action.payload.deliveryOption;
-            state.totalCartAmount = action.payload.totalCartAmount;
-          } else {
-            // Handle the case where the cart is null or doesn't exist
-            state.cartId = undefined;
-            state.userId = undefined;
-            state.items = [];
-            state.coupon = {
-              code: undefined,
-              discount: undefined,
-            };
-            state.deliveryOption = {
-              _id: undefined,
-              name: undefined,
-              price: 0,
-            };
-            state.totalCartAmount = 0;
-          }
-        }
-      )
-      .addCase(fetchCart.rejected, (state, action) => {
-        console.error(
-          "Failed to fetch cart refresh to many times:",
-          action.error.message
-        );
-      });
-  },
 });
 
 export const {
+  setCart,
   setCartId,
   addItem,
   incrementItemQuantity,

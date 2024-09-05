@@ -15,28 +15,13 @@ const initialState: WishlistProps = {
   items: [],
 };
 
-export const fetchWishList = createAsyncThunk(
-  "cart/fetchCart",
-  async (userId: string, { rejectWithValue }) => {
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/user/${userId}?q=wishlist`
-      );
-      if (!response.ok) {
-        throw new Error("Failed to fetch cart");
-      }
-      const { data } = await response.json();
-      return data;
-    } catch (error) {
-      return rejectWithValue(error);
-    }
-  }
-);
-
 const wishlistSlice = createSlice({
   name: "wishlist",
   initialState,
   reducers: {
+    setWishlist(state, action: PayloadAction<WishlistProps>) {
+      return action.payload;
+    },
     addItem(state, action: PayloadAction<WishlistItem>) {
       const exists = state.items.some(
         (item) => item.product === action.payload.product
@@ -51,28 +36,10 @@ const wishlistSlice = createSlice({
       );
     },
   },
-
-  extraReducers: (builder) => {
-    builder
-      .addCase(
-        fetchWishList.fulfilled,
-        (state, action: PayloadAction<WishlistItem[] | null>) => {
-          if (action.payload) {
-            state.items = action.payload;
-          } else {
-            state.items = [];
-          }
-        }
-      )
-      .addCase(fetchWishList.rejected, (state, action) => {
-        console.error("Failed to fetch WishList:", action.error.message);
-        state.items = [];
-      });
-  },
 });
 
 // Export actions
-export const { addItem, removeItem } = wishlistSlice.actions;
+export const { addItem, removeItem, setWishlist } = wishlistSlice.actions;
 
 // Export reducer
 export default wishlistSlice.reducer;
