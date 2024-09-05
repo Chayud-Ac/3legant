@@ -22,7 +22,7 @@ export const fetchWishList = createAsyncThunk(
       `${process.env.NEXT_PUBLIC_SERVER_URL}/api/user/${userId}?q=wishlist`
     );
     if (!response.ok) {
-      throw new Error("Failed to fetch cart");
+      throw new Error("Failed to fetch cart refresh to many times");
     }
     const { data } = await response.json();
     return data;
