@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "../ui/button";
 import { useDispatch } from "react-redux";
 import { addItem, setCartId } from "@/store/slices/cartSlice";
@@ -11,6 +11,7 @@ import { RootState } from "@/store/store";
 import { useSession } from "next-auth/react";
 import { addItemToCart } from "@/lib/actions/cartaction.action";
 import { useToast } from "../ui/use-toast";
+import { Spinner } from "./Spinner";
 
 interface AddtoCartButtonProps {
   otherClasses?: string;
@@ -38,8 +39,10 @@ const AddtoCartButton = ({
   const cart = useSelector((state: RootState) => state.cart);
   const user = useSelector((state: RootState) => state.user);
   const { toast } = useToast();
+  const [loading, setLoading] = useState(false);
 
   const handleAddToCart = async () => {
+    setLoading(true);
     try {
       const result = await addItemToCart({
         cartId: cart.cartId,
@@ -79,6 +82,8 @@ const AddtoCartButton = ({
       }
     } catch (error) {
       throw error;
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -87,8 +92,9 @@ const AddtoCartButton = ({
       type="submit"
       onClick={() => handleAddToCart()}
       className={`${otherClasses} btn-primary`}
+      disabled={loading}
     >
-      Add to cart
+      {loading ? <Spinner size="small" /> : "Add to cart"}
     </Button>
   );
 };

@@ -52,7 +52,7 @@ export const fetchCart = createAsyncThunk(
       `${process.env.NEXT_PUBLIC_SERVER_URL}/api/user/${userId}?q=cart`
     );
     if (!response.ok) {
-      throw new Error("Failed to fetch cart");
+      throw new Error("Failed to fetch cart refresh to many times");
     }
     const { data } = await response.json();
 
@@ -254,7 +254,10 @@ const cartSlice = createSlice({
         }
       )
       .addCase(fetchCart.rejected, (state, action) => {
-        console.error("Failed to fetch cart:", action.error.message);
+        console.error(
+          "Failed to fetch cart refresh to many times:",
+          action.error.message
+        );
       });
   },
 });
