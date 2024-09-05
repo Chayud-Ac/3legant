@@ -6,6 +6,7 @@ import RemoveFromWishList from "../shared/RemoveFromWishList";
 import Link from "next/link";
 const WishListDesktop = () => {
   const wishlist = useSelector((state: RootState) => state.wishlist);
+  console.log(wishlist);
 
   return (
     <table className="table-fixed w-full max-w-[900px] max-sm:hidden">
