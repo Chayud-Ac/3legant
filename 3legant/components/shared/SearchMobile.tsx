@@ -74,7 +74,7 @@ const SearchMobile = ({ iconPosition, placeHolder }: SearchInputProps) => {
         setLoading={setLoading}
         search={search}
         isGlobalSearchActive={true} // ตาม design มันโชว์ตัว input ตลอดอยู่แล้ว
-        className="z-10 w-full"
+        className="w-full"
       />
     </div>
   );

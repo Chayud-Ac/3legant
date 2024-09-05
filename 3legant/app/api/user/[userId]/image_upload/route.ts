@@ -5,9 +5,17 @@ import path from "path";
 import User from "@/databases/user.model";
 import { connectToDatabase } from "@/lib/mongoose";
 
-// Initialize Google Cloud Storage
+const GOOGLE_APPLICATION_CREDENTIALS = JSON.parse(
+  Buffer.from(
+    process.env.GOOGLE_APPLICATION_CREDENTIALS
+      ? process.env.GOOGLE_APPLICATION_CREDENTIALS
+      : "",
+    "base64"
+  ).toString()
+);
+
 const storage = new Storage({
-  keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS, // Path to your JSON key file
+  credentials: GOOGLE_APPLICATION_CREDENTIALS,
   projectId: process.env.GOOGLE_CLOUD_PROJECT_ID,
 });
 
@@ -18,7 +26,7 @@ export async function POST(request: Request) {
   try {
     const formData = await request.formData();
 
-    const file = formData.get("image") as File | null; // Cast to File, which includes the `name` property
+    const file = formData.get("image") as File | null;
 
     if (!file) {
       return NextResponse.json({ message: "No Image upload" }, { status: 400 });
@@ -53,7 +61,13 @@ export async function POST(request: Request) {
 
       // Save the image URL in MongoDB
       const id = formData.get("id") as string;
-      await User.findByIdAndUpdate(id, { image: publicUrl });
+      const newUser = await User.findByIdAndUpdate(
+        id,
+        { image: publicUrl },
+        { new: true }
+      );
+
+      console.log(JSON.parse(JSON.stringify(newUser)));
 
       return NextResponse.json({ publicUrl }, { status: 200 });
     } catch (uploadError) {

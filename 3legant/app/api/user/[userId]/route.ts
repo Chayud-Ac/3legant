@@ -16,6 +16,7 @@ export async function GET(
 
     const userId = params.userId;
     const query = req.nextUrl.searchParams.get("q");
+    console.log(query);
 
     if (!userId) {
       return new NextResponse(JSON.stringify({ message: "No UserFound" }), {
@@ -50,7 +51,8 @@ export async function GET(
         break;
 
       case "order":
-        data = await Order.find({ userId: userId })
+        console.log("order");
+        data = await Order.find({ user: userId })
           .select({
             dateOrdered: 1,
             status: 1,
@@ -59,6 +61,8 @@ export async function GET(
             path: "cart",
             select: "-_id totalCartAmount",
           });
+
+        console.log(JSON.parse(JSON.stringify(data)));
 
         break;
 
@@ -113,6 +117,7 @@ export async function GET(
         break;
 
       case "wishlist":
+        console.log("test");
         const userDocument = await User.findById(userId)
           .select({ wishlist: 1 })
           .populate({
@@ -130,6 +135,8 @@ export async function GET(
           price: product.price,
           name: product.name,
         }));
+
+        console.log(data);
 
         break;
 

@@ -16,6 +16,7 @@ import { Input } from "../ui/input";
 import { usePathname } from "next/navigation";
 import { updateUser } from "@/lib/actions/user.action";
 import { Spinner } from "../shared/Spinner";
+import { useToast } from "../ui/use-toast";
 
 interface AccountFormProps {
   userId: string;
@@ -46,6 +47,7 @@ async function getUser(userId: string) {
 const AccountForm = ({ userId }: AccountFormProps) => {
   const pathname = usePathname();
   const [loadingSubmit, setLoadingSubmit] = useState(false);
+  const { toast } = useToast();
 
   const form = useForm<z.infer<typeof AccountFormSchema>>({
     resolver: zodResolver(AccountFormSchema),
@@ -87,9 +89,13 @@ const AccountForm = ({ userId }: AccountFormProps) => {
       });
 
       if (result.success) {
-        // toast
+        toast({
+          title: "update successfully",
+        });
       } else {
-        // toast
+        toast({
+          title: "update failed",
+        });
       }
     } catch (error) {
       throw error;
