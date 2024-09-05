@@ -3,7 +3,7 @@ import Image from "next/image";
 
 const JoinUsNews = () => {
   return (
-    <div className="flex relative w-full h-full items-center justify-center min-h-[360px] ">
+    <div className="flex relative w-full h-full items-center justify-center min-h-[360px] pt-10 ">
       <img
         src="/assets/images/news.svg"
         alt="news"
