@@ -1,7 +1,7 @@
 # 3legant
 
 - **Description**: Project นี้เกี่ยวกับการทำ full stack e commerse web application โดยใช้เพียงแค่ Nextjs framework ในการ handle ทั้ง frontend และ backend และในส่วนของ DB ก็จะเป็น MongoDB ในการจัดเก็บข้อมูล โดย project นี้ผมหยิบ free figma design มา แล้วมา convert เป็น responsive full stack application และสามารถทำ features หลักๆ ที่ e-commerse web application มี. 
-- **Live Demo**: https://3legant-sepia.vercel.app/products?maxPrice=100&minPrice=0&room=bedRoom [[link]](https://3legant-sepia.vercel.app/products?maxPrice=100&minPrice=0&room=bedRoom)
+- **Live Demo**: https://3legant-sepia.vercel.app [[link](https://3legant-sepia.vercel.app)]
 
 ## Features
 
@@ -24,15 +24,10 @@
 - Vercel: vercel สำหรับการ Deploy
 
 
-
-
-
-## Screenshots
-
-- Screenshot 1: Description.
-- Screenshot 2: Description.
-
-
-
 ## Discussion
+- complex object ไม่สามารถ pass โดยตรง จาก server component ไปที่ client component ได้ ต้องทำการ parse หรือ deep clone ก่อน
+- Next Image ชอบมีปัญหา warning ตัว width กับ heigth
+- ไม่ควรใช้ useSession ใน NEXT auth เวลาเราต้องการ ดึงข้อมูล จาก client component บางทีมัน (undefined) เราควรใช้ getSession ใน server component และ pass ข้อมูล session เป็น props หระหว่าง server กับ client component เอา
+- Redux store หรือ context เราต้องสร้าง Provider แยกและ กำหนดมันให้เป็น client component ก่อน คลุม ไม่งั้นมันจะทำให้ application ทั้งหมด กลายเป็น client component เราจะ สูญเสีย SSR ไป
+- ใช้ nextJs handle แค่ ฝั่ง front หรือ client และ ใช้ framework อื่นๆ ในการทำส่วน back จะจัดการและออกแบบ Restapi ได้ง่ายกว่า
 
