@@ -23,6 +23,13 @@
 - Google cloud bucket  , credentail , map api: ใช้ google clound ในการเก็บข้อมูล product image , google credential เชื่อมกับ next auth สำหรับ social login , map api ในการโชว์ map หน้า ui
 - Vercel: vercel สำหรับการ Deploy
 
+## Preview
+![image](https://github.com/user-attachments/assets/9e57022a-252f-4284-b32a-6b0be05fe993)
+![image](https://github.com/user-attachments/assets/e7cb4139-4b0d-4c49-9a19-19fb14cc6bc5)
+![image](https://github.com/user-attachments/assets/395d7057-2a6b-405d-b216-a18bd377cab4)
+
+
+
 
 ## Discussion
 - complex object ไม่สามารถ pass โดยตรง จาก server component ไปที่ client component ได้ ต้องทำการ parse หรือ deep clone ก่อน
