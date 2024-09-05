@@ -45,7 +45,7 @@ const CartSideBar = () => {
             </div>
 
             <div className="flex flex-col gap-3">
-              {(delivery.name || coupon.code) && (
+              {(delivery?.name || coupon?.code) && (
                 <span className="relative w-full h-[2px] bg-grey-5"></span>
               )}
               {coupon && coupon.code && (
