@@ -1,6 +1,6 @@
 # 3legant
 
-- **Description**: Project นี้เกี่ยวกับการทำ full stack e commerse web application โดยใช้เพียงแค่ Nextjs framework ในการ handle ทั้ง frontend และ backend และในส่วนของ DB ก็จะเป็น MongoDB ในการจัดเก็บข้อมูล โดย project นี้ผมหยิบ free figma design มา แล้วมา convert เป็น responsive full stack application และสามารถทำ features หลักๆ ที่ e-commerse web application มี. 
+- **Description**: Project นี้เกี่ยวกับการทำ full stack e commerse web application โดยใช้เพียงแค่ Nextjs framework ในการ handle ทั้ง frontend และ backend และในส่วนของ DB ก็จะเป็น MongoDB ในการจัดเก็บข้อมูล tailwind css ในการ styling UI. Project นี้ผมหยิบ free figma design มา (ไม่ได้ออกแบบตัว design เอง) แล้วมา convert เป็น responsive full stack application และสามารถทำ features หลักๆ ที่ e-commerse web application มี. 
 - **Live Demo**: https://3legant-sepia.vercel.app [[link](https://3legant-sepia.vercel.app)]
 
 ## Features
