@@ -93,7 +93,7 @@ const GlobalSearchResult = ({
     <div
       className={`absolute top-full ${className} bg-grey-4 transition-all duration-500 rounded-md p-5 ${
         isGlobalSearchActive && isActive
-          ? "opacity-100 h-[500px] translate-y-0"
+          ? "opacity-100 h-[500px] translate-y-0 z-10"
           : "opacity-0 h-0 translate-y-[-10px]"
       }`}
     >
@@ -105,8 +105,11 @@ const GlobalSearchResult = ({
         <>
           {products.length > 0 ? (
             <div className="flex flex-col gap-3 items-start w-full max-h-[450px] overflow-y-auto box-border custom-scrollbar-2">
-              {products.map((item) => (
-                <div className="flex flex-row justify-between items-center w-full bg-grey-5 rounded-md px-2">
+              {products.map((item, index) => (
+                <div
+                  className="flex flex-row justify-between items-center w-full bg-grey-5 rounded-md px-2"
+                  key={index}
+                >
                   <div className="flex flex-row items-center justify-center gap-3">
                     <Image
                       src={`${process.env.NEXT_PUBLIC_GOOGLE_CLOUD_BUCKET}/${item.category}/${item.slug}/thumbnail.svg`}

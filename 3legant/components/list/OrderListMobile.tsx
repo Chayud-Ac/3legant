@@ -13,8 +13,8 @@ interface OrderListMobileProps {
 const OrderListMobile = ({ orders }: OrderListMobileProps) => {
   return (
     <div className="md:hidden pt-5 flex flex-col gap-5 justify-center items-center w-full">
-      {orders.map((order) => (
-        <div className="flex flex-col w-full gap-5">
+      {orders.map((order, index) => (
+        <div className="flex flex-col w-full gap-5" key={index}>
           <div className="flex flex-row justify-between items-center">
             <span className="text-grey-2 regular-sm">Order Id</span>
             <span className="text-dark-2 regular-sm">#{order._id}</span>

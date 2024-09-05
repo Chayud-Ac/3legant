@@ -25,6 +25,7 @@ import { z } from "zod";
 import { updateUserAddress } from "@/lib/actions/user.action";
 import { usePathname } from "next/navigation";
 import { Spinner } from "../shared/Spinner";
+import { useToast } from "../ui/use-toast";
 
 interface AddressFormProps {
   control?: Control<any>;
@@ -57,6 +58,7 @@ async function getAddress(userId: string) {
 const AddressForm = ({ control, userId, otherClasses }: AddressFormProps) => {
   const pathname = usePathname();
   const [loadingSubmit, setLoadingSubmit] = useState(false);
+  const { toast } = useToast();
 
   const form = useForm<z.infer<typeof AddressFormSchema>>({
     resolver: zodResolver(AddressFormSchema),
@@ -77,7 +79,7 @@ const AddressForm = ({ control, userId, otherClasses }: AddressFormProps) => {
         if (userId) {
           const userData = await getAddress(userId);
 
-          if (userData) {
+          if (userData && userData.data) {
             reset({
               street: userData.data.street || "",
               country: userData.data.country || "",
@@ -85,10 +87,18 @@ const AddressForm = ({ control, userId, otherClasses }: AddressFormProps) => {
               state: userData.data.state || "",
               zipCode: userData.data.zipCode || 0,
             });
+          } else {
+            reset({
+              street: "",
+              country: "",
+              city: "",
+              state: "",
+              zipCode: 0,
+            });
           }
         }
       } catch (error) {
-        throw error;
+        console.error("Error fetching address:", error);
       }
     }
     fetchAddress();
@@ -105,9 +115,13 @@ const AddressForm = ({ control, userId, otherClasses }: AddressFormProps) => {
           path: pathname,
         });
         if (result.success) {
-          // toast message
+          toast({
+            title: "Update Successfully",
+          });
         } else {
-          // toast message
+          toast({
+            title: "Update failed",
+          });
         }
       }
     } catch (error) {
