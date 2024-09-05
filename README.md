@@ -27,6 +27,8 @@
 ![image](https://github.com/user-attachments/assets/9e57022a-252f-4284-b32a-6b0be05fe993)
 ![image](https://github.com/user-attachments/assets/e7cb4139-4b0d-4c49-9a19-19fb14cc6bc5)
 ![image](https://github.com/user-attachments/assets/395d7057-2a6b-405d-b216-a18bd377cab4)
+![image](https://github.com/user-attachments/assets/7e3b9e52-dc21-4e05-9cc4-11091a610f09)
+![image](https://github.com/user-attachments/assets/a2443899-7785-4a7e-9159-46be9c4d9990)
 
 
 
@@ -37,4 +39,5 @@
 - ไม่ควรใช้ useSession ใน NEXT auth เวลาเราต้องการ ดึงข้อมูล จาก client component บางทีมัน (undefined) เราควรใช้ getSession ใน server component และ pass ข้อมูล session เป็น props หระหว่าง server กับ client component เอา
 - Redux store หรือ context เราต้องสร้าง Provider แยกและ กำหนดมันให้เป็น client component ก่อน คลุม ไม่งั้นมันจะทำให้ application ทั้งหมด กลายเป็น client component เราจะ สูญเสีย SSR ไป
 - ใช้ nextJs handle แค่ ฝั่ง front หรือ client และ ใช้ framework อื่นๆ ในการทำส่วน back จะจัดการและออกแบบ Restapi ได้ง่ายกว่า
+- stipe mock credit card ใช้ เป็น 4242 4242 4242 ส่วนเลขอื่นๆกำหนดเองได้เลยครับ เป็น test mode 
 
