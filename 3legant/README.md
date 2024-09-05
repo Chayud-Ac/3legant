@@ -1,36 +1,38 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# โครงสร้าง Directory ของโปรเจค
 
-## Getting Started
+Directory หลักๆ ใน โปรเจคนี้ (ผมใช้เป็น app กรพำแะนพั นะครับ ) จริงจะใช้ page หรือ src เหมือน react ก็ได้ครับ ปรับ config นิดหน่อย ตาม doc นี้เลยครับ [[Link](https://nextjs.org/docs/app/building-your-application/configuring/src-directory)]
 
-First, run the development server:
+## `/app`
+Directory นี้เก็บโค้ดหลักของแอปพลิเคชัน ทั้งการจัดการ layout page route api route 
+- file base route
+- folder ที่มี วงเล็ป () จะไม่ถูกโชว์ใน url
+- folder ที่มี วงเล็ป [] เป็น dynamic route 
+- static folder folder ที่เป็นชื่อปกติจะถูกโชว์ใน url
+- ในทุกๆ page folder จะมี layout คลุม แล้วใน ซึ่ง page ต่างๆ ก็คือ children ที่ถูกคลุมด้วย layout
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## `/components`
+เก็บ components ต่างๆ ที่ใช้ซ้ำได้ทั่วทั้งโปรเจค ตัว /components/ui เป็น component ของ shadcn 
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## `/constant`
+เก็บค่าคงที่ที่ใช้ในโปรเจค 
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## `/context`
+ใช้สำหรับการจัดการ state ระดับแอปพลิเคชันด้วย React Context API
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## `/databases`
+เก็บการตั้งค่าและสคริปต์เกี่ยวกับฐานข้อมูล
 
-## Learn More
+## `/lib`
+เก็บ library และ helper functions ที่ใช้ในโปรเจค เก็บพวก server action , util function , auth.ts config 
 
-To learn more about Next.js, take a look at the following resources:
+## `/public`
+เก็บไฟล์ที่สามารถเข้าถึงได้จาก public พวก images, icons ไฟล์สไตล์ และ favicon
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## `/store`
+เก็บไฟล์สำหรับการจัดการ state ของ Redux store ผมใช้ redux toolkits ในการเก็บ cart state , wishlist state , user. 
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## `/style`
+เก็บไฟล์ CSS หรือการตั้งค่าสไตล์โกลบอลที่ใช้ในโปรเจค
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## `/types`
+เก็บไฟล์ประกาศ type หรือ interface สำหรับ TypeScript เพื่อเพิ่มความปลอดภัยของโค้ดและช่วยให้การพัฒนาง่ายขึ้น
