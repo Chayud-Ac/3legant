@@ -2,13 +2,14 @@
 import { Spinner } from "@/components/shared/Spinner";
 import { updateOrderStatus } from "@/lib/actions/order.action";
 import { formatDate } from "@/lib/utils";
+import { resetCart } from "@/store/slices/cartSlice";
 import { RootState } from "@/store/store";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 interface Cart {
   cartItems: {
@@ -36,7 +37,7 @@ const page = () => {
   const orderId = searchParams.get("orderId");
   const [loading, setLoading] = useState(true);
   const [order, setOrder] = useState<Order | null>(null);
-
+  const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user);
 
   useEffect(() => {
@@ -47,8 +48,8 @@ const page = () => {
         const result = await updateOrderStatus({
           orderId: orderId,
         });
-
         setOrder(result?.data);
+        dispatch(resetCart());
       };
       updateOrderDocument();
       setLoading(false);

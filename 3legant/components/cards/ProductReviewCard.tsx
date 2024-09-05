@@ -159,9 +159,11 @@ const ProductReviewCard = ({
                   className="flex items-center justify-center"
                   onClick={handleLoadMoreReply}
                 >
-                  <span className="medium-xs text-dark-4 text-center cursor-pointer px-2 py-1 hover:bg-grey-5 rounded-md duration-200">
-                    load more replies
-                  </span>
+                  {!repliesLoading && (
+                    <span className="medium-xs text-dark-4 text-center cursor-pointer px-2 py-1 hover:bg-grey-5 rounded-md duration-200">
+                      load more replies
+                    </span>
+                  )}
                 </div>
               )}
               {repliesLoading && (

@@ -68,7 +68,6 @@ const ProductReviewList = ({
   // เวลามีการ update ตัว replies เราจะ ได้ access โดย โยน reviewId hash key เข้าไปแล้ว push ตัว object reply ใหม่ เข้าไปได้เลย O(1) แต่ถ่า เราไม่สร้าง replyObject เราก็ต้อง iterate ผ่าน reviewList เพื่อหาค่า reviewId นั้นๆที่จะอัปเดท ซึง O(n)
   // setReplyObject ใช้กับ ProductReviewCard component
   const [replyObject, setReplyObject] = useState<ReplyState>({});
-
   const [hasMore, setHasMore] = useState(true); // pagination ใช้เช็ค ว่า มี review อีกไหม hasMore จะ response มาจากฝั่ง server
   const [mainLoading, setMainLoading] = useState(true);
   const [hasMoreLoading, setHasMoreLoading] = useState(false);

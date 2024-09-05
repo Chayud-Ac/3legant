@@ -58,6 +58,11 @@ const cartSlice = createSlice({
     }, // setCartId หลังจากที่ได้รับค่า cartId กลับมา จาก response
     // ณ ตอนแรก เรายังไม่มี หลังจาก fetch ไป ที่ product endpoint ครั้งแรก server side logic จะสร้าง document ใหม่มาแล้ว reponse id ของ document นั้น มาให้เราแล้ว เราค่อย set ค่า cartId เป็นค่าที่ response กลับมา (end1)
     // fetch ครั้งถัดไป cartId เป็น params end point updated นั้น จะ ใช้ cartId นี้ ในการ query หา document ของ cartId นี้แล้วทำการ update ... (end2)
+
+    resetCart(state) {
+      return initialState;
+    },
+
     addItem(
       state,
       action: PayloadAction<{
@@ -217,6 +222,7 @@ const cartSlice = createSlice({
 export const {
   setCart,
   setCartId,
+  resetCart,
   addItem,
   incrementItemQuantity,
   decrementItemQuantity,
