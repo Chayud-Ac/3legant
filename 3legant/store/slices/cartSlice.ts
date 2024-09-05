@@ -47,16 +47,19 @@ interface CouponPayload {
 
 export const fetchCart = createAsyncThunk(
   "cart/fetchCart",
-  async (userId: string) => {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_URL}/api/user/${userId}?q=cart`
-    );
-    if (!response.ok) {
-      throw new Error("Failed to fetch cart refresh to many times");
+  async (userId: string, { rejectWithValue }) => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/user/${userId}?q=cart`
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch cart");
+      }
+      const { data } = await response.json();
+      return data;
+    } catch (error) {
+      return rejectWithValue(error);
     }
-    const { data } = await response.json();
-
-    return data; // Assume data is in the format of CartProps
   }
 );
 

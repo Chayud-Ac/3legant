@@ -19,22 +19,20 @@ type StoreProviderProps = {
 const StoreProviderComponent = ({ session }: { session: any }) => {
   const dispatch = useDispatch<AppDispatch>();
 
-  if (session) {
-    useEffect(() => {
-      if (session?.user?.id) {
-        dispatch(fetchCart(session.user.id));
-        dispatch(fetchWishList(session.user.id));
-        dispatch(
-          setUser({
-            id: session.user.id,
-            email: session.user.email,
-            displayName: session.user.displayName,
-            image: session.user.image,
-          })
-        );
-      }
-    }, [dispatch, session]);
-  }
+  useEffect(() => {
+    if (session?.user?.id) {
+      dispatch(fetchCart(session.user.id));
+      dispatch(fetchWishList(session.user.id));
+      dispatch(
+        setUser({
+          id: session.user.id,
+          email: session.user.email,
+          displayName: session.user.displayName,
+          image: session.user.image,
+        })
+      );
+    }
+  }, [dispatch, session]);
 
   return null;
 };
