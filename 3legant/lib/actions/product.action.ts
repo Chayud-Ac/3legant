@@ -5,7 +5,7 @@ import { GetNewArrivalProducts } from "./shared.types";
 import { connectToDatabase } from "../mongoose";
 import Discount from "@/databases/discount.model";
 import Product from "@/databases/product.model";
-import { document } from "postcss";
+import { newArrivalThreshold } from "../utils";
 
 export async function getDiscountProducts(params: GetDiscountProducts) {
   connectToDatabase();
@@ -13,6 +13,8 @@ export async function getDiscountProducts(params: GetDiscountProducts) {
   try {
     const { noOfProduct = 6, percentage } = params;
     let products = [];
+
+    const newArrivalDate = newArrivalThreshold(10);
 
     const discountProducts = await Discount.findOne({
       discountPercentage: percentage,
@@ -31,24 +33,19 @@ export async function getDiscountProducts(params: GetDiscountProducts) {
           thumbnail: 1,
           avgRating: 1,
           category: 1,
-          newArrival: {
-            $cond: {
-              if: {
-                $gt: [
-                  "$createdAt",
-                  new Date(new Date().setDate(new Date().getDate() - 30)),
-                ],
-              },
-              then: true,
-              else: false,
-            },
-          },
+          createdAt: 1,
         },
       })
       .limit(noOfProduct);
 
     if (discountProducts && discountProducts.products.length > 0) {
-      products = discountProducts.products;
+      products = discountProducts.products.map((product: any) => {
+        const isNewArrival = new Date(product.createdAt) >= newArrivalDate;
+        return {
+          ...product._doc,
+          newArrival: isNewArrival,
+        };
+      });
     }
 
     return { products };
@@ -63,7 +60,11 @@ export async function getNewArrivalProducts(params: GetNewArrivalProducts) {
   try {
     const { noOfProduct = 6 } = params;
 
-    const products = await Product.find({})
+    const newArrivalDate = newArrivalThreshold(10);
+
+    const products = await Product.find({
+      createdAt: { $gte: newArrivalDate },
+    })
       .sort({ createdAt: -1 })
       .select({
         discount: 1,
@@ -73,11 +74,17 @@ export async function getNewArrivalProducts(params: GetNewArrivalProducts) {
         thumbnail: 1,
         avgRating: 1,
         category: 1,
-        newArrival: true,
+        createdAt: 1,
       })
       .limit(noOfProduct);
 
-    return { products };
+    // Manually mark products as new arrivals
+    const newArrivalProducts = products.map((product: any) => ({
+      ...product._doc,
+      newArrival: new Date(product.createdAt) >= newArrivalDate,
+    }));
+
+    return { products: newArrivalProducts };
   } catch (error) {
     throw error;
   }
