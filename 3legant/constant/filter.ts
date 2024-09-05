@@ -6,7 +6,6 @@ export const RoomsFilters = [
   { name: "Bathroom", value: "bathRoom" },
   { name: "Dinning", value: "dinning" },
   { name: "Outdoor", value: "outdoor" },
-  { name: "New Arrival", value: "newArrival" },
 ];
 
 export const priceFilters = [
